@@ -5,6 +5,8 @@ import '../../shared/widgets/dashboard_scaffold.dart';
 import '../shell/dashboard_shell.dart';
 import 'login_page.dart';
 
+enum _AuthState { loading, authenticated, unauthenticated, networkError, serverError }
+
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
 
@@ -15,8 +17,8 @@ class AuthGate extends StatefulWidget {
 class _AuthGateState extends State<AuthGate> {
   final ApiClient _api = ApiClient();
   User? _user;
-  Object? _error;
-  bool _loading = true;
+  _AuthState _state = _AuthState.loading;
+  String _errorMessage = '';
   bool _rateLimited = false;
 
   @override
@@ -26,34 +28,42 @@ class _AuthGateState extends State<AuthGate> {
   }
 
   Future<void> _load() async {
+    if (!mounted) return;
+    setState(() {
+      _state = _AuthState.loading;
+      _errorMessage = '';
+    });
     try {
       final user = await _api.currentUser();
-      if (mounted) {
-        setState(() {
-          _user = user;
-          _loading = false;
-          _rateLimited = false;
-        });
-      }
-    } on ApiException catch (error) {
       if (!mounted) return;
       setState(() {
-        _loading = false;
-        if (error.statusCode == 429) {
-          _user = null;
+        _user = user;
+        _rateLimited = false;
+        _state = user != null ? _AuthState.authenticated : _AuthState.unauthenticated;
+      });
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        if (e.statusCode == 429) {
           _rateLimited = true;
-          _error = null;
+          _state = _AuthState.unauthenticated;
+        } else if (e.statusCode >= 500) {
+          _state = _AuthState.serverError;
+          _errorMessage = 'The server returned an error (${e.statusCode}). Please try again.';
         } else {
-          _error = error;
+          // 401 is handled by currentUser() returning null, so any other
+          // ApiException here is unexpected — treat as server error.
+          _state = _AuthState.serverError;
+          _errorMessage = e.message;
         }
       });
-    } catch (error) {
-      if (mounted) {
-        setState(() {
-          _error = error;
-          _loading = false;
-        });
-      }
+    } catch (e) {
+      // Non-ApiException: network failure, timeout, CORS error, etc.
+      if (!mounted) return;
+      setState(() {
+        _state = _AuthState.networkError;
+        _errorMessage = 'Unable to reach the Website View API. Check your connection and try again.';
+      });
     }
   }
 
@@ -65,31 +75,38 @@ class _AuthGateState extends State<AuthGate> {
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) {
-      return const Scaffold(body: LoadingState());
-    }
+    switch (_state) {
+      case _AuthState.loading:
+        return const Scaffold(body: LoadingState());
 
-    if (_error != null) {
-      return Scaffold(
-        body: ErrorState(
-          message: 'Unable to reach the Website View API.',
-          onRetry: () => setState(() {
-            _loading = true;
-            _error = null;
-            _load();
+      case _AuthState.networkError:
+        return Scaffold(
+          body: ErrorState(
+            message: _errorMessage,
+            onRetry: _load,
+          ),
+        );
+
+      case _AuthState.serverError:
+        return Scaffold(
+          body: ErrorState(
+            message: _errorMessage,
+            onRetry: _load,
+          ),
+        );
+
+      case _AuthState.unauthenticated:
+        return LoginPage(rateLimited: _rateLimited);
+
+      case _AuthState.authenticated:
+        return DashboardShell(
+          api: _api,
+          user: _user!,
+          onLoggedOut: () => setState(() {
+            _user = null;
+            _state = _AuthState.unauthenticated;
           }),
-        ),
-      );
+        );
     }
-
-    if (_user == null) {
-      return LoginPage(rateLimited: _rateLimited);
-    }
-
-    return DashboardShell(
-      api: _api,
-      user: _user!,
-      onLoggedOut: () => setState(() => _user = null),
-    );
   }
 }

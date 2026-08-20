@@ -118,10 +118,8 @@ class ApiClient {
 
 String get apiOrigin => DashboardConfig.apiOrigin;
 
-void startGoogleSignIn() {
-  final current = Uri.base.toString();
-  openUrl('${DashboardConfig.apiOrigin}/api/v1/auth/google?redirect=${Uri.encodeComponent(current)}');
-}
+void startGoogleSignIn() =>
+    openUrl('${DashboardConfig.apiOrigin}/api/v1/auth/google');
 
 String wsTrackUrl() {
   final origin = DashboardConfig.apiOrigin;
