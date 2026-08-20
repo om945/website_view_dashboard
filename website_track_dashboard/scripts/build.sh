@@ -27,6 +27,5 @@ echo "Building Flutter Web..."
 flutter clean
 flutter pub get
 
-# If you need to set API_BASE_URL from Vercel environment variables, you can add:
-# --dart-define=API_BASE_URL="$API_BASE_URL" to the command below.
-flutter build web --release --tree-shake-icons -O4 --source-maps --web-resources-cdn
+# Inject the API_BASE_URL from Vercel's Environment Variables
+flutter build web --release --tree-shake-icons -O4 --source-maps --web-resources-cdn --dart-define=API_BASE_URL="$API_BASE_URL"
