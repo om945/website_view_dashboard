@@ -263,92 +263,210 @@ class _WebsitesPageState extends State<WebsitesPage> {
               body:
                   'Create your first website to start tracking visitors.',
             ),
-          ...widget.sites.map((site) {
-            final selected = site.id == widget.selectedSite?.id;
-            return Container(
-              margin: const EdgeInsets.only(bottom: 10),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          ...widget.sites.map(
+            (site) => WebsiteCard(
+              site: site,
+              selected: site.id == widget.selectedSite?.id,
+              onSelect: () => widget.onSelected(site),
+              onDelete: () => _delete(site),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class WebsiteCard extends StatefulWidget {
+  const WebsiteCard({
+    super.key,
+    required this.site,
+    required this.selected,
+    required this.onSelect,
+    required this.onDelete,
+  });
+
+  final Site site;
+  final bool selected;
+  final VoidCallback onSelect;
+  final VoidCallback onDelete;
+
+  @override
+  State<WebsiteCard> createState() => _WebsiteCardState();
+}
+
+class _WebsiteCardState extends State<WebsiteCard> {
+  bool _hovered = false;
+  bool _deleteHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final borderColor = widget.selected
+        ? AppColors.accentBorder
+        : _hovered
+            ? AppColors.borderStrong
+            : AppColors.border;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Semantics(
+        button: !widget.selected,
+        label: '${widget.site.name}, ${widget.site.domain}',
+        child: MouseRegion(
+          onEnter: (_) => setState(() => _hovered = true),
+          onExit: (_) => setState(() {
+            _hovered = false;
+            _deleteHovered = false;
+          }),
+          child: GestureDetector(
+            onTap: widget.selected ? null : widget.onSelect,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 140),
+              curve: Curves.easeOut,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
-                color: selected ? AppColors.surfaceElevated : AppColors.surface,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: selected ? AppColors.accentBorder : AppColors.border,
-                ),
+                color: widget.selected
+                    ? AppColors.surfaceElevated
+                    : _hovered
+                        ? AppColors.surfaceHover
+                        : AppColors.surface,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: borderColor),
               ),
-              child: Row(
-                children: [
-                  const Icon(Icons.language_rounded, size: 18, color: AppColors.accent),
-                  const SizedBox(width: 12),
-                  Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final compact = constraints.maxWidth < 520;
+                  final details = Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              site.name,
-                              style: AppTypography.bodyMedium.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textPrimary,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              '(${site.domain})',
-                              style: AppTypography.bodySmall.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                          ],
+                        Text(
+                          widget.site.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTypography.bodyMedium.copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textPrimary,
+                          ),
                         ),
                         const SizedBox(height: 3),
                         Text(
-                          site.siteKey,
+                          widget.site.domain,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTypography.bodySmall.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          widget.site.siteKey,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: AppTypography.code.copyWith(
-                            fontSize: 11,
+                            fontSize: 10.5,
                             color: AppColors.textMuted,
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  if (!selected)
-                    TextButton(
-                      onPressed: () => widget.onSelected(site),
-                      style: TextButton.styleFrom(
-                        visualDensity: VisualDensity.compact,
+                  );
+
+                  final actions = Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (!widget.selected)
+                        TextButton(
+                          onPressed: widget.onSelect,
+                          style: TextButton.styleFrom(
+                            visualDensity: VisualDensity.compact,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                          ),
+                          child: const Text('Select'),
+                        )
+                      else
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 9,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.accentSoft,
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(color: AppColors.accentBorder),
+                          ),
+                          child: Text('Selected', style: AppTypography.chip),
+                        ),
+                      const SizedBox(width: 8),
+                      MouseRegion(
+                        onEnter: (_) => setState(() => _deleteHovered = true),
+                        onExit: (_) => setState(() => _deleteHovered = false),
+                        child: IconButton(
+                          tooltip: 'Delete website',
+                          onPressed: widget.onDelete,
+                          constraints: const BoxConstraints(
+                            minWidth: 40,
+                            minHeight: 40,
+                          ),
+                          padding: EdgeInsets.zero,
+                          icon: Icon(
+                            Icons.delete_outline_rounded,
+                            size: 19,
+                            color: _deleteHovered
+                                ? AppColors.accent
+                                : AppColors.textSecondary,
+                          ),
+                        ),
                       ),
-                      child: const Text('Select'),
-                    ),
-                  if (selected)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 3,
+                    ],
+                  );
+
+                  if (compact) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.language_rounded,
+                              size: 19,
+                              color: AppColors.accent,
+                            ),
+                            const SizedBox(width: 12),
+                            details,
+                          ],
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: actions,
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+
+                  return Row(
+                    children: [
+                      const Icon(
+                        Icons.language_rounded,
+                        size: 19,
+                        color: AppColors.accent,
                       ),
-                      decoration: BoxDecoration(
-                        color: AppColors.accentSoft,
-                        borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: AppColors.accentBorder),
-                      ),
-                      child: Text('Selected', style: AppTypography.chip),
-                    ),
-                  const SizedBox(width: 4),
-                  IconButton(
-                    tooltip: 'Delete website',
-                    onPressed: () => _delete(site),
-                    visualDensity: VisualDensity.compact,
-                    icon: const Icon(
-                      Icons.delete_outline_rounded,
-                      size: 18,
-                      color: AppColors.textMuted,
-                    ),
-                  ),
-                ],
+                      const SizedBox(width: 12),
+                      details,
+                      const SizedBox(width: 16),
+                      actions,
+                    ],
+                  );
+                },
               ),
-            );
-          }),
-        ],
+            ),
+          ),
+        ),
       ),
     );
   }
