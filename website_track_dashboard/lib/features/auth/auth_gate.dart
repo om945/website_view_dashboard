@@ -19,10 +19,12 @@ class AuthGate extends StatefulWidget {
   const AuthGate({
     super.key,
     required this.routePath,
+    this.loginRedirect,
     required this.onRouteChanged,
   });
 
   final String routePath;
+  final String? loginRedirect;
   final ValueChanged<String> onRouteChanged;
 
   @override
@@ -58,8 +60,13 @@ class _AuthGateState extends State<AuthGate> {
             ? _AuthState.authenticated
             : _AuthState.unauthenticated;
       });
+      if (user == null && widget.routePath.startsWith('/dashboard')) {
+        widget.onRouteChanged(
+          '/login?redirect=${Uri.encodeComponent(widget.routePath)}',
+        );
+      }
       if (user != null && widget.routePath == '/login') {
-        widget.onRouteChanged('/dashboard');
+        widget.onRouteChanged(widget.loginRedirect ?? '/dashboard');
       }
     } on ApiException catch (e) {
       if (!mounted) return;
@@ -111,7 +118,10 @@ class _AuthGateState extends State<AuthGate> {
         );
 
       case _AuthState.unauthenticated:
-        return LoginPage(rateLimited: _rateLimited);
+        return LoginPage(
+          rateLimited: _rateLimited,
+          redirectPath: widget.loginRedirect,
+        );
 
       case _AuthState.authenticated:
         return DashboardShell(
@@ -122,6 +132,7 @@ class _AuthGateState extends State<AuthGate> {
           onLoggedOut: () => setState(() {
             _user = null;
             _state = _AuthState.unauthenticated;
+            widget.onRouteChanged('/');
           }),
         );
     }

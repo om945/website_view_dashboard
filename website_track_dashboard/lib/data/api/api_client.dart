@@ -149,6 +149,7 @@ class ApiClient {
 
 String get apiOrigin => DashboardConfig.apiOrigin;
 
-void startGoogleSignIn() => openUrl(DashboardConfig.googleSignInUrl());
+void startGoogleSignIn({String? redirect}) =>
+    openUrl(DashboardConfig.googleSignInUrl(redirect: redirect));
 
 String wsTrackUrl() => DashboardConfig.wsTrackUrl();

@@ -76,6 +76,9 @@ class DashboardRouteInformationParser extends RouteInformationParser<String> {
     final path = hashPath.startsWith('/') && hashPath != '/'
         ? hashPath
         : uri.path.isEmpty ? DashboardRoutes.home : uri.path;
+    if (path == DashboardRoutes.login && uri.hasQuery) {
+      return '$path?${uri.query}';
+    }
     if (path == DashboardRoutes.home ||
         path == DashboardRoutes.login ||
         DashboardRoutes.isDocsPath(path)) {
@@ -97,19 +100,33 @@ class DashboardRouterDelegate extends RouterDelegate<String>
     with ChangeNotifier {
   final _navigatorKey = GlobalKey<NavigatorState>();
   String _path = DashboardRoutes.overview;
+  String? _loginRedirect;
 
   @override
-  String get currentConfiguration => _path;
+  String get currentConfiguration => _loginRedirect == null
+      ? _path
+      : Uri(path: DashboardRoutes.login, queryParameters: {
+          'redirect': _loginRedirect!,
+        }).toString();
 
   void _setPath(String path) {
-    final next = path == DashboardRoutes.home ||
-            path == DashboardRoutes.login ||
-            DashboardRoutes.isDocsPath(path) ||
-            DashboardRoutes.all.contains(path) ||
-            DashboardRoutes.public.contains(path)
-        ? path
+    final uri = Uri.tryParse(path);
+    final basePath = uri?.path ?? path;
+    final requestedRedirect = uri?.queryParameters['redirect'];
+    final safeRedirect = requestedRedirect != null &&
+            (requestedRedirect == '/dashboard' ||
+                requestedRedirect.startsWith('/dashboard/'))
+        ? requestedRedirect
+        : null;
+    final next = basePath == DashboardRoutes.home ||
+            basePath == DashboardRoutes.login ||
+            DashboardRoutes.isDocsPath(basePath) ||
+            DashboardRoutes.all.contains(basePath) ||
+            DashboardRoutes.public.contains(basePath)
+        ? basePath
         : DashboardRoutes.home;
     if (_path == next) return;
+    _loginRedirect = next == DashboardRoutes.login ? safeRedirect : null;
     _path = next;
     notifyListeners();
   }
@@ -162,7 +179,11 @@ class DashboardRouterDelegate extends RouterDelegate<String>
                       ? LegalPageType.privacy
                       : LegalPageType.terms,
                 )
-              : AuthGate(routePath: _path, onRouteChanged: _setPath),
+              : AuthGate(
+                  routePath: _path,
+                  loginRedirect: _loginRedirect,
+                  onRouteChanged: _setPath,
+                ),
         ),
       ],
       onDidRemovePage: (_) {},

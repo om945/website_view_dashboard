@@ -10,9 +10,10 @@ import '../../shared/widgets/viziapi_brand.dart';
 import '../../shared/icons/dashboard_icons.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key, this.rateLimited = false});
+  const LoginPage({super.key, this.rateLimited = false, this.redirectPath});
 
   final bool rateLimited;
+  final String? redirectPath;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +78,9 @@ class LoginPage extends StatelessWidget {
                         label: 'Continue with Google',
                         icon: DashboardIcons.login,
                         expand: true,
-                        onPressed: startGoogleSignIn,
+                        onPressed: () => startGoogleSignIn(
+                          redirect: redirectPath,
+                        ),
                       ),
                       const SizedBox(height: 18),
                       Text(

@@ -30,5 +30,10 @@ abstract final class DashboardConfig {
     return '$scheme://${Uri.parse(apiOrigin).authority}/ws/track';
   }
 
-  static String googleSignInUrl() => '$apiOrigin/api/v1/auth/google';
+  static String googleSignInUrl({String? redirect}) {
+    final uri = Uri.parse('$apiOrigin/api/v1/auth/google');
+    return uri
+        .replace(queryParameters: redirect == null ? null : {'redirect': redirect})
+        .toString();
+  }
 }
