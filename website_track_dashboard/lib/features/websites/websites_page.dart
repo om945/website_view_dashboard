@@ -409,20 +409,22 @@ class _WebsiteCardState extends State<WebsiteCard> {
                           style: IconButton.styleFrom(
                             minimumSize: const Size(40, 40),
                             padding: EdgeInsets.zero,
+                            backgroundColor: AppColors.surfaceActive,
                             foregroundColor: AppColors.textSecondary,
                             hoverColor: AppColors.accentSoft,
                             focusColor: AppColors.accentSoft,
                             overlayColor: AppColors.accent,
+                            side: const BorderSide(color: AppColors.borderStrong),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                           icon: Icon(
-                            Icons.delete_outline_rounded,
-                            size: 19,
+                            Icons.delete_rounded,
+                            size: 18,
                             color: _deleteHovered
-                                ? AppColors.accent
-                                : AppColors.textSecondary,
+                                ? AppColors.accentHover
+                                : AppColors.textPrimary,
                           ),
                         ),
                       ),
