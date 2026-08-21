@@ -17,11 +17,7 @@ import '../../shared/widgets/dashboard_scaffold.dart';
 import '../../shared/widgets/metric_card.dart';
 
 class RealtimePage extends StatefulWidget {
-  const RealtimePage({
-    super.key,
-    required this.analytics,
-    required this.site,
-  });
+  const RealtimePage({super.key, required this.analytics, required this.site});
 
   final AnalyticsRepository analytics;
   final Site site;
@@ -43,15 +39,16 @@ class _RealtimePageState extends State<RealtimePage> {
   int _retryAttempts = 0;
   bool _disposed = false;
   bool _refreshing = false;
-  bool _advancedDiagnosticsExpanded = false;
 
   @override
   void initState() {
     super.initState();
     _refreshCount();
     _connectPresence();
-    _pollTimer =
-        Timer.periodic(const Duration(seconds: 15), (_) => _refreshCount());
+    _pollTimer = Timer.periodic(
+      const Duration(seconds: 15),
+      (_) => _refreshCount(),
+    );
   }
 
   @override
@@ -86,8 +83,7 @@ class _RealtimePageState extends State<RealtimePage> {
     if (_refreshing || _disposed) return;
     if (mounted) setState(() => _refreshing = true);
     try {
-      final count =
-          await widget.analytics.getVisitorCount(widget.site.siteKey);
+      final count = await widget.analytics.getVisitorCount(widget.site.siteKey);
       if (!mounted) return;
       setState(() {
         _count = count;
@@ -121,8 +117,10 @@ class _RealtimePageState extends State<RealtimePage> {
       _closeSub = _socket!.onClose.listen((_) {
         if (!mounted || _disposed) return;
         setState(() => _connectionStatus = 'reconnecting');
-        final delayMs =
-            (500 * (1 << _retryAttempts.clamp(0, 4))).clamp(500, 8000);
+        final delayMs = (500 * (1 << _retryAttempts.clamp(0, 4))).clamp(
+          500,
+          8000,
+        );
         _retryAttempts++;
         _retryTimer = Timer(Duration(milliseconds: delayMs), _connectPresence);
       });
@@ -136,18 +134,18 @@ class _RealtimePageState extends State<RealtimePage> {
   }
 
   String get _statusLabel => switch (_connectionStatus) {
-        'connected' => 'Connected',
-        'connecting' => 'Connecting',
-        'reconnecting' => 'Reconnecting',
-        _ => 'Disconnected',
-      };
+    'connected' => 'Connected',
+    'connecting' => 'Connecting',
+    'reconnecting' => 'Reconnecting',
+    _ => 'Disconnected',
+  };
 
   Color get _statusColor => switch (_connectionStatus) {
-        'connected' => AppColors.emerald,
-        'connecting' => AppColors.cyan,
-        'reconnecting' => const Color(0xFFFFB020),
-        _ => AppColors.textMuted,
-      };
+    'connected' => AppColors.emerald,
+    'connecting' => AppColors.cyan,
+    'reconnecting' => const Color(0xFFFFB020),
+    _ => AppColors.textMuted,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -246,10 +244,7 @@ class _RealtimePageState extends State<RealtimePage> {
                     children: [
                       Row(
                         children: [
-                          LiveDot(
-                            color: _statusColor,
-                            size: 8,
-                          ),
+                          LiveDot(color: _statusColor, size: 8),
                           const SizedBox(width: 12),
                           Text(
                             formatCount(activeCount),
@@ -292,10 +287,7 @@ class _RealtimePageState extends State<RealtimePage> {
                   )
                 : Row(
                     children: [
-                      LiveDot(
-                        color: _statusColor,
-                        size: 8,
-                      ),
+                      LiveDot(color: _statusColor, size: 8),
                       const SizedBox(width: 18),
                       Expanded(
                         child: Column(
@@ -386,19 +378,21 @@ class _RealtimePageState extends State<RealtimePage> {
                 icon: Icons.sensors_rounded,
                 color: AppColors.emerald,
                 isLive: true,
-                tooltip: 'Live WebSocket presence sessions currently connected.',
+                tooltip:
+                    'Live WebSocket presence sessions currently connected.',
               ),
               MetricCard(
                 title: 'Total visitors',
                 value: totalCount,
                 icon: Icons.people_alt_outlined,
                 color: AppColors.accent,
-                tooltip: 'Total distinct anonymous visitors counted since inception.',
+                tooltip:
+                    'Total distinct anonymous visitors counted since inception.',
               ),
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                          color: AppColors.surfaceElevated.withValues(alpha: 0.75),
+                  color: AppColors.surfaceElevated.withValues(alpha: 0.75),
                   borderRadius: AppRadii.radiusMd,
                   border: Border.all(color: AppColors.border),
                 ),
@@ -489,38 +483,20 @@ class _RealtimePageState extends State<RealtimePage> {
           // Keep implementation details available without making them part of
           // the normal realtime experience.
           DashboardPanel(
-            title: 'Advanced diagnostics',
-            trailing: IconButton(
-              tooltip: _advancedDiagnosticsExpanded ? 'Collapse' : 'Expand',
-              onPressed: () => setState(
-                () => _advancedDiagnosticsExpanded =
-                    !_advancedDiagnosticsExpanded,
-              ),
-              icon: Icon(
-                _advancedDiagnosticsExpanded
-                    ? Icons.expand_less_rounded
-                    : Icons.expand_more_rounded,
-                color: AppColors.textSecondary,
-              ),
+            title: 'Realtime diagnostics',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _diagnosticRow('Domain', widget.site.domain),
+                const SizedBox(height: 8),
+                _diagnosticRow('Site Key', widget.site.siteKey),
+                const SizedBox(height: 8),
+                _diagnosticRow(
+                  'Public Counter API',
+                  DashboardConfig.publicVisitorCountUrl(widget.site.siteKey),
+                ),
+              ],
             ),
-            child: _advancedDiagnosticsExpanded
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _diagnosticRow('WebSocket status', _statusLabel),
-                      const SizedBox(height: 8),
-                      _diagnosticRow(
-                        'WebSocket URL',
-                        DashboardConfig.wsTrackUrl(),
-                      ),
-                      const SizedBox(height: 8),
-                      _diagnosticRow(
-                        'Reconnect attempts',
-                        _retryAttempts.toString(),
-                      ),
-                    ],
-                  )
-                : const SizedBox.shrink(),
           ),
         ],
       ),
@@ -550,4 +526,3 @@ class _RealtimePageState extends State<RealtimePage> {
     );
   }
 }
-
