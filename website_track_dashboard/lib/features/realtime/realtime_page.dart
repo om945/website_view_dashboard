@@ -43,6 +43,7 @@ class _RealtimePageState extends State<RealtimePage> {
   int _retryAttempts = 0;
   bool _disposed = false;
   bool _refreshing = false;
+  bool _advancedDiagnosticsExpanded = false;
 
   @override
   void initState() {
@@ -485,24 +486,41 @@ class _RealtimePageState extends State<RealtimePage> {
           ),
           const SizedBox(height: 18),
 
-          // Live WebSocket Diagnostics Panel
+          // Keep implementation details available without making them part of
+          // the normal realtime experience.
           DashboardPanel(
-            title: 'Realtime diagnostics',
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _diagnosticRow('WebSocket URL', DashboardConfig.wsTrackUrl()),
-                const SizedBox(height: 8),
-                _diagnosticRow('Domain', widget.site.domain),
-                const SizedBox(height: 8),
-                _diagnosticRow('Site Key', widget.site.siteKey),
-                const SizedBox(height: 8),
-                _diagnosticRow(
-                  'Public Counter API',
-                  DashboardConfig.publicVisitorCountUrl(widget.site.siteKey),
-                ),
-              ],
+            title: 'Advanced diagnostics',
+            trailing: IconButton(
+              tooltip: _advancedDiagnosticsExpanded ? 'Collapse' : 'Expand',
+              onPressed: () => setState(
+                () => _advancedDiagnosticsExpanded =
+                    !_advancedDiagnosticsExpanded,
+              ),
+              icon: Icon(
+                _advancedDiagnosticsExpanded
+                    ? Icons.expand_less_rounded
+                    : Icons.expand_more_rounded,
+                color: AppColors.textSecondary,
+              ),
             ),
+            child: _advancedDiagnosticsExpanded
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _diagnosticRow('WebSocket status', _statusLabel),
+                      const SizedBox(height: 8),
+                      _diagnosticRow(
+                        'WebSocket URL',
+                        DashboardConfig.wsTrackUrl(),
+                      ),
+                      const SizedBox(height: 8),
+                      _diagnosticRow(
+                        'Reconnect attempts',
+                        _retryAttempts.toString(),
+                      ),
+                    ],
+                  )
+                : const SizedBox.shrink(),
           ),
         ],
       ),
