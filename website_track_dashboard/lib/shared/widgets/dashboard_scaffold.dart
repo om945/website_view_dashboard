@@ -34,9 +34,7 @@ class DashboardPanel extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(
-                child: Text(title, style: AppTypography.h3),
-              ),
+              Expanded(child: Text(title, style: AppTypography.h3)),
               if (trailing != null) trailing!,
             ],
           ),
@@ -67,35 +65,30 @@ class PageFrame extends StatelessWidget {
     final hPad = Responsive.horizontalPadding(context);
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: hPad, vertical: 20),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1200),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(title, style: AppTypography.h1),
-                        const SizedBox(height: 3),
-                        Text(subtitle, style: AppTypography.bodyMedium),
-                      ],
-                    ),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 1200),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title, style: AppTypography.h1),
+                      const SizedBox(height: 3),
+                      Text(subtitle, style: AppTypography.bodyMedium),
+                    ],
                   ),
-                  if (action != null) ...[
-                    const SizedBox(width: 12),
-                    action!,
-                  ],
-                ],
-              ),
-              const SizedBox(height: 18),
-              child,
-            ],
-          ),
+                ),
+                if (action != null) ...[const SizedBox(width: 12), action!],
+              ],
+            ),
+            const SizedBox(height: 18),
+            child,
+          ],
         ),
       ),
     );
@@ -140,10 +133,7 @@ class EmptyState extends StatelessWidget {
               style: AppTypography.bodyMedium,
             ),
           ),
-          if (action != null) ...[
-            const SizedBox(height: 18),
-            action!,
-          ],
+          if (action != null) ...[const SizedBox(height: 18), action!],
         ],
       ),
     );
@@ -151,11 +141,7 @@ class EmptyState extends StatelessWidget {
 }
 
 class ErrorState extends StatelessWidget {
-  const ErrorState({
-    super.key,
-    required this.message,
-    required this.onRetry,
-  });
+  const ErrorState({super.key, required this.message, required this.onRetry});
 
   final String message;
   final VoidCallback onRetry;
@@ -168,14 +154,15 @@ class ErrorState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(DashboardIcons.cloudOff, color: AppColors.accent, size: 32),
+            const Icon(
+              DashboardIcons.cloudOff,
+              color: AppColors.accent,
+              size: 32,
+            ),
             const SizedBox(height: 12),
             Text(message, style: AppTypography.bodyMedium),
             const SizedBox(height: 8),
-            TextButton(
-              onPressed: onRetry,
-              child: const Text('Retry'),
-            ),
+            TextButton(onPressed: onRetry, child: const Text('Retry')),
           ],
         ),
       ),
@@ -189,7 +176,10 @@ class LoadingState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: CircularProgressIndicator(color: AppColors.accent, strokeWidth: 2.5),
+      child: CircularProgressIndicator(
+        color: AppColors.accent,
+        strokeWidth: 2.5,
+      ),
     );
   }
 }
