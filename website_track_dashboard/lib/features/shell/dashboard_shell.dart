@@ -203,6 +203,15 @@ class _DashboardShellState extends State<DashboardShell> {
                                   const Duration(milliseconds: 140),
                               switchInCurve: Curves.easeOutCubic,
                               switchOutCurve: Curves.easeInCubic,
+                              layoutBuilder: (currentChild, previousChildren) {
+                                return Stack(
+                                  alignment: Alignment.topLeft,
+                                  children: [
+                                    ...previousChildren,
+                                    if (currentChild != null) currentChild,
+                                  ],
+                                );
+                              },
                               transitionBuilder: (child, animation) {
                                 final offset = Tween<Offset>(
                                   begin: const Offset(0, 0.012),
