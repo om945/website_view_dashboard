@@ -128,7 +128,6 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
   Widget build(BuildContext context) {
     final width = Responsive.width(context);
     final isMobile = width < 820;
-    final isCompact = width < 1020;
     final horizontalPad = Responsive.horizontalPadding(context);
 
     return AnimatedContainer(
@@ -241,19 +240,6 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (!isCompact)
-                      AppButton(
-                        label: 'Sign in',
-                        variant: AppButtonVariant.ghost,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 9,
-                        ),
-                        onPressed: () {
-                          AppNavigation.toLogin(context);
-                        },
-                      ),
-                    const SizedBox(width: 8),
                     AppButton(
                       label: 'Get started',
                       variant: AppButtonVariant.primary,
