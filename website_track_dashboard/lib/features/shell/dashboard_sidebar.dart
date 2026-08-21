@@ -5,6 +5,7 @@ import '../../app/theme/radii.dart';
 import '../../app/theme/motion.dart';
 import '../../data/models/models.dart';
 import '../../shared/widgets/viziapi_brand.dart';
+import '../../shared/icons/dashboard_icons.dart';
 
 class DashboardSidebar extends StatelessWidget {
   const DashboardSidebar({
@@ -31,45 +32,45 @@ class DashboardSidebar extends StatelessWidget {
           _sectionLabel('WORKSPACE'),
           _item(
             section: DashboardSection.overview,
-            icon: Icons.grid_view_rounded,
+            icon: DashboardIcons.dashboard,
             label: 'Overview',
           ),
           _item(
             section: DashboardSection.websites,
-            icon: Icons.language_rounded,
+            icon: DashboardIcons.websites,
             label: 'Websites',
           ),
           _item(
             section: DashboardSection.realtime,
-            icon: Icons.sensors_rounded,
+            icon: DashboardIcons.realtime,
             label: 'Realtime',
           ),
           const SizedBox(height: 18),
           _sectionLabel('ANALYTICS'),
           _item(
             section: DashboardSection.pages,
-            icon: Icons.bar_chart_rounded,
+            icon: DashboardIcons.pages,
             label: 'Pages',
           ),
           _item(
             section: DashboardSection.visitors,
-            icon: Icons.people_outline_rounded,
+            icon: DashboardIcons.visitors,
             label: 'Visitors',
           ),
           _item(
             section: DashboardSection.events,
-            icon: Icons.bolt_outlined,
+            icon: DashboardIcons.events,
             label: 'Events',
           ),
           const Spacer(),
           _item(
             section: DashboardSection.tracking,
-            icon: Icons.code_rounded,
+            icon: DashboardIcons.tracking,
             label: 'Tracking',
           ),
           _item(
             section: DashboardSection.settings,
-            icon: Icons.settings_outlined,
+            icon: DashboardIcons.settings,
             label: 'Settings',
           ),
         ],

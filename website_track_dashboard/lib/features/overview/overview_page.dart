@@ -12,6 +12,7 @@ import '../../data/models/models.dart';
 import '../../data/repositories/repositories.dart';
 import '../../shared/widgets/dashboard_scaffold.dart';
 import '../../shared/widgets/metric_card.dart';
+import '../../shared/icons/dashboard_icons.dart';
 
 class OverviewPage extends StatefulWidget {
   const OverviewPage({
@@ -133,7 +134,7 @@ class _OverviewPageState extends State<OverviewPage> {
             tooltip: 'Refresh',
             onPressed: _load,
             icon: const Icon(
-              Icons.refresh_rounded,
+              DashboardIcons.refresh,
               color: AppColors.textSecondary,
             ),
           ),
@@ -176,7 +177,7 @@ class _OverviewPageState extends State<OverviewPage> {
           const SizedBox(height: 12),
           if (!hasTraffic) ...[
             const EmptyState(
-              icon: Icons.insights_outlined,
+              icon: DashboardIcons.dashboard,
               title: 'No visitors yet',
               body:
                   'Install the tracking script and we\'ll show your first visitor here.',
@@ -194,7 +195,7 @@ class _OverviewPageState extends State<OverviewPage> {
               MetricCard(
                 title: 'Total visitors',
                 value: count.totalVisitors,
-                icon: Icons.people_alt_outlined,
+                icon: DashboardIcons.totalVisitors,
                 color: AppColors.accent,
                 tooltip:
                     'Total distinct anonymous visitors recorded for the selected website.',
@@ -202,7 +203,7 @@ class _OverviewPageState extends State<OverviewPage> {
               MetricCard(
                 title: 'Active now',
                 value: count.activeVisitors,
-                icon: Icons.sensors_rounded,
+                icon: DashboardIcons.active,
                 color: AppColors.emerald,
                 isLive: true,
                 tooltip:
@@ -211,14 +212,14 @@ class _OverviewPageState extends State<OverviewPage> {
               MetricCard(
                 title: 'New visitors',
                 value: stats.newVisitors,
-                icon: Icons.person_add_alt_1_outlined,
+                icon: DashboardIcons.newVisitors,
                 color: AppColors.cyan,
                 tooltip: 'Visitors making their first-ever visit.',
               ),
               MetricCard(
                 title: 'Returning visitors',
                 value: stats.returningVisitors,
-                icon: Icons.replay_rounded,
+                icon: DashboardIcons.returningVisitors,
                 color: AppColors.violet,
                 tooltip:
                     'Visitors who have previously visited and later return for another session.',
@@ -226,7 +227,7 @@ class _OverviewPageState extends State<OverviewPage> {
               MetricCard(
                 title: 'Sessions',
                 value: stats.sessions,
-                icon: Icons.timer_outlined,
+                icon: DashboardIcons.sessions,
                 color: AppColors.violet,
                 tooltip:
                     'A visit session ending after 2 hours of inactivity.',
@@ -234,7 +235,7 @@ class _OverviewPageState extends State<OverviewPage> {
               MetricCard(
                 title: 'Page views',
                 value: stats.totalViews,
-                icon: Icons.bar_chart_rounded,
+                icon: DashboardIcons.pageViews,
                 color: AppColors.accent,
                 tooltip: 'Accepted tracked page-view events.',
               ),

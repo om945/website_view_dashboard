@@ -5,6 +5,7 @@ import '../../app/theme/radii.dart';
 import '../../app/theme/motion.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/widgets/live_dot.dart';
+import '../icons/dashboard_icons.dart';
 
 class MetricCard extends StatefulWidget {
   const MetricCard({
@@ -84,7 +85,7 @@ class _MetricCardState extends State<MetricCard> {
                   Tooltip(
                     message: widget.tooltip!,
                     child: const Icon(
-                      Icons.info_outline_rounded,
+                      DashboardIcons.info,
                       size: 13,
                       color: AppColors.textMuted,
                     ),

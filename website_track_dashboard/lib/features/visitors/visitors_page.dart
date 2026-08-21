@@ -8,6 +8,7 @@ import '../../data/models/models.dart';
 import '../../data/repositories/repositories.dart';
 import '../../shared/widgets/dashboard_scaffold.dart';
 import '../../shared/widgets/metric_card.dart';
+import '../../shared/icons/dashboard_icons.dart';
 
 /// Visitors aggregates from public + authenticated stats.
 /// The backend does not expose individual visitor records to the dashboard.
@@ -113,7 +114,7 @@ class _VisitorsPageState extends State<VisitorsPage> {
         children: [
           if (empty)
             const EmptyState(
-              icon: Icons.groups_2_outlined,
+              icon: DashboardIcons.visitors,
               title: 'No visitors yet',
               body:
                   'Install the tracking script to begin collecting analytics. Individual visitor records are not exposed by the API — only anonymous aggregates.',
@@ -133,7 +134,7 @@ class _VisitorsPageState extends State<VisitorsPage> {
                 MetricCard(
                   title: 'Total visitors',
                   value: count.totalVisitors,
-                  icon: Icons.people_alt_outlined,
+                  icon: DashboardIcons.totalVisitors,
                   color: AppColors.accent,
                   tooltip:
                       'Total distinct anonymous visitors recorded for this website.',
@@ -141,7 +142,7 @@ class _VisitorsPageState extends State<VisitorsPage> {
                 MetricCard(
                   title: 'Unique (${_range.label})',
                   value: stats.uniqueVisitors,
-                  icon: Icons.person_outline_rounded,
+                  icon: DashboardIcons.profile,
                   color: AppColors.cyan,
                   tooltip:
                       'Distinct visitors with page views in the selected range.',
@@ -149,14 +150,14 @@ class _VisitorsPageState extends State<VisitorsPage> {
                 MetricCard(
                   title: 'New visitors',
                   value: stats.newVisitors,
-                  icon: Icons.person_add_alt_1_outlined,
+                  icon: DashboardIcons.newVisitors,
                   color: AppColors.emerald,
                   tooltip: 'Visitors making their first-ever visit.',
                 ),
                 MetricCard(
                   title: 'Returning visitors',
                   value: stats.returningVisitors,
-                  icon: Icons.replay_rounded,
+                  icon: DashboardIcons.returningVisitors,
                   color: AppColors.violet,
                   tooltip:
                       'Visitors who have previously visited and later return.',

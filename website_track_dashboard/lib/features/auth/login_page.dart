@@ -5,6 +5,7 @@ import '../../core/widgets/grid_background.dart';
 import '../../data/api/api_client.dart';
 import '../../shared/widgets/app_button.dart';
 import '../../shared/widgets/viziapi_brand.dart';
+import '../../shared/icons/dashboard_icons.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key, this.rateLimited = false});
@@ -72,7 +73,7 @@ class LoginPage extends StatelessWidget {
                       ],
                       AppButton(
                         label: 'Continue with Google',
-                        icon: Icons.login_rounded,
+                        icon: DashboardIcons.login,
                         expand: true,
                         onPressed: startGoogleSignIn,
                       ),

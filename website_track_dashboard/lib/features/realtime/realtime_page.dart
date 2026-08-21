@@ -15,6 +15,7 @@ import '../../data/models/models.dart';
 import '../../data/repositories/repositories.dart';
 import '../../shared/widgets/dashboard_scaffold.dart';
 import '../../shared/widgets/metric_card.dart';
+import '../../shared/icons/dashboard_icons.dart';
 
 class RealtimePage extends StatefulWidget {
   const RealtimePage({super.key, required this.analytics, required this.site});
@@ -209,7 +210,7 @@ class _RealtimePageState extends State<RealtimePage> {
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
                 : const Icon(
-                    Icons.refresh_rounded,
+                    DashboardIcons.refresh,
                     color: AppColors.textSecondary,
                   ),
           ),
@@ -379,7 +380,7 @@ class _RealtimePageState extends State<RealtimePage> {
               MetricCard(
                 title: 'Active now',
                 value: activeCount,
-                icon: Icons.sensors_rounded,
+                icon: DashboardIcons.active,
                 color: AppColors.emerald,
                 isLive: true,
                 tooltip:
@@ -388,7 +389,7 @@ class _RealtimePageState extends State<RealtimePage> {
               MetricCard(
                 title: 'Total visitors',
                 value: totalCount,
-                icon: Icons.people_alt_outlined,
+                icon: DashboardIcons.totalVisitors,
                 color: AppColors.accent,
                 tooltip:
                     'Total distinct anonymous visitors counted since inception.',
@@ -406,7 +407,7 @@ class _RealtimePageState extends State<RealtimePage> {
                     Row(
                       children: [
                         Icon(
-                          Icons.wifi_tethering_rounded,
+                          DashboardIcons.realtime,
                           size: 18,
                           color: _statusColor,
                         ),

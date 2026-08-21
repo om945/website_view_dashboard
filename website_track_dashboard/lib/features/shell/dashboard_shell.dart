@@ -10,6 +10,7 @@ import '../../data/models/models.dart';
 import '../../data/repositories/repositories.dart';
 import '../../shared/widgets/app_button.dart';
 import '../../shared/widgets/dashboard_scaffold.dart';
+import '../../shared/icons/dashboard_icons.dart';
 import '../events/events_page.dart';
 import '../overview/overview_page.dart';
 import '../pages/pages_page.dart';
@@ -239,13 +240,13 @@ class _DashboardShellState extends State<DashboardShell> {
         title: 'Welcome',
         subtitle: 'Create your first website to start collecting analytics.',
         child: EmptyState(
-          icon: Icons.language_rounded,
+          icon: DashboardIcons.websites,
           title: 'No websites yet',
           body:
               'Add a website, copy the tracking script, and your first visitor will appear here.',
           action: AppButton(
             label: 'Add website',
-            icon: Icons.add_rounded,
+            icon: DashboardIcons.add,
             onPressed: _goToAddWebsite,
           ),
         ),

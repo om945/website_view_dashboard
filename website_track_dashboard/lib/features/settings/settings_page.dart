@@ -8,6 +8,7 @@ import '../../data/models/models.dart';
 import '../../data/repositories/repositories.dart';
 import '../../shared/widgets/app_button.dart';
 import '../../shared/widgets/dashboard_scaffold.dart';
+import '../../shared/icons/dashboard_icons.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({
@@ -118,21 +119,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
           ),
-          const SizedBox(height: 14),
-          DashboardPanel(
-            title: 'API connection',
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _row('API endpoint', '/api/v1/...', isCode: true),
-                const SizedBox(height: 6),
-                const Text(
-                  'The dashboard sends credentialed requests using the backend session cookie.',
-                  style: AppTypography.bodyMedium,
-                ),
-              ],
-            ),
-          ),
           if (_error != null) ...[
             const SizedBox(height: 14),
             Text(
@@ -145,7 +131,7 @@ class _SettingsPageState extends State<SettingsPage> {
             alignment: Alignment.centerLeft,
             child: AppButton(
               label: 'Delete website',
-              icon: Icons.delete_outline,
+              icon: DashboardIcons.delete,
               variant: AppButtonVariant.outline,
               isLoading: _deleting,
               onPressed: _deleting ? null : _deleteSite,
@@ -156,7 +142,7 @@ class _SettingsPageState extends State<SettingsPage> {
             alignment: Alignment.centerLeft,
             child: AppButton(
               label: 'Sign out',
-              icon: Icons.logout_rounded,
+              icon: DashboardIcons.logout,
               variant: AppButtonVariant.secondary,
               onPressed: widget.onLogout,
             ),

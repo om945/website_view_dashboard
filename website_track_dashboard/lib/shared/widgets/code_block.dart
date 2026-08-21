@@ -4,6 +4,7 @@ import '../../app/theme/colors.dart';
 import '../../app/theme/typography.dart';
 import '../../app/theme/radii.dart';
 import '../../app/theme/motion.dart';
+import '../icons/dashboard_icons.dart';
 
 class CodeBlock extends StatefulWidget {
   const CodeBlock({
@@ -98,7 +99,7 @@ class _CodeBlockState extends State<CodeBlock> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          _copied ? Icons.check_rounded : Icons.copy_rounded,
+                          _copied ? DashboardIcons.check : DashboardIcons.copy,
                           size: 13,
                           color: _copied ? AppColors.emerald : AppColors.textSecondary,
                         ),

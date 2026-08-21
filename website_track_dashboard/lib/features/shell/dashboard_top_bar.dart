@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../app/theme/colors.dart';
 import '../../app/theme/typography.dart';
 import '../../data/models/models.dart';
+import '../../shared/icons/dashboard_icons.dart';
 
 class DashboardTopBar extends StatelessWidget {
   const DashboardTopBar({
@@ -41,7 +42,7 @@ class DashboardTopBar extends StatelessWidget {
           if (mobile) ...[
             IconButton(
               onPressed: onMenuTap,
-              icon: const Icon(Icons.menu_rounded, color: AppColors.textPrimary, size: 20),
+              icon: const Icon(DashboardIcons.menu, color: AppColors.textPrimary, size: 20),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
             ),
@@ -88,7 +89,7 @@ class DashboardTopBar extends StatelessWidget {
                       child: Row(
                         children: [
                           Icon(
-                            Icons.language_rounded,
+                            DashboardIcons.websites,
                             size: 13,
                             color: site.id == activeSite.id
                                 ? AppColors.accent
@@ -129,7 +130,7 @@ class DashboardTopBar extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Icon(
-                      Icons.language_rounded,
+                      DashboardIcons.websites,
                       size: 13,
                       color: AppColors.accent,
                     ),
@@ -147,7 +148,7 @@ class DashboardTopBar extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     const Icon(
-                      Icons.unfold_more_rounded,
+                      DashboardIcons.chevron,
                       color: AppColors.textSecondary,
                       size: 15,
                     ),
@@ -201,7 +202,7 @@ class DashboardTopBar extends StatelessWidget {
                 child: Row(
                   children: [
                     Icon(
-                      Icons.logout_rounded,
+                      DashboardIcons.logout,
                       size: 15,
                       color: AppColors.accent,
                     ),

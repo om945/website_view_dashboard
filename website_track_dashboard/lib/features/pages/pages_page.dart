@@ -7,6 +7,7 @@ import '../../core/utils/formatters.dart';
 import '../../data/models/models.dart';
 import '../../data/repositories/repositories.dart';
 import '../../shared/widgets/dashboard_scaffold.dart';
+import '../../shared/icons/dashboard_icons.dart';
 
 class PagesPage extends StatefulWidget {
   const PagesPage({
@@ -99,7 +100,7 @@ class _PagesPageState extends State<PagesPage> {
           },
         ),
         child: const EmptyState(
-          icon: Icons.bar_chart_rounded,
+          icon: DashboardIcons.pages,
           title: 'No tracked pages yet',
           body:
               'Install the tracking script and your top pages will appear here.',

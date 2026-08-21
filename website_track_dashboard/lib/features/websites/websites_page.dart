@@ -10,6 +10,7 @@ import '../../data/models/models.dart';
 import '../../data/repositories/repositories.dart';
 import '../../shared/widgets/app_button.dart';
 import '../../shared/widgets/dashboard_scaffold.dart';
+import '../../shared/icons/dashboard_icons.dart';
 
 class WebsitesPage extends StatefulWidget {
   const WebsitesPage({
@@ -201,7 +202,7 @@ class _WebsitesPageState extends State<WebsitesPage> {
       subtitle: 'Create and manage the sites connected to your account.',
       action: AppButton(
         label: _showForm ? 'Cancel' : 'Add website',
-        icon: _showForm ? Icons.close_rounded : Icons.add_rounded,
+        icon: _showForm ? DashboardIcons.close : DashboardIcons.add,
         variant: AppButtonVariant.secondary,
         onPressed: () => setState(() {
           _showForm = !_showForm;
@@ -215,8 +216,7 @@ class _WebsitesPageState extends State<WebsitesPage> {
             Text(
               _message!,
               style: AppTypography.bodyMedium.copyWith(
-                color:
-                    _messageIsError ? AppColors.accent : AppColors.emerald,
+                color: _messageIsError ? AppColors.accent : AppColors.emerald,
               ),
             ),
             const SizedBox(height: 14),
@@ -229,8 +229,9 @@ class _WebsitesPageState extends State<WebsitesPage> {
                   TextField(
                     controller: _nameController,
                     textInputAction: TextInputAction.next,
-                    decoration:
-                        const InputDecoration(labelText: 'Website name'),
+                    decoration: const InputDecoration(
+                      labelText: 'Website name',
+                    ),
                   ),
                   const SizedBox(height: 12),
                   TextField(
@@ -247,7 +248,7 @@ class _WebsitesPageState extends State<WebsitesPage> {
                     alignment: Alignment.centerLeft,
                     child: AppButton(
                       label: 'Create website',
-                      icon: Icons.arrow_forward_rounded,
+                      icon: DashboardIcons.arrowForward,
                       isLoading: _creating,
                       onPressed: _creating ? null : _create,
                     ),
@@ -258,10 +259,9 @@ class _WebsitesPageState extends State<WebsitesPage> {
           if (_showForm) const SizedBox(height: 18),
           if (widget.sites.isEmpty && !_showForm)
             const EmptyState(
-              icon: Icons.language_rounded,
+              icon: DashboardIcons.websites,
               title: 'No websites yet',
-              body:
-                  'Create your first website to start tracking visitors.',
+              body: 'Create your first website to start tracking visitors.',
             ),
           ...widget.sites.map(
             (site) => WebsiteCard(
@@ -304,8 +304,8 @@ class _WebsiteCardState extends State<WebsiteCard> {
     final borderColor = widget.selected
         ? AppColors.accentBorder
         : _hovered
-            ? AppColors.borderStrong
-            : AppColors.border;
+        ? AppColors.borderStrong
+        : AppColors.border;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -328,8 +328,8 @@ class _WebsiteCardState extends State<WebsiteCard> {
                 color: widget.selected
                     ? AppColors.surfaceElevated
                     : _hovered
-                        ? AppColors.surfaceHover
-                        : AppColors.surface,
+                    ? AppColors.surfaceHover
+                    : AppColors.surface,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: borderColor),
               ),
@@ -403,28 +403,30 @@ class _WebsiteCardState extends State<WebsiteCard> {
                       MouseRegion(
                         onEnter: (_) => setState(() => _deleteHovered = true),
                         onExit: (_) => setState(() => _deleteHovered = false),
-                        child: IconButton(
-                          tooltip: 'Delete website',
-                          onPressed: widget.onDelete,
-                          style: IconButton.styleFrom(
-                            minimumSize: const Size(40, 40),
-                            padding: EdgeInsets.zero,
-                            backgroundColor: AppColors.surfaceActive,
-                            foregroundColor: AppColors.textSecondary,
-                            hoverColor: AppColors.accentSoft,
-                            focusColor: AppColors.accentSoft,
-                            overlayColor: AppColors.accent,
-                            side: const BorderSide(color: AppColors.borderStrong),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          icon: Icon(
-                            Icons.delete_rounded,
-                            size: 18,
+                        child: Tooltip(
+                          message: 'Delete website',
+                          child: Material(
                             color: _deleteHovered
-                                ? AppColors.accentHover
-                                : AppColors.textPrimary,
+                                ? AppColors.accentSoft
+                                : AppColors.surfaceActive,
+                            borderRadius: BorderRadius.circular(8),
+                            child: InkWell(
+                              onTap: widget.onDelete,
+                              borderRadius: BorderRadius.circular(8),
+                              child: SizedBox(
+                                width: 40,
+                                height: 40,
+                                child: Center(
+                                  child: Icon(
+                                    DashboardIcons.delete,
+                                    size: 19,
+                                    color: _deleteHovered
+                                        ? AppColors.accentHover
+                                        : AppColors.textPrimary,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -438,7 +440,7 @@ class _WebsiteCardState extends State<WebsiteCard> {
                         Row(
                           children: [
                             const Icon(
-                              Icons.language_rounded,
+                              DashboardIcons.websites,
                               size: 19,
                               color: AppColors.accent,
                             ),
@@ -460,7 +462,7 @@ class _WebsiteCardState extends State<WebsiteCard> {
                   return Row(
                     children: [
                       const Icon(
-                        Icons.language_rounded,
+                        DashboardIcons.websites,
                         size: 19,
                         color: AppColors.accent,
                       ),

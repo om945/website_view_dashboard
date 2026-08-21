@@ -5,6 +5,7 @@ import '../../app/theme/radii.dart';
 import '../../app/theme/motion.dart';
 import '../../core/responsive/responsive.dart';
 import '../../data/models/models.dart';
+import '../icons/dashboard_icons.dart';
 
 class DashboardPanel extends StatelessWidget {
   const DashboardPanel({
@@ -167,7 +168,7 @@ class ErrorState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.cloud_off_rounded, color: AppColors.accent, size: 32),
+            const Icon(DashboardIcons.cloudOff, color: AppColors.accent, size: 32),
             const SizedBox(height: 12),
             Text(message, style: AppTypography.bodyMedium),
             const SizedBox(height: 8),
