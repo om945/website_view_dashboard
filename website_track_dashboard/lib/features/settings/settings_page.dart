@@ -93,7 +93,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 14),
           DashboardPanel(
             title: 'Selected website',
             trailing: TextButton(
@@ -107,25 +107,25 @@ class _SettingsPageState extends State<SettingsPage> {
                   );
                 }
               },
-              child: const Text('Copy key'),
+              child: const Text('Copy site key'),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _row('Name', widget.site.name),
                 _row('Domain', widget.site.domain),
-                _row('Site key', widget.site.siteKey),
+                _row('Site key', widget.site.siteKey, isCode: true),
               ],
             ),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 14),
           DashboardPanel(
             title: 'API connection',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _row('API endpoint', '/api/v1/...'),
-                const SizedBox(height: 8),
+                _row('API endpoint', '/api/v1/...', isCode: true),
+                const SizedBox(height: 6),
                 const Text(
                   'The dashboard sends credentialed requests using the backend session cookie.',
                   style: AppTypography.bodyMedium,
@@ -166,9 +166,9 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _row(String label, String value) {
+  Widget _row(String label, String value, {bool isCode = false}) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -179,9 +179,11 @@ class _SettingsPageState extends State<SettingsPage> {
           Expanded(
             child: SelectableText(
               value,
-              style: AppTypography.bodyMedium.copyWith(
-                color: AppColors.textPrimary,
-              ),
+              style: isCode
+                  ? AppTypography.code.copyWith(fontSize: 12)
+                  : AppTypography.bodyMedium.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
             ),
           ),
         ],

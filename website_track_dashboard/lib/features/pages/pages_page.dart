@@ -124,33 +124,54 @@ class _PagesPageState extends State<PagesPage> {
         title: 'Top pages · ${_range.label.toLowerCase()}',
         child: Column(
           children: [
-            const Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'PATH',
-                    style: TextStyle(color: AppColors.textMuted, fontSize: 10),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'PATH',
+                      style: AppTypography.bodySmall.copyWith(
+                        fontSize: 9.5,
+                        letterSpacing: 1.0,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textMuted,
+                      ),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 90,
-                  child: Text(
-                    'VIEWS',
-                    style: TextStyle(color: AppColors.textMuted, fontSize: 10),
+                  SizedBox(
+                    width: 90,
+                    child: Text(
+                      'VIEWS',
+                      textAlign: TextAlign.right,
+                      style: AppTypography.bodySmall.copyWith(
+                        fontSize: 9.5,
+                        letterSpacing: 1.0,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textMuted,
+                      ),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 100,
-                  child: Text(
-                    'UNIQUE',
-                    style: TextStyle(color: AppColors.textMuted, fontSize: 10),
+                  const SizedBox(width: 16),
+                  SizedBox(
+                    width: 90,
+                    child: Text(
+                      'UNIQUE',
+                      textAlign: TextAlign.right,
+                      style: AppTypography.bodySmall.copyWith(
+                        fontSize: 9.5,
+                        letterSpacing: 1.0,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textMuted,
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             ..._rows!.take(25).map(
                   (row) => Container(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    padding: const EdgeInsets.symmetric(vertical: 9),
                     decoration: const BoxDecoration(
                       border: Border(
                         top: BorderSide(color: AppColors.border),
@@ -159,23 +180,50 @@ class _PagesPageState extends State<PagesPage> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Text(
-                            row.path,
-                            style: AppTypography.code.copyWith(fontSize: 12.5),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 7,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.codeBackground,
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(color: AppColors.codeBorder),
+                              ),
+                              child: Text(
+                                row.path,
+                                style: AppTypography.code.copyWith(
+                                  fontSize: 11.5,
+                                  color: AppColors.textPrimary,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                         SizedBox(
                           width: 90,
                           child: Text(
                             formatCount(row.views),
-                            style: AppTypography.bodyMedium,
+                            textAlign: TextAlign.right,
+                            style: AppTypography.bodyMedium.copyWith(
+                              fontSize: 12.5,
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
+                        const SizedBox(width: 16),
                         SizedBox(
-                          width: 100,
+                          width: 90,
                           child: Text(
                             formatCount(row.uniqueVisitors),
-                            style: AppTypography.bodyMedium,
+                            textAlign: TextAlign.right,
+                            style: AppTypography.bodySmall.copyWith(
+                              fontSize: 12,
+                              color: AppColors.textSecondary,
+                            ),
                           ),
                         ),
                       ],

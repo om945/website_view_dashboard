@@ -77,7 +77,7 @@ class _AppButtonState extends State<AppButton> {
             _pressed ? 1 : (_hovered ? -1 : 0),
             0,
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
             color: bg,
             borderRadius: AppRadii.radiusSm,
@@ -89,24 +89,24 @@ class _AppButtonState extends State<AppButton> {
             children: [
               if (widget.isLoading) ...[
                 SizedBox(
-                  width: 14,
-                  height: 14,
+                  width: 13,
+                  height: 13,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
                     color: fg,
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 6),
               ] else if (widget.icon != null) ...[
-                Icon(widget.icon, size: 17, color: fg),
-                const SizedBox(width: 8),
+                Icon(widget.icon, size: 15, color: fg),
+                const SizedBox(width: 6),
               ],
               Text(
                 widget.label,
                 style: TextStyle(
                   fontFamily: AppTypography.fontSans,
                   fontFamilyFallback: AppTypography.fontFallback,
-                  fontSize: 14,
+                  fontSize: 12.5,
                   fontWeight: FontWeight.w600,
                   color: fg,
                 ),

@@ -122,10 +122,10 @@ class _VisitorsPageState extends State<VisitorsPage> {
             GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              crossAxisSpacing: 14,
-              mainAxisSpacing: 14,
-              childAspectRatio: 1.8,
+              crossAxisCount: MediaQuery.sizeOf(context).width < 640 ? 1 : 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: MediaQuery.sizeOf(context).width < 640 ? 2.6 : 2.4,
               children: [
                 MetricCard(
                   title: 'Total visitors',

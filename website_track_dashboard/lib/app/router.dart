@@ -63,7 +63,9 @@ class DashboardRouteInformationParser extends RouteInformationParser<String> {
         ? hashPath
         : uri.path.startsWith('/dashboard')
             ? uri.path
-            : DashboardRoutes.overview;
+            : uri.path == '/' || uri.path.isEmpty
+                ? DashboardRoutes.overview
+                : uri.path;
     return DashboardRoutes.all.contains(path)
         ? path
         : DashboardRoutes.overview;

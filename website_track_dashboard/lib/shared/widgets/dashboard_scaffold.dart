@@ -22,7 +22,7 @@ class DashboardPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: AppRadii.radiusLg,
@@ -39,7 +39,7 @@ class DashboardPanel extends StatelessWidget {
               if (trailing != null) trailing!,
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
           child,
         ],
       ),
@@ -63,34 +63,35 @@ class PageFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hPad = Responsive.horizontalPadding(context);
     return SingleChildScrollView(
-      padding: EdgeInsets.all(Responsive.horizontalPadding(context)),
+      padding: EdgeInsets.symmetric(horizontal: hPad, vertical: 20),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1240),
+          constraints: const BoxConstraints(maxWidth: 1200),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(title, style: AppTypography.h1),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 3),
                         Text(subtitle, style: AppTypography.bodyMedium),
                       ],
                     ),
                   ),
                   if (action != null) ...[
-                    const SizedBox(width: 16),
+                    const SizedBox(width: 12),
                     action!,
                   ],
                 ],
               ),
-              const SizedBox(height: 28),
+              const SizedBox(height: 18),
               child,
             ],
           ),
@@ -118,7 +119,7 @@ class EmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 56, horizontal: 24),
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: AppRadii.radiusLg,
@@ -126,12 +127,12 @@ class EmptyState extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Icon(icon, color: AppColors.accent, size: 36),
-          const SizedBox(height: 16),
+          Icon(icon, color: AppColors.accent, size: 32),
+          const SizedBox(height: 12),
           Text(title, textAlign: TextAlign.center, style: AppTypography.h3),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 520),
+            constraints: const BoxConstraints(maxWidth: 480),
             child: Text(
               body,
               textAlign: TextAlign.center,
@@ -139,7 +140,7 @@ class EmptyState extends StatelessWidget {
             ),
           ),
           if (action != null) ...[
-            const SizedBox(height: 22),
+            const SizedBox(height: 18),
             action!,
           ],
         ],
@@ -161,15 +162,21 @@ class ErrorState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.cloud_off, color: AppColors.accent, size: 36),
-          const SizedBox(height: 14),
-          Text(message, style: AppTypography.bodyMedium),
-          const SizedBox(height: 8),
-          TextButton(onPressed: onRetry, child: const Text('Retry')),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 40),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.cloud_off_rounded, color: AppColors.accent, size: 32),
+            const SizedBox(height: 12),
+            Text(message, style: AppTypography.bodyMedium),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: onRetry,
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -181,7 +188,7 @@ class LoadingState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: CircularProgressIndicator(color: AppColors.accent),
+      child: CircularProgressIndicator(color: AppColors.accent, strokeWidth: 2.5),
     );
   }
 }
@@ -199,9 +206,9 @@ class MetricSkeletonGrid extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: columns,
-        crossAxisSpacing: 14,
-        mainAxisSpacing: 14,
-        childAspectRatio: 1.7,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        childAspectRatio: 2.2,
       ),
       itemCount: count,
       itemBuilder: (_, __) => Container(
@@ -228,7 +235,7 @@ class RangeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
         color: AppColors.surfaceElevated,
         borderRadius: AppRadii.radiusSm,
@@ -243,7 +250,7 @@ class RangeSelector extends StatelessWidget {
             borderRadius: AppRadii.radiusSm,
             child: AnimatedContainer(
               duration: AppMotion.fast,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
               decoration: BoxDecoration(
                 color: selected ? AppColors.accentSoft : Colors.transparent,
                 borderRadius: AppRadii.radiusSm,
@@ -255,7 +262,7 @@ class RangeSelector extends StatelessWidget {
                 range.label,
                 style: TextStyle(
                   fontFamily: AppTypography.fontSans,
-                  fontSize: 11.5,
+                  fontSize: 11,
                   fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
                   color: selected ? AppColors.accent : AppColors.textSecondary,
                 ),

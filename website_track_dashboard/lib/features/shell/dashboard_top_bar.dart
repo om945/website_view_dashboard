@@ -30,8 +30,8 @@ class DashboardTopBar extends StatelessWidget {
         : (sites.isNotEmpty ? sites.first : null);
 
     return Container(
-      height: 70,
-      padding: EdgeInsets.symmetric(horizontal: mobile ? 14 : 24),
+      height: 56,
+      padding: EdgeInsets.symmetric(horizontal: mobile ? 12 : 20),
       decoration: const BoxDecoration(
         color: AppColors.surface,
         border: Border(bottom: BorderSide(color: AppColors.border)),
@@ -41,38 +41,39 @@ class DashboardTopBar extends StatelessWidget {
           if (mobile) ...[
             IconButton(
               onPressed: onMenuTap,
-              icon: const Icon(Icons.menu_rounded, color: AppColors.textPrimary),
+              icon: const Icon(Icons.menu_rounded, color: AppColors.textPrimary, size: 20),
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
             ),
             const SizedBox(width: 4),
           ],
           Text(
             'Dashboard',
-            style: AppTypography.h3.copyWith(
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.2,
+            style: AppTypography.bodyMedium.copyWith(
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
             ),
           ),
           if (activeSite != null) ...[
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsets.symmetric(horizontal: 8),
               child: Text(
                 '/',
                 style: TextStyle(
-                  color: AppColors.textDisabled,
-                  fontSize: 16,
+                  color: AppColors.textMuted,
+                  fontSize: 14,
                   fontWeight: FontWeight.w300,
                 ),
               ),
             ),
             PopupMenuButton<String>(
               tooltip: 'Switch website',
-              offset: const Offset(0, 8),
+              offset: const Offset(0, 6),
               position: PopupMenuPosition.under,
               constraints: BoxConstraints(
-                minWidth: mobile ? 160 : 220,
-                maxWidth: mobile ? 220 : 280,
-                maxHeight: 360,
+                minWidth: mobile ? 160 : 200,
+                maxWidth: mobile ? 220 : 260,
+                maxHeight: 320,
               ),
               initialValue: activeSite.id,
               onSelected: (siteId) {
@@ -83,12 +84,15 @@ class DashboardTopBar extends StatelessWidget {
                   .map(
                     (site) => PopupMenuItem(
                       value: site.id,
+                      height: 38,
                       child: Row(
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.language_rounded,
-                            size: 14,
-                            color: AppColors.accent,
+                            size: 13,
+                            color: site.id == activeSite.id
+                                ? AppColors.accent
+                                : AppColors.textMuted,
                           ),
                           const SizedBox(width: 8),
                           Expanded(
@@ -96,8 +100,10 @@ class DashboardTopBar extends StatelessWidget {
                               site.domain,
                               overflow: TextOverflow.ellipsis,
                               style: AppTypography.bodyMedium.copyWith(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
+                                fontSize: 12.5,
+                                fontWeight: site.id == activeSite.id
+                                    ? FontWeight.w600
+                                    : FontWeight.w400,
                                 color: AppColors.textPrimary,
                               ),
                             ),
@@ -108,40 +114,42 @@ class DashboardTopBar extends StatelessWidget {
                   )
                   .toList(),
               child: Container(
-                height: 38,
+                height: 32,
                 constraints: BoxConstraints(
-                  maxWidth: mobile ? 160 : 260,
-                  minWidth: 120,
+                  maxWidth: mobile ? 150 : 220,
+                  minWidth: 100,
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 9),
                 decoration: BoxDecoration(
                   color: AppColors.surfaceElevated,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(6),
                   border: Border.all(color: AppColors.borderStrong),
                 ),
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     const Icon(
                       Icons.language_rounded,
-                      size: 14,
+                      size: 13,
                       color: AppColors.accent,
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
+                    const SizedBox(width: 6),
+                    Flexible(
                       child: Text(
                         activeSite.domain,
                         overflow: TextOverflow.ellipsis,
                         style: AppTypography.bodyMedium.copyWith(
-                          fontSize: 13,
+                          fontSize: 12.5,
                           fontWeight: FontWeight.w500,
                           color: AppColors.textPrimary,
                         ),
                       ),
                     ),
+                    const SizedBox(width: 4),
                     const Icon(
-                      Icons.keyboard_arrow_down_rounded,
+                      Icons.unfold_more_rounded,
                       color: AppColors.textSecondary,
-                      size: 18,
+                      size: 15,
                     ),
                   ],
                 ),
@@ -151,12 +159,11 @@ class DashboardTopBar extends StatelessWidget {
           const Spacer(),
           PopupMenuButton<String>(
             tooltip: 'Account',
-            offset: const Offset(0, 8),
+            offset: const Offset(0, 6),
             position: PopupMenuPosition.under,
             constraints: const BoxConstraints(
-              minWidth: 220,
-              maxWidth: 280,
-              maxHeight: 240,
+              minWidth: 200,
+              maxWidth: 260,
             ),
             onSelected: (value) {
               if (value == 'logout') onLogout();
@@ -164,6 +171,7 @@ class DashboardTopBar extends StatelessWidget {
             itemBuilder: (_) => [
               PopupMenuItem(
                 enabled: false,
+                height: 48,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -173,45 +181,47 @@ class DashboardTopBar extends StatelessWidget {
                       style: AppTypography.bodyMedium.copyWith(
                         fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
+                        fontSize: 12.5,
                       ),
                     ),
-                    const SizedBox(height: 2),
                     Text(
                       user.email,
                       style: AppTypography.bodySmall.copyWith(
                         color: AppColors.textMuted,
+                        fontSize: 11,
                       ),
                     ),
                   ],
                 ),
               ),
-              const PopupMenuDivider(),
+              const PopupMenuDivider(height: 1),
               const PopupMenuItem(
                 value: 'logout',
+                height: 38,
                 child: Row(
                   children: [
                     Icon(
                       Icons.logout_rounded,
-                      size: 16,
+                      size: 15,
                       color: AppColors.accent,
                     ),
                     SizedBox(width: 8),
-                    Text('Sign out'),
+                    Text('Sign out', style: TextStyle(fontSize: 12.5)),
                   ],
                 ),
               ),
             ],
             child: Container(
-              padding: const EdgeInsets.all(2),
+              padding: const EdgeInsets.all(1.5),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: AppColors.borderStrong,
-                  width: 1.5,
+                  width: 1.2,
                 ),
               ),
               child: CircleAvatar(
-                radius: 16,
+                radius: 14,
                 backgroundColor: AppColors.accent,
                 backgroundImage:
                     user.avatarUrl != null ? NetworkImage(user.avatarUrl!) : null,
@@ -220,7 +230,7 @@ class DashboardTopBar extends StatelessWidget {
                         user.name.isEmpty ? '?' : user.name[0].toUpperCase(),
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 13,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
                       )
@@ -233,3 +243,4 @@ class DashboardTopBar extends StatelessWidget {
     );
   }
 }
+

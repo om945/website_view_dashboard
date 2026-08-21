@@ -19,13 +19,26 @@ class DashboardSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.surface,
-      padding: const EdgeInsets.fromLTRB(18, 28, 14, 18),
+      padding: const EdgeInsets.fromLTRB(14, 20, 12, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 12, bottom: 30),
-            child: Text('WEBSITE VIEW API', style: AppTypography.eyebrow),
+          Padding(
+            padding: const EdgeInsets.only(left: 10, bottom: 20, top: 4),
+            child: Row(
+              children: [
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    color: AppColors.accent,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Text('WEBSITE VIEW API', style: AppTypography.eyebrow),
+              ],
+            ),
           ),
           _sectionLabel('WORKSPACE'),
           _item(
@@ -43,7 +56,7 @@ class DashboardSidebar extends StatelessWidget {
             icon: Icons.sensors_rounded,
             label: 'Realtime',
           ),
-          const SizedBox(height: 22),
+          const SizedBox(height: 18),
           _sectionLabel('ANALYTICS'),
           _item(
             section: DashboardSection.pages,
@@ -78,13 +91,14 @@ class DashboardSidebar extends StatelessWidget {
 
   Widget _sectionLabel(String label) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 0, 8),
+      padding: const EdgeInsets.fromLTRB(10, 0, 0, 6),
       child: Text(
         label,
         style: AppTypography.bodySmall.copyWith(
-          fontSize: 10,
-          letterSpacing: 1.5,
+          fontSize: 9.5,
+          letterSpacing: 1.2,
           fontWeight: FontWeight.w700,
+          color: AppColors.textMuted,
         ),
       ),
     );
@@ -101,8 +115,8 @@ class DashboardSidebar extends StatelessWidget {
       borderRadius: AppRadii.radiusSm,
       child: AnimatedContainer(
         duration: AppMotion.fast,
-        margin: const EdgeInsets.only(bottom: 3),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        margin: const EdgeInsets.only(bottom: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           color: active ? AppColors.accentSoft : Colors.transparent,
           borderRadius: AppRadii.radiusSm,
@@ -112,15 +126,15 @@ class DashboardSidebar extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 18,
+              size: 16,
               color: active ? AppColors.accent : AppColors.textSecondary,
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 10),
             Text(
               label,
               style: TextStyle(
                 fontFamily: AppTypography.fontSans,
-                fontSize: 13,
+                fontSize: 12.5,
                 fontWeight: active ? FontWeight.w600 : FontWeight.w400,
                 color: active ? AppColors.textPrimary : AppColors.textSecondary,
               ),
@@ -131,3 +145,4 @@ class DashboardSidebar extends StatelessWidget {
     );
   }
 }
+

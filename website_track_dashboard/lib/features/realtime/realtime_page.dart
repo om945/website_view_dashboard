@@ -221,20 +221,20 @@ class _RealtimePageState extends State<RealtimePage> {
           // Hero Live Banner
           Container(
             width: double.infinity,
-            padding: EdgeInsets.all(isMobile ? 20 : 28),
+            padding: EdgeInsets.all(isMobile ? 16 : 20),
             decoration: BoxDecoration(
               color: AppColors.surface,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: _connectionStatus == 'connected'
                     ? AppColors.emerald.withValues(alpha: 0.35)
-                    : AppColors.borderStrong,
+                    : AppColors.border,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.2),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
+                  color: Colors.black.withValues(alpha: 0.15),
+                  blurRadius: 16,
+                  offset: const Offset(0, 6),
                 ),
               ],
             ),
@@ -244,30 +244,30 @@ class _RealtimePageState extends State<RealtimePage> {
                     children: [
                       Row(
                         children: [
-                          LiveDot(color: _statusColor, size: 8),
-                          const SizedBox(width: 12),
+                          LiveDot(color: _statusColor, size: 7),
+                          const SizedBox(width: 10),
                           Text(
                             formatCount(activeCount),
                             style: AppTypography.h1.copyWith(
-                              fontSize: 36,
+                              fontSize: 30,
                               fontWeight: FontWeight.w800,
                               color: AppColors.textPrimary,
                             ),
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 8),
                           const Text(
                             'active now',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               color: AppColors.textSecondary,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 12),
-                      const Divider(color: AppColors.border),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 10),
+                      const Divider(color: AppColors.border, height: 1),
+                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -279,6 +279,7 @@ class _RealtimePageState extends State<RealtimePage> {
                             '${formatCount(totalCount)} total visitors',
                             style: AppTypography.bodySmall.copyWith(
                               color: AppColors.textPrimary,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],
@@ -287,8 +288,8 @@ class _RealtimePageState extends State<RealtimePage> {
                   )
                 : Row(
                     children: [
-                      LiveDot(color: _statusColor, size: 8),
-                      const SizedBox(width: 18),
+                      LiveDot(color: _statusColor, size: 7),
+                      const SizedBox(width: 14),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -300,27 +301,27 @@ class _RealtimePageState extends State<RealtimePage> {
                                 Text(
                                   formatCount(activeCount),
                                   style: AppTypography.h1.copyWith(
-                                    fontSize: 38,
+                                    fontSize: 32,
                                     fontWeight: FontWeight.w800,
                                     color: AppColors.textPrimary,
-                                    letterSpacing: -1.0,
+                                    letterSpacing: -0.8,
                                   ),
                                 ),
-                                const SizedBox(width: 10),
+                                const SizedBox(width: 8),
                                 const Text(
                                   'active now',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     color: AppColors.textSecondary,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 4),
+                            const SizedBox(height: 2),
                             Text(
                               'Presence connection: $_statusLabel · Live WebSocket heartbeat',
-                              style: AppTypography.bodyMedium.copyWith(
+                              style: AppTypography.bodySmall.copyWith(
                                 color: AppColors.textSecondary,
                               ),
                             ),
@@ -329,12 +330,12 @@ class _RealtimePageState extends State<RealtimePage> {
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 10,
+                          horizontal: 12,
+                          vertical: 8,
                         ),
                         decoration: BoxDecoration(
                           color: AppColors.surfaceElevated,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: AppColors.border),
                         ),
                         child: Column(
@@ -345,14 +346,15 @@ class _RealtimePageState extends State<RealtimePage> {
                               style: AppTypography.bodyMedium.copyWith(
                                 fontWeight: FontWeight.w600,
                                 color: AppColors.textPrimary,
+                                fontSize: 12.5,
                               ),
                             ),
-                            const SizedBox(height: 3),
+                            const SizedBox(height: 2),
                             const Text(
                               'Public counter API',
                               style: TextStyle(
                                 color: AppColors.textMuted,
-                                fontSize: 11,
+                                fontSize: 10.5,
                               ),
                             ),
                           ],
@@ -361,16 +363,16 @@ class _RealtimePageState extends State<RealtimePage> {
                     ],
                   ),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 14),
 
           // 3 Metric Cards Grid
           GridView.count(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: isMobile ? 1 : 3,
-            crossAxisSpacing: 14,
-            mainAxisSpacing: 14,
-            childAspectRatio: isMobile ? 2.6 : 1.8,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: isMobile ? 2.6 : 2.2,
             children: [
               MetricCard(
                 title: 'Active now',

@@ -159,8 +159,11 @@ class _DashboardShellState extends State<DashboardShell> {
       body: Row(
         children: [
           if (!mobile)
-            SizedBox(
-              width: 248,
+            Container(
+              width: 228,
+              decoration: const BoxDecoration(
+                border: Border(right: BorderSide(color: AppColors.border)),
+              ),
               child: DashboardSidebar(
                 current: _section,
                 onTap: _navigate,

@@ -266,32 +266,47 @@ class _WebsitesPageState extends State<WebsitesPage> {
           ...widget.sites.map((site) {
             final selected = site.id == widget.selectedSite?.id;
             return Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.all(18),
+              margin: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(12),
+                color: selected ? AppColors.surfaceElevated : AppColors.surface,
+                borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color:
-                      selected ? AppColors.accentBorder : AppColors.border,
+                  color: selected ? AppColors.accentBorder : AppColors.border,
                 ),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.language_rounded, color: AppColors.accent),
-                  const SizedBox(width: 14),
+                  const Icon(Icons.language_rounded, size: 18, color: AppColors.accent),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(site.name, style: AppTypography.h3),
-                        const SizedBox(height: 4),
-                        Text(site.domain, style: AppTypography.bodyMedium),
-                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Text(
+                              site.name,
+                              style: AppTypography.bodyMedium.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              '(${site.domain})',
+                              style: AppTypography.bodySmall.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 3),
                         Text(
                           site.siteKey,
-                          style: AppTypography.bodySmall.copyWith(
-                            fontFamily: 'JetBrains Mono',
+                          style: AppTypography.code.copyWith(
+                            fontSize: 11,
+                            color: AppColors.textMuted,
                           ),
                         ),
                       ],
@@ -300,26 +315,32 @@ class _WebsitesPageState extends State<WebsitesPage> {
                   if (!selected)
                     TextButton(
                       onPressed: () => widget.onSelected(site),
+                      style: TextButton.styleFrom(
+                        visualDensity: VisualDensity.compact,
+                      ),
                       child: const Text('Select'),
                     ),
                   if (selected)
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8,
-                        vertical: 4,
+                        vertical: 3,
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.accentSoft,
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(4),
                         border: Border.all(color: AppColors.accentBorder),
                       ),
                       child: Text('Selected', style: AppTypography.chip),
                     ),
+                  const SizedBox(width: 4),
                   IconButton(
                     tooltip: 'Delete website',
                     onPressed: () => _delete(site),
+                    visualDensity: VisualDensity.compact,
                     icon: const Icon(
-                      Icons.delete_outline,
+                      Icons.delete_outline_rounded,
+                      size: 18,
                       color: AppColors.textMuted,
                     ),
                   ),

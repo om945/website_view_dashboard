@@ -143,37 +143,37 @@ class _OverviewPageState extends State<OverviewPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               color: AppColors.surface,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: AppColors.borderStrong),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: AppColors.border),
             ),
-            child: const Row(
+            child: Row(
               children: [
-                LiveDot(color: AppColors.emerald, size: 7),
-                SizedBox(width: 8),
+                const LiveDot(color: AppColors.emerald, size: 6),
+                const SizedBox(width: 8),
                 Text(
                   'Overview & live traffic',
-                  style: TextStyle(
+                  style: AppTypography.bodyMedium.copyWith(
                     color: AppColors.textPrimary,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12.5,
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Text(
                   'Auto-refresh 15s',
                   style: TextStyle(
                     color: AppColors.textMuted,
-                    fontFamily: 'JetBrains Mono',
-                    fontSize: 11,
+                    fontFamily: AppTypography.fontMono,
+                    fontSize: 10.5,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           if (!hasTraffic) ...[
             const EmptyState(
               icon: Icons.insights_outlined,
@@ -181,15 +181,15 @@ class _OverviewPageState extends State<OverviewPage> {
               body:
                   'Install the tracking script and we\'ll show your first visitor here.',
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 14),
           ],
           GridView.count(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: columns,
-            crossAxisSpacing: 14,
-            mainAxisSpacing: 14,
-            childAspectRatio: 1.65,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: columns == 1 ? 2.6 : 2.2,
             children: [
               MetricCard(
                 title: 'Total visitors',
@@ -240,44 +240,119 @@ class _OverviewPageState extends State<OverviewPage> {
               ),
             ],
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
           if (_topPages.isNotEmpty)
             DashboardPanel(
               title: 'Top pages · ${_range.label.toLowerCase()}',
               child: Column(
-                children: _topPages.map((page) {
-                  return Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        top: BorderSide(color: AppColors.border),
-                      ),
-                    ),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
                     child: Row(
                       children: [
                         Expanded(
                           child: Text(
-                            page.path,
-                            style: const TextStyle(
-                              color: AppColors.textPrimary,
-                              fontFamily: 'JetBrains Mono',
-                              fontSize: 13,
+                            'PATH',
+                            style: AppTypography.bodySmall.copyWith(
+                              fontSize: 9.5,
+                              letterSpacing: 1.0,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textMuted,
                             ),
                           ),
                         ),
-                        Text(
-                          '${formatCount(page.views)} views',
-                          style: AppTypography.bodySmall,
+                        SizedBox(
+                          width: 80,
+                          child: Text(
+                            'VIEWS',
+                            textAlign: TextAlign.right,
+                            style: AppTypography.bodySmall.copyWith(
+                              fontSize: 9.5,
+                              letterSpacing: 1.0,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textMuted,
+                            ),
+                          ),
                         ),
                         const SizedBox(width: 16),
-                        Text(
-                          '${formatCount(page.uniqueVisitors)} unique',
-                          style: AppTypography.bodySmall,
+                        SizedBox(
+                          width: 80,
+                          child: Text(
+                            'UNIQUE',
+                            textAlign: TextAlign.right,
+                            style: AppTypography.bodySmall.copyWith(
+                              fontSize: 9.5,
+                              letterSpacing: 1.0,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textMuted,
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                  );
-                }).toList(),
+                  ),
+                  ..._topPages.map((page) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(vertical: 9),
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          top: BorderSide(color: AppColors.border),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 7,
+                                  vertical: 3,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.codeBackground,
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(color: AppColors.codeBorder),
+                                ),
+                                child: Text(
+                                  page.path,
+                                  style: AppTypography.code.copyWith(
+                                    fontSize: 11.5,
+                                    color: AppColors.textPrimary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 80,
+                            child: Text(
+                              formatCount(page.views),
+                              textAlign: TextAlign.right,
+                              style: AppTypography.bodyMedium.copyWith(
+                                fontSize: 12.5,
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          SizedBox(
+                            width: 80,
+                            child: Text(
+                              formatCount(page.uniqueVisitors),
+                              textAlign: TextAlign.right,
+                              style: AppTypography.bodySmall.copyWith(
+                                fontSize: 12,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                ],
               ),
             ),
         ],
