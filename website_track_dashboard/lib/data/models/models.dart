@@ -1,3 +1,5 @@
+import '../../core/utils/json.dart';
+
 enum DashboardSection {
   overview,
   websites,
@@ -33,9 +35,9 @@ class User {
   final String? avatarUrl;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json['id'] as String? ?? '',
-        name: json['name'] as String? ?? '',
-        email: json['email'] as String? ?? '',
+        id: asString(json['id']),
+        name: asString(json['name']),
+        email: asString(json['email']),
         avatarUrl: json['avatarUrl'] as String?,
       );
 }
@@ -54,10 +56,10 @@ class Site {
   final String siteKey;
 
   factory Site.fromJson(Map<String, dynamic> json) => Site(
-        id: json['id'] as String? ?? '',
-        name: json['name'] as String? ?? '',
-        domain: json['domain'] as String? ?? '',
-        siteKey: json['siteKey'] as String? ?? '',
+        id: asString(json['id']),
+        name: asString(json['name']),
+        domain: asString(json['domain']),
+        siteKey: asString(json['siteKey']),
       );
 }
 
@@ -79,12 +81,12 @@ class SiteStats {
   final int activeVisitors;
 
   factory SiteStats.fromJson(Map<String, dynamic> json) => SiteStats(
-        totalViews: json['totalViews'] as int? ?? 0,
-        uniqueVisitors: json['uniqueVisitors'] as int? ?? 0,
-        newVisitors: json['newVisitors'] as int? ?? 0,
-        returningVisitors: json['returningVisitors'] as int? ?? 0,
-        sessions: json['sessions'] as int? ?? 0,
-        activeVisitors: json['activeVisitors'] as int? ?? 0,
+        totalViews: asInt(json['totalViews']),
+        uniqueVisitors: asInt(json['uniqueVisitors']),
+        newVisitors: asInt(json['newVisitors']),
+        returningVisitors: asInt(json['returningVisitors']),
+        sessions: asInt(json['sessions']),
+        activeVisitors: asInt(json['activeVisitors']),
       );
 }
 
@@ -98,8 +100,8 @@ class VisitorCount {
   final int activeVisitors;
 
   factory VisitorCount.fromJson(Map<String, dynamic> json) => VisitorCount(
-        totalVisitors: json['totalVisitors'] as int? ?? 0,
-        activeVisitors: json['activeVisitors'] as int? ?? 0,
+        totalVisitors: asInt(json['totalVisitors']),
+        activeVisitors: asInt(json['activeVisitors']),
       );
 }
 
@@ -115,8 +117,8 @@ class PageStat {
   final int uniqueVisitors;
 
   factory PageStat.fromJson(Map<String, dynamic> json) => PageStat(
-        path: json['path'] as String? ?? '/',
-        views: json['views'] as int? ?? 0,
-        uniqueVisitors: json['uniqueVisitors'] as int? ?? 0,
+        path: asString(json['path'], '/'),
+        views: asInt(json['views']),
+        uniqueVisitors: asInt(json['uniqueVisitors']),
       );
 }

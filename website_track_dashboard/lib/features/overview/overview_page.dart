@@ -1,23 +1,26 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import '../../app/theme/colors.dart';
 import '../../app/theme/typography.dart';
+import '../../core/errors/api_exception.dart';
 import '../../core/responsive/responsive.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/widgets/live_dot.dart';
-import '../../data/api/api_client.dart';
 import '../../data/models/models.dart';
+import '../../data/repositories/repositories.dart';
 import '../../shared/widgets/dashboard_scaffold.dart';
 import '../../shared/widgets/metric_card.dart';
 
 class OverviewPage extends StatefulWidget {
   const OverviewPage({
     super.key,
-    required this.api,
+    required this.analytics,
     required this.site,
   });
 
-  final ApiClient api;
+  final AnalyticsRepository analytics;
   final Site site;
 
   @override
@@ -36,7 +39,22 @@ class _OverviewPageState extends State<OverviewPage> {
   void initState() {
     super.initState();
     _load();
-    _refreshTimer = Timer.periodic(const Duration(seconds: 15), (_) => _load(silent: true));
+    _refreshTimer =
+        Timer.periodic(const Duration(seconds: 15), (_) => _load(silent: true));
+  }
+
+  @override
+  void didUpdateWidget(covariant OverviewPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.site.id != widget.site.id) {
+      setState(() {
+        _stats = null;
+        _count = null;
+        _topPages = [];
+        _error = null;
+      });
+      _load();
+    }
   }
 
   @override
@@ -48,9 +66,9 @@ class _OverviewPageState extends State<OverviewPage> {
   Future<void> _load({bool silent = false}) async {
     try {
       final results = await Future.wait([
-        widget.api.fetchStats(widget.site.siteKey, _range),
-        widget.api.fetchVisitorCount(widget.site.siteKey),
-        widget.api.fetchPages(widget.site.siteKey, _range),
+        widget.analytics.getStats(widget.site.siteKey, _range),
+        widget.analytics.getVisitorCount(widget.site.siteKey),
+        widget.analytics.getPageStats(widget.site.siteKey, _range),
       ]);
       if (!mounted) return;
       setState(() {
@@ -71,7 +89,13 @@ class _OverviewPageState extends State<OverviewPage> {
       return PageFrame(
         title: 'Overview',
         subtitle: 'A clear view of what is happening.',
-        child: ErrorState(message: 'Unable to load overview.', onRetry: _load),
+        child: ErrorState(
+          message: friendlyError(_error!),
+          onRetry: () {
+            setState(() => _error = null);
+            _load();
+          },
+        ),
       );
     }
 
@@ -86,6 +110,7 @@ class _OverviewPageState extends State<OverviewPage> {
     final stats = _stats!;
     final count = _count!;
     final columns = Responsive.metricColumns(context);
+    final hasTraffic = count.totalVisitors > 0 || stats.totalViews > 0;
 
     return PageFrame(
       title: 'Overview',
@@ -93,15 +118,24 @@ class _OverviewPageState extends State<OverviewPage> {
       action: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          RangeSelector(value: _range, onChanged: (StatsRange range) {
-            setState(() => _range = range);
-            _load();
-          }),
+          RangeSelector(
+            value: _range,
+            onChanged: (StatsRange range) {
+              setState(() {
+                _range = range;
+                _stats = null;
+              });
+              _load();
+            },
+          ),
           const SizedBox(width: 8),
           IconButton(
             tooltip: 'Refresh',
             onPressed: _load,
-            icon: const Icon(Icons.refresh_rounded, color: AppColors.textSecondary),
+            icon: const Icon(
+              Icons.refresh_rounded,
+              color: AppColors.textSecondary,
+            ),
           ),
         ],
       ),
@@ -115,8 +149,8 @@ class _OverviewPageState extends State<OverviewPage> {
               borderRadius: BorderRadius.circular(14),
               border: Border.all(color: AppColors.borderStrong),
             ),
-            child: Row(
-              children: const [
+            child: const Row(
+              children: [
                 LiveDot(color: AppColors.emerald, size: 7),
                 SizedBox(width: 8),
                 Text(
@@ -140,6 +174,15 @@ class _OverviewPageState extends State<OverviewPage> {
             ),
           ),
           const SizedBox(height: 16),
+          if (!hasTraffic) ...[
+            const EmptyState(
+              icon: Icons.insights_outlined,
+              title: 'No visitors yet',
+              body:
+                  'Install the tracking script and we\'ll show your first visitor here.',
+            ),
+            const SizedBox(height: 18),
+          ],
           GridView.count(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -153,7 +196,8 @@ class _OverviewPageState extends State<OverviewPage> {
                 value: count.totalVisitors,
                 icon: Icons.people_alt_outlined,
                 color: AppColors.accent,
-                tooltip: 'Distinct anonymous visitors ever recorded for this site.',
+                tooltip:
+                    'Total distinct anonymous visitors recorded for the selected website.',
               ),
               MetricCard(
                 title: 'Active now',
@@ -161,42 +205,38 @@ class _OverviewPageState extends State<OverviewPage> {
                 icon: Icons.sensors_rounded,
                 color: AppColors.emerald,
                 isLive: true,
-                tooltip: 'Visitors currently active via realtime presence.',
-              ),
-              MetricCard(
-                title: 'Unique visitors',
-                value: stats.uniqueVisitors,
-                icon: Icons.person_outline_rounded,
-                color: AppColors.cyan,
-                tooltip: 'Distinct visitors with page views in the selected range.',
+                tooltip:
+                    'Visitors currently active according to realtime presence.',
               ),
               MetricCard(
                 title: 'New visitors',
                 value: stats.newVisitors,
                 icon: Icons.person_add_alt_1_outlined,
                 color: AppColors.cyan,
-                tooltip: 'First-ever visitors in the selected range.',
+                tooltip: 'Visitors making their first-ever visit.',
               ),
               MetricCard(
                 title: 'Returning visitors',
                 value: stats.returningVisitors,
                 icon: Icons.replay_rounded,
                 color: AppColors.violet,
-                tooltip: 'Visitors who were seen before the selected range.',
-              ),
-              MetricCard(
-                title: 'Page views',
-                value: stats.totalViews,
-                icon: Icons.bar_chart_rounded,
-                color: AppColors.accent,
-                tooltip: 'Accepted tracked page-view events in the selected range.',
+                tooltip:
+                    'Visitors who have previously visited and later return for another session.',
               ),
               MetricCard(
                 title: 'Sessions',
                 value: stats.sessions,
                 icon: Icons.timer_outlined,
                 color: AppColors.violet,
-                tooltip: 'Sessions started in the selected range (2h inactivity timeout).',
+                tooltip:
+                    'A visit session ending after 2 hours of inactivity.',
+              ),
+              MetricCard(
+                title: 'Page views',
+                value: stats.totalViews,
+                icon: Icons.bar_chart_rounded,
+                color: AppColors.accent,
+                tooltip: 'Accepted tracked page-view events.',
               ),
             ],
           ),
@@ -209,7 +249,9 @@ class _OverviewPageState extends State<OverviewPage> {
                   return Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: const BoxDecoration(
-                      border: Border(top: BorderSide(color: AppColors.border)),
+                      border: Border(
+                        top: BorderSide(color: AppColors.border),
+                      ),
                     ),
                     child: Row(
                       children: [
@@ -238,14 +280,6 @@ class _OverviewPageState extends State<OverviewPage> {
                 }).toList(),
               ),
             ),
-          const SizedBox(height: 18),
-          const DashboardPanel(
-            title: 'Metric definitions',
-            child: Text(
-              'Total visitors uses the public all-time counter. Range metrics come from authenticated stats endpoints and respect UTC server timestamps.',
-              style: AppTypography.bodyMedium,
-            ),
-          ),
         ],
       ),
     );

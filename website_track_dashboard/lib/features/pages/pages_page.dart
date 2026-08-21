@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+
 import '../../app/theme/colors.dart';
 import '../../app/theme/typography.dart';
+import '../../core/errors/api_exception.dart';
 import '../../core/utils/formatters.dart';
-import '../../data/api/api_client.dart';
 import '../../data/models/models.dart';
+import '../../data/repositories/repositories.dart';
 import '../../shared/widgets/dashboard_scaffold.dart';
 
 class PagesPage extends StatefulWidget {
   const PagesPage({
     super.key,
-    required this.api,
+    required this.analytics,
     required this.site,
   });
 
-  final ApiClient api;
+  final AnalyticsRepository analytics;
   final Site site;
 
   @override
@@ -31,17 +33,30 @@ class _PagesPageState extends State<PagesPage> {
     _load();
   }
 
+  @override
+  void didUpdateWidget(covariant PagesPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.site.id != widget.site.id) {
+      setState(() {
+        _rows = null;
+        _error = null;
+      });
+      _load();
+    }
+  }
+
   Future<void> _load() async {
     try {
-      final rows = await widget.api.fetchPages(widget.site.siteKey, _range);
-      if (mounted) {
-        setState(() {
-          _rows = rows;
-          _error = null;
-        });
-      }
+      final rows =
+          await widget.analytics.getPageStats(widget.site.siteKey, _range);
+      if (!mounted) return;
+      setState(() {
+        _rows = rows;
+        _error = null;
+      });
     } catch (error) {
-      if (mounted) setState(() => _error = error);
+      if (!mounted) return;
+      setState(() => _error = error);
     }
   }
 
@@ -51,7 +66,13 @@ class _PagesPageState extends State<PagesPage> {
       return PageFrame(
         title: 'Pages',
         subtitle: 'The pages your visitors view most often.',
-        child: ErrorState(message: 'Unable to load page analytics.', onRetry: _load),
+        child: ErrorState(
+          message: friendlyError(_error!),
+          onRetry: () {
+            setState(() => _error = null);
+            _load();
+          },
+        ),
       );
     }
 
@@ -64,13 +85,24 @@ class _PagesPageState extends State<PagesPage> {
     }
 
     if (_rows!.isEmpty) {
-      return const PageFrame(
+      return PageFrame(
         title: 'Pages',
         subtitle: 'The pages your visitors view most often.',
-        child: EmptyState(
+        action: RangeSelector(
+          value: _range,
+          onChanged: (StatsRange range) {
+            setState(() {
+              _range = range;
+              _rows = null;
+            });
+            _load();
+          },
+        ),
+        child: const EmptyState(
           icon: Icons.bar_chart_rounded,
-          title: 'No page views yet',
-          body: 'Install the tracking script and your top pages will appear here.',
+          title: 'No tracked pages yet',
+          body:
+              'Install the tracking script and your top pages will appear here.',
         ),
       );
     }
@@ -81,7 +113,10 @@ class _PagesPageState extends State<PagesPage> {
       action: RangeSelector(
         value: _range,
         onChanged: (StatsRange range) {
-          setState(() => _range = range);
+          setState(() {
+            _range = range;
+            _rows = null;
+          });
           _load();
         },
       ),
@@ -92,44 +127,61 @@ class _PagesPageState extends State<PagesPage> {
             const Row(
               children: [
                 Expanded(
-                  child: Text('PATH', style: TextStyle(color: AppColors.textMuted, fontSize: 10)),
+                  child: Text(
+                    'PATH',
+                    style: TextStyle(color: AppColors.textMuted, fontSize: 10),
+                  ),
                 ),
                 SizedBox(
                   width: 90,
-                  child: Text('VIEWS', style: TextStyle(color: AppColors.textMuted, fontSize: 10)),
+                  child: Text(
+                    'VIEWS',
+                    style: TextStyle(color: AppColors.textMuted, fontSize: 10),
+                  ),
                 ),
                 SizedBox(
                   width: 100,
-                  child: Text('UNIQUE', style: TextStyle(color: AppColors.textMuted, fontSize: 10)),
+                  child: Text(
+                    'UNIQUE',
+                    style: TextStyle(color: AppColors.textMuted, fontSize: 10),
+                  ),
                 ),
               ],
             ),
             ..._rows!.take(25).map(
-              (row) => Container(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                decoration: const BoxDecoration(
-                  border: Border(top: BorderSide(color: AppColors.border)),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        row.path,
-                        style: AppTypography.code.copyWith(fontSize: 12.5),
+                  (row) => Container(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        top: BorderSide(color: AppColors.border),
                       ),
                     ),
-                    SizedBox(
-                      width: 90,
-                      child: Text(formatCount(row.views), style: AppTypography.bodyMedium),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            row.path,
+                            style: AppTypography.code.copyWith(fontSize: 12.5),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 90,
+                          child: Text(
+                            formatCount(row.views),
+                            style: AppTypography.bodyMedium,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 100,
+                          child: Text(
+                            formatCount(row.uniqueVisitors),
+                            style: AppTypography.bodyMedium,
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      width: 100,
-                      child: Text(formatCount(row.uniqueVisitors), style: AppTypography.bodyMedium),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
           ],
         ),
       ),

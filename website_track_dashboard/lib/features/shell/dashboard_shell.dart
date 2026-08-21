@@ -1,18 +1,24 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
+import '../../app/router.dart';
 import '../../app/theme/colors.dart';
+import '../../core/errors/api_exception.dart';
+import '../../core/platform/platform.dart';
 import '../../core/responsive/responsive.dart';
 import '../../data/api/api_client.dart';
 import '../../data/models/models.dart';
-import '../../core/platform/platform.dart';
+import '../../data/repositories/repositories.dart';
 import '../../shared/widgets/app_button.dart';
 import '../../shared/widgets/dashboard_scaffold.dart';
+import '../events/events_page.dart';
 import '../overview/overview_page.dart';
 import '../pages/pages_page.dart';
 import '../realtime/realtime_page.dart';
 import '../settings/settings_page.dart';
 import '../tracking/tracking_page.dart';
-import '../unsupported/unsupported_page.dart';
+import '../visitors/visitors_page.dart';
 import '../websites/websites_page.dart';
 import 'dashboard_sidebar.dart';
 import 'dashboard_top_bar.dart';
@@ -34,51 +40,38 @@ class DashboardShell extends StatefulWidget {
 }
 
 class _DashboardShellState extends State<DashboardShell> {
+  late final WebsiteRepository _websites;
+  late final AnalyticsRepository _analytics;
+
   List<Site> _sites = [];
   Site? _selectedSite;
   DashboardSection _section = DashboardSection.overview;
   bool _loading = true;
   Object? _error;
+  bool _openCreateForm = false;
   late final GlobalKey<ScaffoldState> _scaffoldKey;
   StreamSubscription<String>? _pathSubscription;
 
   @override
   void initState() {
     super.initState();
+    _websites = WebsiteRepository(widget.api);
+    _analytics = AnalyticsRepository(widget.api);
     _scaffoldKey = GlobalKey<ScaffoldState>();
-    _section = _sectionFromPath(currentPath());
-    if (!currentPath().startsWith('/dashboard')) pushPath('/dashboard');
+    _section = DashboardRoutes.sectionFromPath(currentPath());
+    if (!currentPath().startsWith('/dashboard')) {
+      pushPath(DashboardRoutes.overview);
+    }
     _pathSubscription = pathChanges().listen((path) {
-      if (mounted) setState(() => _section = _sectionFromPath(path));
+      if (!mounted) return;
+      setState(() => _section = DashboardRoutes.sectionFromPath(path));
     });
     _loadSites();
   }
 
-  DashboardSection _sectionFromPath(String path) => switch (path) {
-        '/dashboard/websites' => DashboardSection.websites,
-        '/dashboard/realtime' => DashboardSection.realtime,
-        '/dashboard/analytics/pages' => DashboardSection.pages,
-        '/dashboard/analytics/visitors' => DashboardSection.visitors,
-        '/dashboard/analytics/events' => DashboardSection.events,
-        '/dashboard/tracking' => DashboardSection.tracking,
-        '/dashboard/settings' => DashboardSection.settings,
-        _ => DashboardSection.overview,
-      };
-
-  String _pathFor(DashboardSection section) => switch (section) {
-        DashboardSection.overview => '/dashboard',
-        DashboardSection.websites => '/dashboard/websites',
-        DashboardSection.realtime => '/dashboard/realtime',
-        DashboardSection.pages => '/dashboard/analytics/pages',
-        DashboardSection.visitors => '/dashboard/analytics/visitors',
-        DashboardSection.events => '/dashboard/analytics/events',
-        DashboardSection.tracking => '/dashboard/tracking',
-        DashboardSection.settings => '/dashboard/settings',
-      };
-
   Future<void> _loadSites({String? preferredId}) async {
     try {
-      final sites = await widget.api.listSites();
+      final sites = await _websites.listSites();
       if (!mounted) return;
       setState(() {
         _sites = sites;
@@ -91,6 +84,10 @@ class _DashboardShellState extends State<DashboardShell> {
       });
     } catch (error) {
       if (!mounted) return;
+      if (error is ApiException && error.isUnauthorized) {
+        widget.onLoggedOut();
+        return;
+      }
       setState(() {
         _error = error;
         _loading = false;
@@ -107,14 +104,26 @@ class _DashboardShellState extends State<DashboardShell> {
   }
 
   Future<void> _logout() async {
-    await widget.api.logout();
+    try {
+      await widget.api.logout();
+    } catch (_) {
+      // Always clear local session even if network fails.
+    }
+    setSelectedSiteId(null);
     if (!mounted) return;
     widget.onLoggedOut();
   }
 
-  void _navigate(DashboardSection section) {
-    pushPath(_pathFor(section));
-    setState(() => _section = section);
+  void _navigate(DashboardSection section, {bool openCreateForm = false}) {
+    pushPath(DashboardRoutes.pathFor(section));
+    setState(() {
+      _section = section;
+      _openCreateForm = openCreateForm;
+    });
+  }
+
+  void _goToAddWebsite() {
+    _navigate(DashboardSection.websites, openCreateForm: true);
   }
 
   @override
@@ -173,9 +182,7 @@ class _DashboardShellState extends State<DashboardShell> {
                       ? const LoadingState()
                       : _error != null
                           ? ErrorState(
-                              message: _error is ApiException
-                                  ? (_error as ApiException).message
-                                  : 'Unable to reach the API.',
+                              message: friendlyError(_error!),
                               onRetry: () {
                                 setState(() {
                                   _loading = true;
@@ -195,7 +202,32 @@ class _DashboardShellState extends State<DashboardShell> {
   }
 
   Widget _buildContent() {
-    if (_selectedSite == null && _section != DashboardSection.websites) {
+    if (_section == DashboardSection.websites) {
+      return WebsitesPage(
+        websites: _websites,
+        sites: _sites,
+        selectedSite: _selectedSite,
+        initiallyShowForm: _openCreateForm || _sites.isEmpty,
+        onCreated: (site) {
+          setSelectedSiteId(site.id);
+          setState(() => _openCreateForm = false);
+          _loadSites(preferredId: site.id);
+        },
+        onSelected: (site) {
+          setSelectedSiteId(site.id);
+          setState(() => _selectedSite = site);
+        },
+        onDeleted: (siteId) async {
+          if (_selectedSite?.id == siteId) {
+            setSelectedSiteId(null);
+          }
+          await _loadSites();
+        },
+        onRefresh: _loadSites,
+      );
+    }
+
+    if (_selectedSite == null) {
       return PageFrame(
         title: 'Welcome',
         subtitle: 'Create your first website to start collecting analytics.',
@@ -207,53 +239,45 @@ class _DashboardShellState extends State<DashboardShell> {
           action: AppButton(
             label: 'Add website',
             icon: Icons.add_rounded,
-            onPressed: () => _navigate(DashboardSection.websites),
+            onPressed: _goToAddWebsite,
           ),
         ),
       );
     }
 
-    if (_section == DashboardSection.websites) {
-      return WebsitesPage(
-        api: widget.api,
-        sites: _sites,
-        selectedSite: _selectedSite,
-        onCreated: (site) {
-          setSelectedSiteId(site.id);
-          _loadSites(preferredId: site.id);
-        },
-        onSelected: (site) {
-          setSelectedSiteId(site.id);
-          setState(() => _selectedSite = site);
-        },
-        onRefresh: _loadSites,
-      );
-    }
     final site = _selectedSite!;
     return KeyedSubtree(
       key: ValueKey('${_section.name}-${site.id}'),
       child: switch (_section) {
-        DashboardSection.overview => OverviewPage(api: widget.api, site: site),
+        DashboardSection.overview => OverviewPage(
+            analytics: _analytics,
+            site: site,
+          ),
         DashboardSection.websites => const SizedBox.shrink(),
-        DashboardSection.realtime => RealtimePage(api: widget.api, site: site),
-        DashboardSection.pages => PagesPage(api: widget.api, site: site),
-        DashboardSection.visitors => const UnsupportedPage(
-            title: 'Visitors',
-            body:
-                'The current API exposes anonymous visitor aggregates, not individual visitor records.',
-            icon: Icons.groups_2_outlined,
+        DashboardSection.realtime => RealtimePage(
+            analytics: _analytics,
+            site: site,
           ),
-        DashboardSection.events => const UnsupportedPage(
-            title: 'Events',
-            body:
-                'Event ingestion exists, but aggregate event analytics are not exposed by the current API.',
-            icon: Icons.bolt_outlined,
+        DashboardSection.pages => PagesPage(
+            analytics: _analytics,
+            site: site,
           ),
+        DashboardSection.visitors => VisitorsPage(
+            analytics: _analytics,
+            site: site,
+          ),
+        DashboardSection.events => const EventsPage(),
         DashboardSection.tracking => TrackingPage(site: site),
         DashboardSection.settings => SettingsPage(
-            api: widget.api,
+            websites: _websites,
             user: widget.user,
             site: site,
+            onDeleted: () async {
+              setSelectedSiteId(null);
+              await _loadSites();
+              if (mounted) _navigate(DashboardSection.websites);
+            },
+            onLogout: _logout,
           ),
       },
     );

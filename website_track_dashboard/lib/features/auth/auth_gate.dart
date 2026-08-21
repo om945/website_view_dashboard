@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+
+import '../../core/errors/api_exception.dart';
 import '../../data/api/api_client.dart';
 import '../../data/models/models.dart';
 import '../../shared/widgets/dashboard_scaffold.dart';
 import '../shell/dashboard_shell.dart';
 import 'login_page.dart';
 
-enum _AuthState { loading, authenticated, unauthenticated, networkError, serverError }
+enum _AuthState {
+  loading,
+  authenticated,
+  unauthenticated,
+  networkError,
+  serverError,
+}
 
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
@@ -39,33 +47,34 @@ class _AuthGateState extends State<AuthGate> {
       setState(() {
         _user = user;
         _rateLimited = false;
-        _state = user != null ? _AuthState.authenticated : _AuthState.unauthenticated;
+        _state = user != null
+            ? _AuthState.authenticated
+            : _AuthState.unauthenticated;
       });
     } on ApiException catch (e) {
       if (!mounted) return;
       setState(() {
-        if (e.statusCode == 0) {
+        if (e.isNetwork) {
           _state = _AuthState.networkError;
           _errorMessage = 'Unable to reach the API.';
-        } else if (e.statusCode == 429) {
+        } else if (e.isRateLimited) {
           _rateLimited = true;
           _state = _AuthState.unauthenticated;
-        } else if (e.statusCode >= 500) {
+        } else if (e.isServer) {
           _state = _AuthState.serverError;
-          _errorMessage = 'The server returned an error (${e.statusCode}). Please try again.';
+          _errorMessage =
+              'The server returned an error (${e.statusCode}). Please try again.';
         } else {
-          // 401 is handled by currentUser() returning null, so any other
-          // ApiException here is unexpected — treat as server error.
           _state = _AuthState.serverError;
           _errorMessage = e.message;
         }
       });
-    } catch (e) {
-      // Non-ApiException: network failure, timeout, CORS error, etc.
+    } catch (_) {
       if (!mounted) return;
       setState(() {
         _state = _AuthState.networkError;
-        _errorMessage = 'Unable to reach the Website View API. Check your connection and try again.';
+        _errorMessage =
+            'Unable to reach the Website View API. Check your connection and try again.';
       });
     }
   }
@@ -83,13 +92,6 @@ class _AuthGateState extends State<AuthGate> {
         return const Scaffold(body: LoadingState());
 
       case _AuthState.networkError:
-        return Scaffold(
-          body: ErrorState(
-            message: _errorMessage,
-            onRetry: _load,
-          ),
-        );
-
       case _AuthState.serverError:
         return Scaffold(
           body: ErrorState(

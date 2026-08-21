@@ -1,22 +1,26 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import '../../app/theme/colors.dart';
 import '../../app/theme/typography.dart';
+import '../../core/config/dashboard_config.dart';
+import '../../core/errors/api_exception.dart';
 import '../../core/platform/platform.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/widgets/live_dot.dart';
-import '../../data/api/api_client.dart';
 import '../../data/models/models.dart';
+import '../../data/repositories/repositories.dart';
 import '../../shared/widgets/dashboard_scaffold.dart';
 
 class RealtimePage extends StatefulWidget {
   const RealtimePage({
     super.key,
-    required this.api,
+    required this.analytics,
     required this.site,
   });
 
-  final ApiClient api;
+  final AnalyticsRepository analytics;
   final Site site;
 
   @override
@@ -25,43 +29,78 @@ class RealtimePage extends StatefulWidget {
 
 class _RealtimePageState extends State<RealtimePage> {
   VisitorCount? _count;
+  Object? _error;
   Timer? _pollTimer;
   Timer? _retryTimer;
   PresenceSocket? _socket;
+  StreamSubscription<void>? _openSub;
+  StreamSubscription<void>? _closeSub;
+  StreamSubscription<void>? _errorSub;
   String _connectionStatus = 'connecting';
   int _retryAttempts = 0;
+  bool _disposed = false;
 
   @override
   void initState() {
     super.initState();
     _refreshCount();
     _connectPresence();
-    _pollTimer = Timer.periodic(const Duration(seconds: 15), (_) => _refreshCount());
+    _pollTimer =
+        Timer.periodic(const Duration(seconds: 15), (_) => _refreshCount());
+  }
+
+  @override
+  void didUpdateWidget(covariant RealtimePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.site.id != widget.site.id) {
+      _refreshCount();
+    }
   }
 
   @override
   void dispose() {
+    _disposed = true;
     _pollTimer?.cancel();
     _retryTimer?.cancel();
-    _socket?.close();
+    _detachSocket();
     super.dispose();
+  }
+
+  void _detachSocket() {
+    _openSub?.cancel();
+    _closeSub?.cancel();
+    _errorSub?.cancel();
+    _openSub = null;
+    _closeSub = null;
+    _errorSub = null;
+    _socket?.close();
+    _socket = null;
   }
 
   Future<void> _refreshCount() async {
     try {
-      final count = await widget.api.fetchVisitorCount(widget.site.siteKey);
-      if (mounted) setState(() => _count = count);
-    } catch (_) {}
+      final count =
+          await widget.analytics.getVisitorCount(widget.site.siteKey);
+      if (!mounted) return;
+      setState(() {
+        _count = count;
+        _error = null;
+      });
+    } catch (error) {
+      if (!mounted) return;
+      setState(() => _error = error);
+    }
   }
 
   void _connectPresence() {
+    if (_disposed) return;
     _retryTimer?.cancel();
     if (mounted) setState(() => _connectionStatus = 'connecting');
 
-    _socket?.close();
-    _socket = connectPresence(wsTrackUrl());
+    _detachSocket();
+    _socket = connectPresence(DashboardConfig.wsTrackUrl());
 
-    _socket!.onOpen.listen((_) {
+    _openSub = _socket!.onOpen.listen((_) {
       if (!mounted) return;
       setState(() {
         _connectionStatus = 'connected';
@@ -69,21 +108,44 @@ class _RealtimePageState extends State<RealtimePage> {
       });
     });
 
-    _socket!.onClose.listen((_) {
-      if (!mounted) return;
+    _closeSub = _socket!.onClose.listen((_) {
+      if (!mounted || _disposed) return;
       setState(() => _connectionStatus = 'reconnecting');
-      final delayMs = (500 * (1 << _retryAttempts.clamp(0, 4))).clamp(500, 8000);
+      final delayMs =
+          (500 * (1 << _retryAttempts.clamp(0, 4))).clamp(500, 8000);
       _retryAttempts++;
       _retryTimer = Timer(Duration(milliseconds: delayMs), _connectPresence);
     });
 
-    _socket!.onError.listen((_) {
+    _errorSub = _socket!.onError.listen((_) {
       if (mounted) setState(() => _connectionStatus = 'disconnected');
     });
   }
 
+  String get _statusLabel => switch (_connectionStatus) {
+        'connected' => 'Connected',
+        'connecting' => 'Connecting',
+        'reconnecting' => 'Reconnecting',
+        _ => 'Disconnected',
+      };
+
   @override
   Widget build(BuildContext context) {
+    if (_error != null && _count == null) {
+      return PageFrame(
+        title: 'Realtime',
+        subtitle: 'Visitors currently active on ${widget.site.domain}.',
+        child: ErrorState(
+          message: friendlyError(_error!),
+          onRetry: () {
+            setState(() => _error = null);
+            _refreshCount();
+            _connectPresence();
+          },
+        ),
+      );
+    }
+
     return PageFrame(
       title: 'Realtime',
       subtitle: 'Visitors currently active on ${widget.site.domain}.',
@@ -100,7 +162,9 @@ class _RealtimePageState extends State<RealtimePage> {
             decoration: BoxDecoration(
               color: AppColors.surface,
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: AppColors.emerald.withValues(alpha: 0.35)),
+              border: Border.all(
+                color: AppColors.emerald.withValues(alpha: 0.35),
+              ),
             ),
             child: Row(
               children: [
@@ -121,7 +185,7 @@ class _RealtimePageState extends State<RealtimePage> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Presence connection: $_connectionStatus',
+                        'Presence connection: $_statusLabel',
                         style: AppTypography.bodyMedium,
                       ),
                     ],
@@ -137,7 +201,10 @@ class _RealtimePageState extends State<RealtimePage> {
                     const SizedBox(height: 4),
                     const Text(
                       'Public counter',
-                      style: TextStyle(color: AppColors.textMuted, fontSize: 11),
+                      style: TextStyle(
+                        color: AppColors.textMuted,
+                        fontSize: 11,
+                      ),
                     ),
                   ],
                 ),

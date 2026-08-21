@@ -1,27 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
+
 import '../../core/config/dashboard_config.dart';
+import '../../core/errors/api_exception.dart';
 import '../../core/platform/platform.dart';
 import '../models/models.dart';
-
-class ApiException implements Exception {
-  ApiException(this.statusCode, this.message, {this.code});
-
-  final int statusCode;
-  final String message;
-  final String? code;
-
-  bool get isUnauthorized => statusCode == 401;
-
-  @override
-  String toString() => message;
-}
 
 class ApiClient {
   ApiClient({http.Client? client}) : _client = client ?? createClient();
 
   final http.Client _client;
+
   String get _origin => DashboardConfig.apiOrigin;
 
   Future<dynamic> _request(
@@ -37,13 +28,16 @@ class ApiClient {
 
     late http.StreamedResponse streamed;
     try {
-      streamed = await _client.send(request).timeout(const Duration(seconds: 30));
+      streamed =
+          await _client.send(request).timeout(const Duration(seconds: 30));
     } on TimeoutException {
       throw ApiException(0, 'Unable to reach the API');
     } on http.ClientException {
       throw ApiException(0, 'Unable to reach the API');
     }
+
     final raw = await streamed.stream.bytesToString();
+    final requestId = streamed.headers['x-request-id'];
 
     dynamic decoded;
     try {
@@ -67,8 +61,12 @@ class ApiClient {
         503 => 'The API is temporarily unavailable.',
         _ => 'The request could not be completed.',
       };
-      throw ApiException(status, error['message'] as String? ?? fallback,
-          code: error['code'] as String?);
+      throw ApiException(
+        status,
+        error['message'] as String? ?? fallback,
+        code: error['code'] as String?,
+        requestId: requestId,
+      );
     }
 
     return decoded;
@@ -99,6 +97,18 @@ class ApiClient {
       '/api/v1/sites',
       body: {'name': name, 'domain': domain},
     );
+    return Site.fromJson(json as Map<String, dynamic>);
+  }
+
+  Future<Site> updateSite(
+    String id, {
+    String? name,
+    String? domain,
+  }) async {
+    final body = <String, dynamic>{};
+    if (name != null) body['name'] = name;
+    if (domain != null) body['domain'] = domain;
+    final json = await _request('PATCH', '/api/v1/sites/$id', body: body);
     return Site.fromJson(json as Map<String, dynamic>);
   }
 
@@ -139,12 +149,6 @@ class ApiClient {
 
 String get apiOrigin => DashboardConfig.apiOrigin;
 
-void startGoogleSignIn() =>
-    openUrl('${DashboardConfig.apiOrigin}/api/v1/auth/google');
+void startGoogleSignIn() => openUrl(DashboardConfig.googleSignInUrl());
 
-String wsTrackUrl() {
-  final origin = DashboardConfig.apiOrigin;
-  final scheme = origin.startsWith('https') ? 'wss' : 'ws';
-  final authority = Uri.parse(origin).authority;
-  return '$scheme://$authority/ws/track';
-}
+String wsTrackUrl() => DashboardConfig.wsTrackUrl();
