@@ -9,7 +9,7 @@ class WebsiteViewDashboardApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Website View API — Dashboard',
+      title: 'ViziAPI — Dashboard',
       theme: AppTheme.darkTheme,
       routerDelegate: DashboardRouterDelegate(),
       routeInformationParser: DashboardRouteInformationParser(),

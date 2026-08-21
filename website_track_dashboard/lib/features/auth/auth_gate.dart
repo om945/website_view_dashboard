@@ -81,7 +81,7 @@ class _AuthGateState extends State<AuthGate> {
       setState(() {
         _state = _AuthState.networkError;
         _errorMessage =
-            'Unable to reach the Website View API. Check your connection and try again.';
+            'Unable to reach ViziAPI. Check your connection and try again.';
       });
     }
   }

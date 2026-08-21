@@ -4,6 +4,7 @@ import '../../app/theme/typography.dart';
 import '../../core/widgets/grid_background.dart';
 import '../../data/api/api_client.dart';
 import '../../shared/widgets/app_button.dart';
+import '../../shared/widgets/viziapi_brand.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key, this.rateLimited = false});
@@ -39,7 +40,7 @@ class LoginPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text('WEBSITE VIEW API', style: AppTypography.eyebrow),
+                      const ViziApiBrand(),
                       const SizedBox(height: 20),
                       Text(
                         'Your analytics command center.',

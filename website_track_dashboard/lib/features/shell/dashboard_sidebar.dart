@@ -4,6 +4,7 @@ import '../../app/theme/typography.dart';
 import '../../app/theme/radii.dart';
 import '../../app/theme/motion.dart';
 import '../../data/models/models.dart';
+import '../../shared/widgets/viziapi_brand.dart';
 
 class DashboardSidebar extends StatelessWidget {
   const DashboardSidebar({
@@ -25,20 +26,7 @@ class DashboardSidebar extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 10, bottom: 20, top: 4),
-            child: Row(
-              children: [
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: AppColors.accent,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                const Text('WEBSITE VIEW API', style: AppTypography.eyebrow),
-              ],
-            ),
+            child: const ViziApiBrand(compact: true),
           ),
           _sectionLabel('WORKSPACE'),
           _item(
