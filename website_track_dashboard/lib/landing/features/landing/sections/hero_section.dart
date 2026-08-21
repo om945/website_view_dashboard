@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../app/theme/colors.dart';
 import '../../../app/theme/typography.dart';
 import '../../../app/theme/spacing.dart';
@@ -45,7 +46,7 @@ class HeroSection extends StatelessWidget {
                   label: 'Lightweight Website Analytics',
                   color: AppColors.accent,
                   icon: const Icon(
-                    Icons.flash_on_rounded,
+                    LucideIcons.zap,
                     size: 13,
                     color: AppColors.accent,
                   ),
@@ -101,7 +102,7 @@ class HeroSection extends StatelessWidget {
                     AppButton(
                       label: 'Start building free',
                       variant: AppButtonVariant.primary,
-                      icon: const Icon(Icons.arrow_forward_rounded, size: 16),
+                      icon: const Icon(LucideIcons.arrowRight, size: 16),
                       onPressed: () =>
                           AppNavigation.toLogin(context),
                     ),
