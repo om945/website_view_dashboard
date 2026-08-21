@@ -1,0 +1,11 @@
+# PLACEHOLDER — replace the Sitemap host below with the verified canonical
+# domain once confirmed (see index.html canonical-tag comment for context).
+# "/dashboard" is disallowed as a best guess based on the app's own reference
+# to authenticated /dashboard routes — confirm this matches your actual
+# private route prefixes (e.g. /app, /settings) before relying on it.
+
+User-agent: *
+Allow: /
+Disallow: /dashboard
+
+Sitemap: https://viziapi.vercel.app/sitemap.xml

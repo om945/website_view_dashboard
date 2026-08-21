@@ -5,8 +5,51 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="ViziAPI developer dashboard — manage sites, tracking, and realtime analytics.">
+  <meta name="description" content="ViziAPI is lightweight website analytics for developers. Track visitors, sessions, page views, events, and realtime traffic with one simple script.">
   <meta name="theme-color" content="#090A0F">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="application-name" content="ViziAPI">
+  <meta name="author" content="ViziAPI">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <!--
+    CANONICAL DOMAIN — UNVERIFIED, PLACEHOLDER IN USE
+    Neither candidate domain could be confirmed as the live canonical production
+    site for this exact landing page during this pass:
+      - viziapi.vercel.app currently resolves, but its root document title is
+        "ViziAPI — Developer Dashboard", not this marketing page, so it's unclear
+        this file is what's actually served at "/" there.
+      - viziapi.com resolves but blocks automated fetching, so it cannot be
+        confirmed as ViziAPI's real, configured domain.
+    Using viziapi.vercel.app/ as an explicit placeholder per the documented
+    fallback rule. REPLACE with the verified custom domain (or confirmed
+    Vercel URL) before submitting to Search Console / going live.
+  -->
+  <link rel="canonical" href="https://viziapi.vercel.app/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ViziAPI">
+  <meta property="og:title" content="ViziAPI — Website Analytics for Developers">
+  <meta property="og:description" content="Lightweight website analytics for developers. Understand visitors, sessions, page views, events, and realtime activity.">
+  <meta property="og:url" content="https://viziapi.vercel.app/">
+  <meta property="og:image" content="https://viziapi.vercel.app/og-image.png">
+  <meta property="og:image:alt" content="ViziAPI — Website Analytics for Developers">
+  <meta property="og:locale" content="en_US">
+
+  <!-- X / Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ViziAPI — Website Analytics for Developers">
+  <meta name="twitter:description" content="Lightweight website analytics for developers with realtime traffic, visitors, sessions, page views, and events.">
+  <meta name="twitter:image" content="https://viziapi.vercel.app/og-image.png">
+  <meta name="twitter:image:alt" content="ViziAPI — Website Analytics for Developers">
+
+  <!-- Favicons / platform metadata -->
+  <meta name="format-detection" content="telephone=no">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/Icon-192.png">
 
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -14,12 +57,162 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>ViziAPI — Developer Dashboard</title>
+  <title>ViziAPI — Website Analytics for Developers</title>
   <link rel="manifest" href="manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!--
+    JSON-LD: description trimmed to remove unverified feature claims
+    (devices/locations/referrals were in the original but could not be
+    confirmed against actual product behavior). url uses the same
+    placeholder domain as the canonical tag above — update together.
+  -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "ViziAPI",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "description": "Lightweight website analytics for developers, with realtime traffic, visitors, sessions, page views, and events.",
+    "url": "https://viziapi.vercel.app/"
+  }
+  </script>
+
   <style>
+
+    #viziapi-shell {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      overflow: hidden;
+      background: #07090d;
+      color: #f7f8fa;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      transition: opacity .42s ease, visibility .42s ease;
+    }
+
+    #viziapi-shell.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .landing-grid {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, rgba(255,255,255,.045) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,.045) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,.96) 70%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,.96) 70%, transparent 100%);
+    }
+
+    .landing-glow {
+      position: absolute;
+      width: 620px;
+      height: 360px;
+      left: 50%;
+      top: 38px;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse, rgba(255,83,36,.09) 0%, rgba(255,83,36,.035) 42%, transparent 72%);
+      filter: blur(10px);
+      pointer-events: none;
+      animation: heroGlow 7s ease-in-out infinite alternate;
+    }
+
+    .landing-hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 56px 24px 56px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 0 17px;
+      border: 1px solid rgba(255,79,33,.48);
+      border-radius: 999px;
+      background: rgba(255,79,33,.10);
+      color: #ff6a3a;
+      font: 650 12px/1 'JetBrains Mono', monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      box-shadow: inset 0 0 20px rgba(255,79,33,.04);
+    }
+
+    .hero-title {
+      margin: 27px auto 0;
+      max-width: 1080px;
+      font: 800 clamp(54px, 6.3vw, 92px)/.94 'Inter', sans-serif;
+      letter-spacing: -.067em;
+      text-wrap: balance;
+      color: #f4f5f7;
+      animation: heroTextIn .75s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    .hero-title span {
+      display: block;
+    }
+
+    .hero-subtitle {
+      max-width: 760px;
+      margin: 32px auto 0;
+      color: #98a3b5;
+      font: 400 clamp(17px, 1.55vw, 22px)/1.55 'Inter', sans-serif;
+      letter-spacing: -.022em;
+      text-wrap: balance;
+      animation: heroTextIn .85s .08s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    @keyframes heroTextIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes heroGlow {
+      from { opacity: .68; transform: translateX(-50%) scale(.96); }
+      to { opacity: 1; transform: translateX(-50%) scale(1.05); }
+    }
+
+    @media (max-width: 620px) {
+      .eyebrow {
+        min-height: 31px;
+        padding: 0 13px;
+        font-size: 10px;
+      }
+      .hero-title {
+        margin-top: 22px;
+        font-size: clamp(44px, 13vw, 62px);
+        letter-spacing: -.062em;
+      }
+      .hero-subtitle {
+        margin-top: 24px;
+        font-size: 16px;
+      }
+      .landing-glow {
+        width: 420px;
+        height: 300px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #viziapi-shell *, #viziapi-shell {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
     html, body {
       background-color: #090A0F;
       background-image:
@@ -31,7 +224,7 @@
       min-height: 100vh;
       margin: 0;
       padding: 0;
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
     ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -41,6 +234,47 @@
   </style>
 </head>
 <body>
+
+  <div id="viziapi-shell" aria-label="ViziAPI landing page preview">
+    <div class="landing-grid"></div>
+    <div class="landing-glow"></div>
+    <main class="landing-hero">
+      <div class="eyebrow">LIGHTWEIGHT WEBSITE ANALYTICS</div>
+
+      <h1 class="hero-title">
+        <span>Understand your traffic.</span>
+        <span>See who comes back.</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        A focused analytics API for developer-built websites. One lightweight script for
+        anonymous visitors, sessions, page views, events, and realtime presence.
+      </p>
+    </main>
+  </div>
+
+  <noscript>
+    <main style="max-width:760px;margin:0 auto;padding:64px 24px;color:#f4f4f5;font-family:Arial,sans-serif;background:#090A0F;">
+      <h1>ViziAPI — Website Analytics for Developers</h1>
+      <p>ViziAPI is a lightweight developer-first analytics platform for understanding website traffic, visitors, sessions, page views, events, and realtime activity.</p>
+      <p>Please enable JavaScript to use the ViziAPI web application.</p>
+      <nav aria-label="Legal">
+        <a href="/privacy" style="color:#f4f4f5;margin-right:16px;">Privacy Policy</a>
+        <a href="/terms" style="color:#f4f4f5;">Terms of Service</a>
+      </nav>
+    </main>
+  </noscript>
+
   <script src="flutter_bootstrap.js" async></script>
+
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      var shell = document.getElementById('viziapi-shell');
+      if (shell) {
+        shell.classList.add('is-hidden');
+        window.setTimeout(function () { shell.remove(); }, 500);
+      }
+    }, { once: true });
+  </script>
 </body>
 </html>
