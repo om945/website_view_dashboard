@@ -63,7 +63,7 @@ class _MetricCardState extends State<MetricCard> {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -91,7 +91,7 @@ class _MetricCardState extends State<MetricCard> {
                   ),
               ],
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 10),
             Row(
               crossAxisAlignment: CrossAxisAlignment.baseline,
               textBaseline: TextBaseline.alphabetic,

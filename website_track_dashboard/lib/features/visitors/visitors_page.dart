@@ -119,13 +119,16 @@ class _VisitorsPageState extends State<VisitorsPage> {
                   'Install the tracking script to begin collecting analytics. Individual visitor records are not exposed by the API — only anonymous aggregates.',
             )
           else ...[
-            GridView.count(
+            GridView(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: MediaQuery.sizeOf(context).width < 640 ? 1 : 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: MediaQuery.sizeOf(context).width < 640 ? 2.6 : 2.4,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: MediaQuery.sizeOf(context).width < 640 ? 1 : 2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                mainAxisExtent:
+                    MediaQuery.sizeOf(context).width < 640 ? 128 : 146,
+              ),
               children: [
                 MetricCard(
                   title: 'Total visitors',

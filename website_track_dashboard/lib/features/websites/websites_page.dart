@@ -406,11 +406,17 @@ class _WebsiteCardState extends State<WebsiteCard> {
                         child: IconButton(
                           tooltip: 'Delete website',
                           onPressed: widget.onDelete,
-                          constraints: const BoxConstraints(
-                            minWidth: 40,
-                            minHeight: 40,
+                          style: IconButton.styleFrom(
+                            minimumSize: const Size(40, 40),
+                            padding: EdgeInsets.zero,
+                            foregroundColor: AppColors.textSecondary,
+                            hoverColor: AppColors.accentSoft,
+                            focusColor: AppColors.accentSoft,
+                            overlayColor: AppColors.accent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
-                          padding: EdgeInsets.zero,
                           icon: Icon(
                             Icons.delete_outline_rounded,
                             size: 19,

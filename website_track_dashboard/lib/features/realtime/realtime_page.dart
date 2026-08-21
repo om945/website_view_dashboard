@@ -366,13 +366,15 @@ class _RealtimePageState extends State<RealtimePage> {
           const SizedBox(height: 14),
 
           // 3 Metric Cards Grid
-          GridView.count(
+          GridView(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: isMobile ? 1 : 3,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: isMobile ? 2.6 : 2.2,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: isMobile ? 1 : 3,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              mainAxisExtent: isMobile ? 128 : 154,
+            ),
             children: [
               MetricCard(
                 title: 'Active now',
@@ -421,7 +423,7 @@ class _RealtimePageState extends State<RealtimePage> {
                         ),
                       ],
                     ),
-                    const Spacer(),
+                    const SizedBox(height: 16),
                     Row(
                       children: [
                         Container(
