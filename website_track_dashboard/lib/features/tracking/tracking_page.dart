@@ -17,6 +17,9 @@ class TrackingPage extends StatelessWidget {
   String get _publicCounterUrl =>
       DashboardConfig.publicVisitorCountUrl(site.siteKey);
 
+  static const _publicCounterPath =
+      'GET /api/v1/public/sites/{siteKey}/visitor-count';
+
   @override
   Widget build(BuildContext context) {
     return PageFrame(
@@ -59,11 +62,11 @@ class TrackingPage extends StatelessWidget {
                 );
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Public counter URL copied')),
+                    const SnackBar(content: Text('Endpoint copied')),
                   );
                 }
               },
-              child: const Text('Copy URL'),
+              child: const Text('Copy endpoint'),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +76,10 @@ class TrackingPage extends StatelessWidget {
                   style: AppTypography.bodyMedium,
                 ),
                 const SizedBox(height: 12),
-                SelectableText(_publicCounterUrl, style: AppTypography.code),
+                const SelectableText(
+                  _publicCounterPath,
+                  style: AppTypography.code,
+                ),
               ],
             ),
           ),

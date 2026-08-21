@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 
 import '../../app/theme/colors.dart';
 import '../../app/theme/typography.dart';
-import '../../core/config/dashboard_config.dart';
 import '../../core/errors/api_exception.dart';
 import '../../data/models/models.dart';
 import '../../data/repositories/repositories.dart';
@@ -125,7 +124,7 @@ class _SettingsPageState extends State<SettingsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _row('Base URL', DashboardConfig.apiOrigin),
+                _row('API endpoint', '/api/v1/...'),
                 const SizedBox(height: 8),
                 const Text(
                   'The dashboard sends credentialed requests using the backend session cookie.',
