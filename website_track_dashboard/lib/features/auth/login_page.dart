@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../app/theme/colors.dart';
 import '../../app/theme/typography.dart';
+import '../../core/config/dashboard_config.dart';
+import '../../core/platform/platform.dart';
 import '../../core/widgets/grid_background.dart';
 import '../../data/api/api_client.dart';
 import '../../shared/widgets/app_button.dart';
@@ -81,6 +83,24 @@ class LoginPage extends StatelessWidget {
                       Text(
                         'Session authentication is handled securely by the backend.',
                         style: AppTypography.bodySmall.copyWith(fontSize: 11.5),
+                      ),
+                      const SizedBox(height: 14),
+                      Wrap(
+                        spacing: 4,
+                        children: [
+                          TextButton(
+                            onPressed: () => openUrl(
+                              DashboardConfig.privacyPolicyUrl,
+                            ),
+                            child: const Text('Privacy Policy'),
+                          ),
+                          TextButton(
+                            onPressed: () => openUrl(
+                              DashboardConfig.termsOfServiceUrl,
+                            ),
+                            child: const Text('Terms of Service'),
+                          ),
+                        ],
                       ),
                     ],
                   ),
