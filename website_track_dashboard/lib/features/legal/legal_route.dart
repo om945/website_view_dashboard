@@ -1,0 +1,1 @@
+enum LegalPageType { privacy, terms }
