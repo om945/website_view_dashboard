@@ -58,6 +58,9 @@ class _AuthGateState extends State<AuthGate> {
             ? _AuthState.authenticated
             : _AuthState.unauthenticated;
       });
+      if (user != null && widget.routePath == '/login') {
+        widget.onRouteChanged('/dashboard');
+      }
     } on ApiException catch (e) {
       if (!mounted) return;
       setState(() {

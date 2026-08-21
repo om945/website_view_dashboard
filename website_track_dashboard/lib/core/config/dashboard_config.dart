@@ -9,8 +9,8 @@ abstract final class DashboardConfig {
     defaultValue: 'production',
   );
 
-  static const privacyPolicyUrl = 'https://viziapiio.vercel.app/privacy';
-  static const termsOfServiceUrl = 'https://viziapiio.vercel.app/terms';
+  static const privacyPolicyUrl = 'https://viziapi.vercel.app/privacy';
+  static const termsOfServiceUrl = 'https://viziapi.vercel.app/terms';
 
   static String get apiOrigin => apiBaseUrl.replaceFirst(RegExp(r'/$'), '');
 

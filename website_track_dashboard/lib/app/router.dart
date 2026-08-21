@@ -4,8 +4,13 @@ import '../data/models/models.dart';
 import '../features/auth/auth_gate.dart';
 import '../features/legal/legal_route.dart';
 import '../features/legal/pages/legal_page.dart';
+import '../landing/features/docs/pages/docs_shell.dart';
+import '../landing/features/landing/pages/landing_page.dart';
 
 abstract final class DashboardRoutes {
+  static const home = '/';
+  static const login = '/login';
+  static const docs = '/docs';
   static const overview = '/dashboard';
   static const websites = '/dashboard/websites';
   static const realtime = '/dashboard/realtime';
@@ -29,6 +34,9 @@ abstract final class DashboardRoutes {
   ];
 
   static const public = <String>[privacy, terms];
+
+  static bool isDocsPath(String path) =>
+      path == docs || path.startsWith('$docs/');
 
   static DashboardSection sectionFromPath(String path) {
     final normalized = path.endsWith('/') && path.length > 1
@@ -65,17 +73,18 @@ class DashboardRouteInformationParser extends RouteInformationParser<String> {
   ) async {
     final uri = routeInformation.uri;
     final hashPath = uri.fragment;
-    final path = hashPath.startsWith('/dashboard')
+    final path = hashPath.startsWith('/') && hashPath != '/'
         ? hashPath
-        : uri.path.startsWith('/dashboard')
-            ? uri.path
-            : uri.path == '/' || uri.path.isEmpty
-                ? DashboardRoutes.overview
-                : uri.path;
+        : uri.path.isEmpty ? DashboardRoutes.home : uri.path;
+    if (path == DashboardRoutes.home ||
+        path == DashboardRoutes.login ||
+        DashboardRoutes.isDocsPath(path)) {
+      return path;
+    }
     return DashboardRoutes.all.contains(path) ||
             DashboardRoutes.public.contains(path)
         ? path
-        : DashboardRoutes.overview;
+        : DashboardRoutes.home;
   }
 
   @override
@@ -93,14 +102,29 @@ class DashboardRouterDelegate extends RouterDelegate<String>
   String get currentConfiguration => _path;
 
   void _setPath(String path) {
-    final next = DashboardRoutes.all.contains(path) ||
+    final next = path == DashboardRoutes.home ||
+            path == DashboardRoutes.login ||
+            DashboardRoutes.isDocsPath(path) ||
+            DashboardRoutes.all.contains(path) ||
             DashboardRoutes.public.contains(path)
         ? path
-        : DashboardRoutes.overview;
+        : DashboardRoutes.home;
     if (_path == next) return;
     _path = next;
     notifyListeners();
   }
+
+  void goToHome() => _setPath(DashboardRoutes.home);
+
+  void goToDocs(String slug) => _setPath(
+        slug.isEmpty || slug == 'docs' || slug == 'doc'
+            ? DashboardRoutes.docs
+            : '${DashboardRoutes.docs}/$slug',
+      );
+
+  void goToLogin() => _setPath(DashboardRoutes.login);
+
+  void goToLegal(String path) => _setPath(path);
 
   @override
   Future<void> setNewRoutePath(String configuration) async {
@@ -123,8 +147,16 @@ class DashboardRouterDelegate extends RouterDelegate<String>
       key: _navigatorKey,
       pages: [
         MaterialPage<void>(
-          key: const ValueKey('dashboard-root'),
-          child: DashboardRoutes.public.contains(_path)
+          key: ValueKey(_path),
+          child: _path == DashboardRoutes.home
+              ? const LandingPage()
+              : DashboardRoutes.isDocsPath(_path)
+                  ? DocsShell(
+                      slug: _path == DashboardRoutes.docs
+                          ? 'docs'
+                          : _path.substring('${DashboardRoutes.docs}/'.length),
+                    )
+                  : DashboardRoutes.public.contains(_path)
               ? LegalPage(
                   type: _path == DashboardRoutes.privacy
                       ? LegalPageType.privacy
