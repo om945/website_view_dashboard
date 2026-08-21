@@ -15,16 +15,15 @@ class Responsive {
 
   static double horizontalPadding(BuildContext context) {
     final w = width(context);
-    if (w < mobileBreakpoint) return 20;
+    if (w < mobileBreakpoint) return 16;
     if (w < tabletBreakpoint) return 28;
     return 32;
   }
 
   static int metricColumns(BuildContext context) {
     final w = width(context);
-    if (w < 480) return 1;
-    if (w < 760) return 2;
-    if (w < 1100) return 3;
+    if (w < 768) return 1;
+    if (w < 1200) return 2;
     return 3;
   }
 }

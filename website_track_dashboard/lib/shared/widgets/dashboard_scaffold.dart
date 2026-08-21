@@ -63,29 +63,38 @@ class PageFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hPad = Responsive.horizontalPadding(context);
+    final stackHeader = action != null && Responsive.width(context) < 760;
+    final heading = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: AppTypography.h1),
+        const SizedBox(height: 3),
+        Text(subtitle, style: AppTypography.bodyMedium),
+      ],
+    );
+
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: hPad, vertical: 20),
+      padding: EdgeInsets.fromLTRB(hPad, 20, hPad, 24),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 1200),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(title, style: AppTypography.h1),
-                      const SizedBox(height: 3),
-                      Text(subtitle, style: AppTypography.bodyMedium),
-                    ],
-                  ),
-                ),
-                if (action != null) ...[const SizedBox(width: 12), action!],
-              ],
-            ),
+            if (stackHeader) ...[
+              heading,
+              const SizedBox(height: 14),
+              Align(alignment: Alignment.centerLeft, child: action!),
+            ] else
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(child: heading),
+                  if (action != null) ...[
+                    const SizedBox(width: 12),
+                    action!,
+                  ],
+                ],
+              ),
             const SizedBox(height: 18),
             child,
           ],
@@ -226,14 +235,16 @@ class RangeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: Responsive.isCompact(context) ? double.infinity : null,
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
         color: AppColors.surfaceElevated,
         borderRadius: AppRadii.radiusSm,
         border: Border.all(color: AppColors.border),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
+      child: Wrap(
+        spacing: 2,
+        runSpacing: 2,
         children: StatsRange.values.map((range) {
           final selected = range == value;
           return InkWell(

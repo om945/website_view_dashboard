@@ -124,11 +124,11 @@ class _VisitorsPageState extends State<VisitorsPage> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: MediaQuery.sizeOf(context).width < 640 ? 1 : 2,
+                crossAxisCount: MediaQuery.sizeOf(context).width < 768 ? 1 : 2,
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 12,
                 mainAxisExtent:
-                    MediaQuery.sizeOf(context).width < 640 ? 128 : 146,
+                    MediaQuery.sizeOf(context).width < 768 ? 128 : 146,
               ),
               children: [
                 MetricCard(
