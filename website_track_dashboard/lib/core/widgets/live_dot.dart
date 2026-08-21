@@ -55,7 +55,8 @@ class _LiveDotState extends State<LiveDot> with SingleTickerProviderStateMixin {
                   height: widget.size * _pulse.value,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: widget.color.withOpacity(
+                    color: widget.color.withValues(
+                      alpha: 
                       (0.3 / _pulse.value).clamp(0.0, 1.0),
                     ),
                   ),
@@ -68,7 +69,7 @@ class _LiveDotState extends State<LiveDot> with SingleTickerProviderStateMixin {
                     color: widget.color,
                     boxShadow: [
                       BoxShadow(
-                        color: widget.color.withOpacity(0.6),
+                        color: widget.color.withValues(alpha: 0.6),
                         blurRadius: 6,
                       ),
                     ],

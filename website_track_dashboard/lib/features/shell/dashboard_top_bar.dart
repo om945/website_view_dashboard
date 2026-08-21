@@ -25,9 +25,9 @@ class DashboardTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeSiteId = sites.any((s) => s.id == selectedSite?.id)
-        ? selectedSite?.id
-        : (sites.isNotEmpty ? sites.first.id : null);
+    final activeSite = sites.any((s) => s.id == selectedSite?.id)
+        ? selectedSite
+        : (sites.isNotEmpty ? sites.first : null);
 
     return Container(
       height: 70,
@@ -53,7 +53,7 @@ class DashboardTopBar extends StatelessWidget {
               letterSpacing: -0.2,
             ),
           ),
-          if (sites.isNotEmpty) ...[
+          if (activeSite != null) ...[
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Text(
@@ -65,63 +65,85 @@ class DashboardTopBar extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              height: 38,
+            PopupMenuButton<String>(
+              tooltip: 'Switch website',
+              offset: const Offset(0, 8),
+              position: PopupMenuPosition.under,
               constraints: BoxConstraints(
-                maxWidth: mobile ? 160 : 260,
-                minWidth: 120,
+                minWidth: mobile ? 160 : 220,
+                maxWidth: mobile ? 220 : 280,
+                maxHeight: 360,
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceElevated,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.borderStrong),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: activeSiteId,
-                  isExpanded: true,
-                  icon: const Icon(
-                    Icons.keyboard_arrow_down_rounded,
-                    color: AppColors.textSecondary,
-                    size: 18,
-                  ),
-                  dropdownColor: AppColors.surfaceElevated,
-                  items: sites
-                      .map(
-                        (site) => DropdownMenuItem<String>(
-                          value: site.id,
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.language_rounded,
-                                size: 14,
-                                color: AppColors.accent,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  site.domain,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppTypography.bodyMedium.copyWith(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColors.textPrimary,
-                                  ),
-                                ),
-                              ),
-                            ],
+              initialValue: activeSite.id,
+              onSelected: (siteId) {
+                final match = sites.where((s) => s.id == siteId);
+                if (match.isNotEmpty) onSiteChanged(match.first);
+              },
+              itemBuilder: (_) => sites
+                  .map(
+                    (site) => PopupMenuItem(
+                      value: site.id,
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.language_rounded,
+                            size: 14,
+                            color: AppColors.accent,
                           ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              site.domain,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTypography.bodyMedium.copyWith(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+              child: Container(
+                height: 38,
+                constraints: BoxConstraints(
+                  maxWidth: mobile ? 160 : 260,
+                  minWidth: 120,
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceElevated,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppColors.borderStrong),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.language_rounded,
+                      size: 14,
+                      color: AppColors.accent,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        activeSite.domain,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTypography.bodyMedium.copyWith(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.textPrimary,
                         ),
-                      )
-                      .toList(),
-                  onChanged: (siteId) {
-                    if (siteId == null) return;
-                    final match = sites.where((s) => s.id == siteId);
-                    if (match.isNotEmpty) {
-                      onSiteChanged(match.first);
-                    }
-                  },
+                      ),
+                    ),
+                    const Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      color: AppColors.textSecondary,
+                      size: 18,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -129,7 +151,13 @@ class DashboardTopBar extends StatelessWidget {
           const Spacer(),
           PopupMenuButton<String>(
             tooltip: 'Account',
-            offset: const Offset(0, 48),
+            offset: const Offset(0, 8),
+            position: PopupMenuPosition.under,
+            constraints: const BoxConstraints(
+              minWidth: 220,
+              maxWidth: 280,
+              maxHeight: 240,
+            ),
             onSelected: (value) {
               if (value == 'logout') onLogout();
             },

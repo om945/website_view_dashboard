@@ -44,11 +44,11 @@ class _MetricCardState extends State<MetricCard> {
         decoration: BoxDecoration(
           color: _hovered
               ? AppColors.surfaceElevated
-              : AppColors.surfaceElevated.withOpacity(0.75),
+              : AppColors.surfaceElevated.withValues(alpha: 0.75),
           borderRadius: AppRadii.radiusMd,
           border: Border.all(
             color: _hovered
-                ? AppColors.accent.withOpacity(0.45)
+                ? AppColors.accent.withValues(alpha: 0.45)
                 : AppColors.border,
           ),
         ),

@@ -12,10 +12,38 @@ abstract final class AppTheme {
       fontFamily: AppTypography.fontSans,
       fontFamilyFallback: AppTypography.fontFallback,
       useMaterial3: true,
+      canvasColor: AppColors.surface,
       colorScheme: const ColorScheme.dark(
         primary: AppColors.accent,
+        onPrimary: Colors.white,
         secondary: AppColors.cyan,
+        onSecondary: Colors.white,
         surface: AppColors.surface,
+        onSurface: AppColors.textPrimary,
+        onSurfaceVariant: AppColors.textSecondary,
+        error: Color(0xFFEF5350),
+        onError: Colors.white,
+        outline: AppColors.border,
+        outlineVariant: AppColors.borderSubtle,
+        surfaceContainerLowest: AppColors.background,
+        surfaceContainerLow: AppColors.backgroundElevated,
+        surfaceContainer: AppColors.surface,
+        surfaceContainerHigh: AppColors.surfaceElevated,
+        surfaceContainerHighest: AppColors.surfaceHover,
+        inverseSurface: AppColors.surfaceHover,
+        onInverseSurface: AppColors.textPrimary,
+        scrim: Color(0x99000000),
+      ),
+      tooltipTheme: TooltipThemeData(
+        waitDuration: const Duration(milliseconds: 400),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceHover,
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: AppColors.borderStrong),
+        ),
+        textStyle: AppTypography.bodySmall.copyWith(
+          color: AppColors.textPrimary,
+        ),
       ),
       textTheme: const TextTheme(
         bodyLarge: AppTypography.bodyLarge,
@@ -54,9 +82,14 @@ abstract final class AppTheme {
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: AppRadii.radiusMd),
       ),
-      popupMenuTheme: const PopupMenuThemeData(
+      popupMenuTheme: PopupMenuThemeData(
         color: AppColors.surfaceElevated,
+        surfaceTintColor: Colors.transparent,
         textStyle: AppTypography.bodyMedium,
+        shape: RoundedRectangleBorder(
+          borderRadius: AppRadii.radiusMd,
+          side: const BorderSide(color: AppColors.borderStrong),
+        ),
       ),
       dialogTheme: DialogThemeData(
         backgroundColor: AppColors.surfaceElevated,

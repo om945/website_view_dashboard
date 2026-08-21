@@ -77,6 +77,7 @@ class DashboardRouteInformationParser extends RouteInformationParser<String> {
 
 class DashboardRouterDelegate extends RouterDelegate<String>
     with ChangeNotifier {
+  final _navigatorKey = GlobalKey<NavigatorState>();
   String _path = DashboardRoutes.overview;
 
   @override
@@ -97,10 +98,26 @@ class DashboardRouterDelegate extends RouterDelegate<String>
   }
 
   @override
-  Future<bool> popRoute() async => false;
+  Future<bool> popRoute() async {
+    final navigator = _navigatorKey.currentState;
+    if (navigator != null && navigator.canPop()) {
+      navigator.pop();
+      return true;
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return AuthGate(routePath: _path, onRouteChanged: _setPath);
+    return Navigator(
+      key: _navigatorKey,
+      pages: [
+        MaterialPage<void>(
+          key: const ValueKey('dashboard-root'),
+          child: AuthGate(routePath: _path, onRouteChanged: _setPath),
+        ),
+      ],
+      onDidRemovePage: (_) {},
+    );
   }
 }

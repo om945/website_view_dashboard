@@ -42,6 +42,7 @@ class _RealtimePageState extends State<RealtimePage> {
   String _connectionStatus = 'connecting';
   int _retryAttempts = 0;
   bool _disposed = false;
+  bool _refreshing = false;
 
   @override
   void initState() {
@@ -81,6 +82,8 @@ class _RealtimePageState extends State<RealtimePage> {
   }
 
   Future<void> _refreshCount() async {
+    if (_refreshing || _disposed) return;
+    if (mounted) setState(() => _refreshing = true);
     try {
       final count =
           await widget.analytics.getVisitorCount(widget.site.siteKey);
@@ -92,6 +95,8 @@ class _RealtimePageState extends State<RealtimePage> {
     } catch (error) {
       if (!mounted) return;
       setState(() => _error = error);
+    } finally {
+      if (mounted) setState(() => _refreshing = false);
     }
   }
 
@@ -173,9 +178,9 @@ class _RealtimePageState extends State<RealtimePage> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-              color: _statusColor.withOpacity(0.12),
+              color: _statusColor.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: _statusColor.withOpacity(0.35)),
+              border: Border.all(color: _statusColor.withValues(alpha: 0.35)),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -197,11 +202,17 @@ class _RealtimePageState extends State<RealtimePage> {
           const SizedBox(width: 8),
           IconButton(
             tooltip: 'Refresh count',
-            onPressed: _refreshCount,
-            icon: const Icon(
-              Icons.refresh_rounded,
-              color: AppColors.textSecondary,
-            ),
+            onPressed: _refreshing ? null : _refreshCount,
+            icon: _refreshing
+                ? const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(
+                    Icons.refresh_rounded,
+                    color: AppColors.textSecondary,
+                  ),
           ),
         ],
       ),
@@ -217,12 +228,12 @@ class _RealtimePageState extends State<RealtimePage> {
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: _connectionStatus == 'connected'
-                    ? AppColors.emerald.withOpacity(0.35)
+                    ? AppColors.emerald.withValues(alpha: 0.35)
                     : AppColors.borderStrong,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha: 0.2),
                   blurRadius: 20,
                   offset: const Offset(0, 8),
                 ),
@@ -386,7 +397,7 @@ class _RealtimePageState extends State<RealtimePage> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceElevated.withOpacity(0.75),
+                          color: AppColors.surfaceElevated.withValues(alpha: 0.75),
                   borderRadius: AppRadii.radiusMd,
                   border: Border.all(color: AppColors.border),
                 ),
