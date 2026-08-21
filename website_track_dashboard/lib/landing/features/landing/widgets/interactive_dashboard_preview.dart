@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:website_track_dashboard/landing/shared/icons/landing_icons.dart';
 import '../../../app/theme/colors.dart';
 import '../../../app/theme/typography.dart';
 import '../../../app/theme/radii.dart';
@@ -134,7 +135,7 @@ class _InteractiveDashboardPreviewState
                             ),
                           ),
                           SizedBox(width: 4),
-                          Icon(Icons.keyboard_arrow_down_rounded,
+                          Icon(LandingIcons.keyboardArrowDown,
                               size: 14, color: AppColors.textMuted),
                         ],
                       ),

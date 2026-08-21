@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:website_track_dashboard/landing/shared/icons/landing_icons.dart';
 import '../../../app/theme/spacing.dart';
 import '../../../core/responsive/responsive_layout.dart';
 import '../../../shared/widgets/section_heading.dart';
@@ -53,7 +54,7 @@ class FeaturesSection extends StatelessWidget {
                         title: 'Lightweight',
                         description:
                             'A tiny asynchronous tracker (<2KB) with zero runtime dependencies. Never degrades Lighthouse scores.',
-                        icon: Icons.bolt_rounded,
+                        icon: LandingIcons.bolt,
                       ),
                       FeatureCard(
                         width: cardWidth,
@@ -61,7 +62,7 @@ class FeaturesSection extends StatelessWidget {
                         title: 'New vs returning',
                         description:
                             'Understand discovery and repeat engagement. Clear distinction between first-time discovery and loyal users.',
-                        icon: Icons.repeat_rounded,
+                        icon: LandingIcons.repeat,
                       ),
                       FeatureCard(
                         width: cardWidth,
@@ -69,7 +70,7 @@ class FeaturesSection extends StatelessWidget {
                         title: 'Realtime presence',
                         description:
                             'See currently active visitors in realtime via resilient WebSocket connection heartbeats and expiring presence.',
-                        icon: Icons.radar_rounded,
+                        icon: LandingIcons.radar,
                       ),
                       FeatureCard(
                         width: cardWidth,
@@ -77,7 +78,7 @@ class FeaturesSection extends StatelessWidget {
                         title: 'Developer-first',
                         description:
                             'Simple, predictable REST APIs and client SDKs. Inspect, query, or export raw data on your own terms.',
-                        icon: Icons.code_rounded,
+                        icon: LandingIcons.code,
                       ),
                       FeatureCard(
                         width: cardWidth,
@@ -85,7 +86,7 @@ class FeaturesSection extends StatelessWidget {
                         title: 'SPA ready',
                         description:
                             'Automatic client-side route tracking for Next.js, React Router, Vue, SvelteKit, and Astro without page reloads.',
-                        icon: Icons.route_rounded,
+                        icon: LandingIcons.route,
                       ),
                       FeatureCard(
                         width: cardWidth,
@@ -93,7 +94,7 @@ class FeaturesSection extends StatelessWidget {
                         title: 'Privacy-conscious',
                         description:
                             'No invasive fingerprinting, cookie banners, or cross-site tracking. Anonymous cryptographic hashes keep data safe.',
-                        icon: Icons.shield_outlined,
+                        icon: LandingIcons.shield,
                       ),
                     ],
                   );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:website_track_dashboard/landing/shared/icons/landing_icons.dart';
 import '../../../app/theme/colors.dart';
 import '../../../app/theme/typography.dart';
 import '../../../app/theme/radii.dart';
@@ -154,7 +155,7 @@ class _RealtimeDisplayBlock extends StatelessWidget {
             ),
             child: Row(
               children: const [
-                Icon(Icons.hub_outlined, color: AppColors.cyan, size: 16),
+                Icon(LandingIcons.hub, color: AppColors.cyan, size: 16),
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(

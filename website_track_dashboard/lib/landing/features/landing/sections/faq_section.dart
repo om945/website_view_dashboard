@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:website_track_dashboard/landing/shared/icons/landing_icons.dart';
 import '../../../app/theme/colors.dart';
 import '../../../app/theme/typography.dart';
 import '../../../app/theme/radii.dart';
@@ -114,7 +115,7 @@ class _FaqAccordionCardState extends State<_FaqAccordionCard> {
                 turns: _isExpanded ? 0.25 : 0.0,
                 duration: const Duration(milliseconds: 200),
                 child: Icon(
-                  Icons.arrow_forward_ios_rounded,
+                  LandingIcons.arrowForwardIos,
                   size: 14,
                   color:
                       _isExpanded ? AppColors.accent : AppColors.textSecondary,

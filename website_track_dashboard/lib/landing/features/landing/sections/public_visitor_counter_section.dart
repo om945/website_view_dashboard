@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:website_track_dashboard/landing/shared/icons/landing_icons.dart';
 import '../../../app/theme/colors.dart';
 import '../../../app/theme/typography.dart';
 import '../../../app/theme/radii.dart';
@@ -141,7 +142,7 @@ class _PublicVisitorCounterSectionState
                                 ),
                               ),
                               child: const Icon(
-                                Icons.route_rounded,
+                                LandingIcons.route,
                                 color: AppColors.accent,
                                 size: 16,
                               ),
@@ -196,7 +197,7 @@ class _PublicVisitorCounterSectionState
                     if (isMobile) ...[
                       _StepCard(
                         num: '01',
-                        icon: Icons.language_rounded,
+                        icon: LandingIcons.language,
                         title: 'Create your website',
                         body:
                             'Register your domain in ViziAPI to get a unique site key instantly.',
@@ -204,7 +205,7 @@ class _PublicVisitorCounterSectionState
                       const SizedBox(height: 12),
                       _StepCard(
                         num: '02',
-                        icon: Icons.data_object_rounded,
+                        icon: LandingIcons.dataObject,
                         title: 'Fetch visitor count',
                         body:
                             'Call the public endpoint via fetch or curl with your site key. No private keys needed.',
@@ -212,7 +213,7 @@ class _PublicVisitorCounterSectionState
                       const SizedBox(height: 12),
                       _StepCard(
                         num: '03',
-                        icon: Icons.insights_rounded,
+                        icon: LandingIcons.insights,
                         title: 'Display on your site',
                         body:
                             'Show total and active visitors anywhere on your site UI, footer, badge, or README.',
@@ -225,7 +226,7 @@ class _PublicVisitorCounterSectionState
                             Expanded(
                               child: _StepCard(
                                 num: '01',
-                                icon: Icons.language_rounded,
+                                icon: LandingIcons.language,
                                 title: 'Create your website',
                                 body:
                                     'Register your domain in ViziAPI to get a unique site key instantly.',
@@ -235,7 +236,7 @@ class _PublicVisitorCounterSectionState
                             Expanded(
                               child: _StepCard(
                                 num: '02',
-                                icon: Icons.data_object_rounded,
+                                icon: LandingIcons.dataObject,
                                 title: 'Fetch visitor count',
                                 body:
                                     'Call the public endpoint via fetch or curl with your site key. No private keys needed.',
@@ -245,7 +246,7 @@ class _PublicVisitorCounterSectionState
                             Expanded(
                               child: _StepCard(
                                 num: '03',
-                                icon: Icons.insights_rounded,
+                                icon: LandingIcons.insights,
                                 title: 'Display on your site',
                                 body:
                                     'Show total and active visitors anywhere on your site UI, footer, badge, or README.',
@@ -331,31 +332,31 @@ class _PublicVisitorCounterSectionState
                           children: [
                             _UseCaseChip(
                               width: itemWidth,
-                              icon: Icons.groups_rounded,
+                              icon: LandingIcons.groups,
                               title: 'Community websites',
                               subtitle: 'Show project visitor reach',
                             ),
                             _UseCaseChip(
                               width: itemWidth,
-                              icon: Icons.person_rounded,
+                              icon: LandingIcons.person,
                               title: 'Personal websites',
                               subtitle: 'Display reader audience size',
                             ),
                             _UseCaseChip(
                               width: itemWidth,
-                              icon: Icons.code_rounded,
+                              icon: LandingIcons.code,
                               title: 'Open-source projects',
                               subtitle: 'Public traffic transparency',
                             ),
                             _UseCaseChip(
                               width: itemWidth,
-                              icon: Icons.rocket_launch_rounded,
+                              icon: LandingIcons.rocketLaunch,
                               title: 'Product launches',
                               subtitle: 'Live launchday momentum',
                             ),
                             _UseCaseChip(
                               width: itemWidth,
-                              icon: Icons.event_available_rounded,
+                              icon: LandingIcons.eventAvailable,
                               title: 'Event websites',
                               subtitle: 'Live attendee activity',
                             ),
@@ -381,7 +382,7 @@ class _PublicVisitorCounterSectionState
           label: 'Public Visitor Counter',
           color: AppColors.accent,
           icon: Icon(
-            Icons.visibility_rounded,
+            LandingIcons.visibility,
             size: 13,
             color: AppColors.accent,
           ),
@@ -401,7 +402,7 @@ class _PublicVisitorCounterSectionState
             AppButton(
               label: 'Get started',
               variant: AppButtonVariant.primary,
-              icon: const Icon(Icons.arrow_forward_rounded, size: 16),
+              icon: const Icon(LandingIcons.arrowForward, size: 16),
               onPressed: () => AppNavigation.toLogin(context),
             ),
             AppButton(
@@ -430,7 +431,7 @@ class _PublicVisitorCounterSectionState
                 ),
                 SizedBox(width: 6),
                 Icon(
-                  Icons.arrow_forward_rounded,
+                  LandingIcons.arrowForward,
                   size: 14,
                   color: AppColors.accent,
                 ),
@@ -483,7 +484,7 @@ class _PublicVisitorCounterSectionState
                   Row(
                     children: const [
                       Icon(
-                        Icons.insights_rounded,
+                        LandingIcons.insights,
                         color: AppColors.accent,
                         size: 17,
                       ),
@@ -683,7 +684,7 @@ class _PublicVisitorCounterSectionState
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: const Icon(
-                      Icons.query_stats_rounded,
+                      LandingIcons.queryStats,
                       color: AppColors.accent,
                       size: 16,
                     ),
@@ -750,7 +751,7 @@ class _PublicVisitorCounterSectionState
             child: Row(
               children: const [
                 Icon(
-                  Icons.check_circle_outline_rounded,
+                  LandingIcons.checkCircle,
                   color: AppColors.accent,
                   size: 14,
                 ),
@@ -859,7 +860,7 @@ class _PublicVisitorCounterSectionState
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: const Icon(
-                      Icons.shield_outlined,
+                      LandingIcons.shield,
                       color: AppColors.emerald,
                       size: 16,
                     ),
@@ -945,7 +946,7 @@ class _PrivacyPill extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.check, size: 12, color: AppColors.emerald),
+          const Icon(LandingIcons.check, size: 12, color: AppColors.emerald),
           const SizedBox(width: 5),
           Text(
             label,

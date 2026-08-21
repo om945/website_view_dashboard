@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:website_track_dashboard/landing/shared/icons/landing_icons.dart';
 
 import '../../../app/theme/colors.dart';
 import '../../../app/theme/spacing.dart';
@@ -26,7 +27,7 @@ class GoogleAuthSection extends StatelessWidget {
               border: Border.all(color: AppColors.border),
             ),
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Icon(Icons.lock_outline_rounded,
+              const Icon(LandingIcons.lock,
                   color: AppColors.accent, size: 22),
               const SizedBox(width: 16),
               Expanded(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:website_track_dashboard/landing/shared/icons/landing_icons.dart';
 import '../../../app/theme/colors.dart';
 import '../../../app/theme/typography.dart';
 import '../../../app/theme/radii.dart';
@@ -73,7 +74,7 @@ class _MetricsStack extends StatelessWidget {
           title: 'Total views',
           value: '12,540',
           color: AppColors.accent,
-          icon: Icons.visibility_outlined,
+          icon: LandingIcons.visibility,
           description: 'Aggregated page views across all canonical paths',
         ),
         SizedBox(height: 12),
@@ -81,7 +82,7 @@ class _MetricsStack extends StatelessWidget {
           title: 'New visitors',
           value: '842',
           color: AppColors.textPrimary,
-          icon: Icons.person_add_alt_1_outlined,
+          icon: LandingIcons.personAdd,
           description: 'First-ever visitor identities recorded during period',
         ),
         SizedBox(height: 12),
@@ -89,7 +90,7 @@ class _MetricsStack extends StatelessWidget {
           title: 'Returning visitors',
           value: '406',
           color: AppColors.violet,
-          icon: Icons.repeat_one_rounded,
+          icon: LandingIcons.repeatOne,
           description: 'Previously recognized anonymous visitors re-engaging',
         ),
       ],

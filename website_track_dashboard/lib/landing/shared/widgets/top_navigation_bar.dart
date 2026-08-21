@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:website_track_dashboard/landing/shared/icons/landing_icons.dart';
 import '../../app/theme/colors.dart';
 import '../../app/theme/typography.dart';
 import '../../app/theme/radii.dart';
@@ -47,7 +48,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
                   const _BrandLogo(),
                   IconButton(
                     icon: const Icon(
-                      Icons.close_rounded,
+                      LandingIcons.close,
                       color: AppColors.textSecondary,
                     ),
                     onPressed: () => Navigator.pop(ctx),
@@ -57,7 +58,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
               const Divider(color: AppColors.border, height: 28),
               _MobileNavLink(
                 label: 'Product Overview',
-                icon: Icons.dashboard_outlined,
+                icon: LandingIcons.dashboard,
                 onTap: () {
                   Navigator.pop(ctx);
                   if (widget.currentPath != '/') {
@@ -69,7 +70,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
               ),
               _MobileNavLink(
                 label: 'Features',
-                icon: Icons.auto_awesome_outlined,
+                icon: LandingIcons.autoAwesome,
                 onTap: () {
                   Navigator.pop(ctx);
                   if (widget.currentPath != '/') {
@@ -81,7 +82,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
               ),
               _MobileNavLink(
                 label: 'How It Works',
-                icon: Icons.layers_outlined,
+                icon: LandingIcons.layers,
                 onTap: () {
                   Navigator.pop(ctx);
                   if (widget.currentPath != '/') {
@@ -93,7 +94,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
               ),
               _MobileNavLink(
                 label: 'Documentation',
-                icon: Icons.menu_book_outlined,
+                icon: LandingIcons.menuBook,
                 onTap: () {
                   Navigator.pop(ctx);
                   AppNavigation.toDocs(context, 'docs');
@@ -101,7 +102,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
               ),
               _MobileNavLink(
                 label: 'API Reference',
-                icon: Icons.terminal_outlined,
+                icon: LandingIcons.terminal,
                 onTap: () {
                   Navigator.pop(ctx);
                   AppNavigation.toDocs(context, 'api');
@@ -268,7 +269,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
                 IconButton(
                   onPressed: () => _openMobileMenu(context),
                   icon: const Icon(
-                    Icons.menu_rounded,
+                    LandingIcons.menu,
                     color: AppColors.textPrimary,
                     size: 24,
                   ),

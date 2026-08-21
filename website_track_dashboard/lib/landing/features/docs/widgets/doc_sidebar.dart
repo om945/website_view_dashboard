@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:website_track_dashboard/landing/shared/icons/landing_icons.dart';
 import '../../../app/theme/colors.dart';
 import '../../../app/theme/typography.dart';
 import '../../../app/theme/radii.dart';
@@ -25,7 +26,7 @@ class DocSidebar extends StatelessWidget {
         children: [
           Row(
             children: const [
-              Icon(Icons.menu_book_rounded, color: AppColors.accent, size: 16),
+              Icon(LandingIcons.menuBook, color: AppColors.accent, size: 16),
               SizedBox(width: 8),
               Text(
                 'DOCUMENTATION',

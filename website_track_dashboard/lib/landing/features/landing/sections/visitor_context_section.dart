@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:website_track_dashboard/landing/shared/icons/landing_icons.dart';
 import '../../../app/theme/colors.dart';
 import '../../../app/theme/typography.dart';
 import '../../../app/theme/radii.dart';
@@ -101,7 +102,7 @@ class _VisitorFlowCard extends StatelessWidget {
             action: 'First-ever visit detected',
             tag: 'NEW VISITOR',
             color: AppColors.accent,
-            icon: Icons.person_add_alt_outlined,
+            icon: LandingIcons.personAdd,
             stepText: 'Unique anonymous key generated',
           ),
           Padding(
@@ -116,7 +117,7 @@ class _VisitorFlowCard extends StatelessWidget {
             action: 'Leaves, then comes back later',
             tag: 'RETURNING VISITOR',
             color: AppColors.violet,
-            icon: Icons.sync_rounded,
+            icon: LandingIcons.sync,
             stepText: 'Session reset after 2h of inactivity',
           ),
         ],

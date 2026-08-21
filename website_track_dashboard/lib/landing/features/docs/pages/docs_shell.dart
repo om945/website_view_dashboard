@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:website_track_dashboard/landing/shared/icons/landing_icons.dart';
 import '../../../app/theme/colors.dart';
 import '../../../app/theme/typography.dart';
 import '../../../app/theme/radii.dart';
@@ -75,7 +76,7 @@ class _DocsShellState extends State<DocsShell> {
                 children: [
                   Row(
                     children: const [
-                      Icon(Icons.menu_book_rounded,
+                      Icon(LandingIcons.menuBook,
                           color: AppColors.accent, size: 18),
                       SizedBox(width: 8),
                       Text(
@@ -91,7 +92,7 @@ class _DocsShellState extends State<DocsShell> {
                     ],
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close_rounded,
+                    icon: const Icon(LandingIcons.close,
                         color: AppColors.textSecondary),
                     onPressed: () => Navigator.pop(ctx),
                   ),
@@ -126,7 +127,7 @@ class _DocsShellState extends State<DocsShell> {
                     ),
                   ),
                   trailing: isActive
-                      ? const Icon(Icons.check_rounded,
+                      ? const Icon(LandingIcons.check,
                           color: AppColors.accent, size: 18)
                       : null,
                   onTap: () {
@@ -204,7 +205,7 @@ class _DocsShellState extends State<DocsShell> {
                                       ),
                                       child: Row(
                                         children: [
-                                          const Icon(Icons.menu_book_rounded,
+                                          const Icon(LandingIcons.menuBook,
                                               color: AppColors.accent,
                                               size: 16),
                                           const SizedBox(width: 10),
@@ -263,7 +264,7 @@ class _DocsShellState extends State<DocsShell> {
                                                 ),
                                                 SizedBox(width: 2),
                                                 Icon(
-                                                  Icons.keyboard_arrow_down_rounded,
+                                                  LandingIcons.keyboardArrowDown,
                                                   size: 14,
                                                   color: AppColors.accent,
                                                 ),

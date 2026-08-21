@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:website_track_dashboard/landing/shared/icons/landing_icons.dart';
 import '../../../app/theme/colors.dart';
 import '../../../app/theme/typography.dart';
 import '../../../app/theme/radii.dart';
@@ -92,7 +93,7 @@ class DocContent extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.shield_outlined,
+              const Icon(LandingIcons.shield,
                   color: AppColors.accent, size: 20),
               const SizedBox(width: 12),
               Expanded(
@@ -146,7 +147,7 @@ class DocContent extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.arrow_back_rounded,
+                      const Icon(LandingIcons.arrowBack,
                           size: 14, color: AppColors.textSecondary),
                       const SizedBox(width: 6),
                       Text(
@@ -184,7 +185,7 @@ class DocContent extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 6),
-                      const Icon(Icons.arrow_forward_rounded,
+                      const Icon(LandingIcons.arrowForward,
                           size: 14, color: AppColors.accent),
                     ],
                   ),

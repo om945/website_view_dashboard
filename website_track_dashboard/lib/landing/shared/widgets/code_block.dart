@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:website_track_dashboard/landing/shared/icons/landing_icons.dart';
 import 'package:flutter/services.dart';
 import '../../app/theme/colors.dart';
 import '../../app/theme/typography.dart';
@@ -164,8 +165,8 @@ class _CodeBlockState extends State<CodeBlock> {
                         children: [
                           Icon(
                             _copied
-                                ? Icons.check_rounded
-                                : Icons.copy_rounded,
+                                ? LandingIcons.check
+                                : LandingIcons.copy,
                             size: 13,
                             color: _copied
                                 ? AppColors.emerald
