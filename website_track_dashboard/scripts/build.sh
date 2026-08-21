@@ -1,31 +1,35 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-echo "Installing Flutter..."
+# Vercel runs this script from the Flutter project root. The source checkout is
+# the deployment input; build/web is always regenerated from that checkout.
+FLUTTER_DIR="${FLUTTER_DIR:-.flutter-sdk}"
+API_BASE_URL="${API_BASE_URL:-https://website-view-api-1.onrender.com}"
+APP_ENV="${APP_ENV:-production}"
 
-if [ -d "flutter" ]; then
-  cd flutter
-  git pull
-  cd ..
-else
-  git clone https://github.com/flutter/flutter.git -b stable --depth 1
+echo "Preparing Flutter SDK..."
+if [ ! -x "$FLUTTER_DIR/bin/flutter" ]; then
+  rm -rf "$FLUTTER_DIR"
+  git clone --depth 1 --branch stable https://github.com/flutter/flutter.git "$FLUTTER_DIR"
 fi
 
-# ADD FLUTTER TO PATH
-export PATH="$PATH:`pwd`/flutter/bin"
+export PATH="$PWD/$FLUTTER_DIR/bin:$PATH"
 
-echo "Flutter version:"
 flutter --version
-
-echo "Enable web..."
 flutter config --enable-web
 
-echo "Cleaning previous build output..."
+echo "Cleaning release output..."
+flutter clean
 rm -rf build/web
 
-echo "Building Flutter Web..."
-
-flutter clean
+echo "Installing Dart dependencies..."
 flutter pub get
 
-# Inject the API_BASE_URL from Vercel's Environment Variables
-flutter build web --release --tree-shake-icons -O4 --source-maps --web-resources-cdn --dart-define=API_BASE_URL="$API_BASE_URL"
+echo "Building Flutter Web release..."
+flutter build web \
+  --release \
+  --tree-shake-icons \
+  --source-maps \
+  --web-resources-cdn \
+  --dart-define=API_BASE_URL="$API_BASE_URL" \
+  --dart-define=APP_ENV="$APP_ENV"
