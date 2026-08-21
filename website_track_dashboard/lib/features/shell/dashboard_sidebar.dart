@@ -27,7 +27,7 @@ class DashboardSidebar extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 10, bottom: 20, top: 4),
-            child: const ViziApiBrand(compact: true),
+            child: const ViziApiBrand(),
           ),
           _sectionLabel('WORKSPACE'),
           _item(
