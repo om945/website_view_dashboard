@@ -125,8 +125,9 @@ class DashboardRouterDelegate extends RouterDelegate<String>
             DashboardRoutes.public.contains(basePath)
         ? basePath
         : DashboardRoutes.home;
-    if (_path == next) return;
-    _loginRedirect = next == DashboardRoutes.login ? safeRedirect : null;
+    final nextLoginRedirect = next == DashboardRoutes.login ? safeRedirect : null;
+    if (_path == next && _loginRedirect == nextLoginRedirect) return;
+    _loginRedirect = nextLoginRedirect;
     _path = next;
     notifyListeners();
   }
@@ -164,7 +165,11 @@ class DashboardRouterDelegate extends RouterDelegate<String>
       key: _navigatorKey,
       pages: [
         MaterialPage<void>(
-          key: ValueKey(_path),
+          // One stable page identity keeps AuthGate and DashboardShell mounted
+          // while only the route content changes inside the shell.
+          key: ValueKey(
+            _path.startsWith('/dashboard') ? 'protected-dashboard-shell' : _path,
+          ),
           child: _path == DashboardRoutes.home
               ? const LandingPage()
               : DashboardRoutes.isDocsPath(_path)

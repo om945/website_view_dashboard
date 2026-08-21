@@ -68,10 +68,8 @@ class _DashboardShellState extends State<DashboardShell> {
   void didUpdateWidget(covariant DashboardShell oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.routePath != widget.routePath) {
-      setState(() {
-        _section = DashboardRoutes.sectionFromPath(widget.routePath);
-        _openCreateForm = false;
-      });
+      _section = DashboardRoutes.sectionFromPath(widget.routePath);
+      _openCreateForm = false;
     }
   }
 
@@ -199,7 +197,32 @@ class _DashboardShellState extends State<DashboardShell> {
                                 _loadSites();
                               },
                             )
-                          : _buildContent(),
+                          : AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 190),
+                              reverseDuration:
+                                  const Duration(milliseconds: 140),
+                              switchInCurve: Curves.easeOutCubic,
+                              switchOutCurve: Curves.easeInCubic,
+                              transitionBuilder: (child, animation) {
+                                final offset = Tween<Offset>(
+                                  begin: const Offset(0, 0.012),
+                                  end: Offset.zero,
+                                ).animate(animation);
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: SlideTransition(
+                                    position: offset,
+                                    child: child,
+                                  ),
+                                );
+                              },
+                              child: KeyedSubtree(
+                                key: ValueKey(
+                                  '${_section.name}-${_selectedSite?.id ?? 'none'}',
+                                ),
+                                child: _buildContent(),
+                              ),
+                            ),
                 ),
               ],
             ),
