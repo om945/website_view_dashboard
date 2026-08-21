@@ -12,6 +12,7 @@ import '../sections/public_visitor_counter_section.dart';
 import '../sections/realtime_presence_section.dart';
 import '../sections/how_it_works_section.dart';
 import '../sections/faq_section.dart';
+import '../sections/google_auth_section.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -71,6 +72,7 @@ class _LandingPageState extends State<LandingPage> {
                   Container(key: ScrollManager.realtimeKey, child: const RealtimePresenceSection()),
                   Container(key: ScrollManager.howItWorksKey, child: const HowItWorksSection()),
                   Container(key: ScrollManager.faqKey, child: const FaqSection()),
+                  const GoogleAuthSection(),
                   const SizedBox(height: 64),
                   const SiteFooter(),
                 ],

@@ -14,28 +14,16 @@
   <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
-  <!--
-    CANONICAL DOMAIN — UNVERIFIED, PLACEHOLDER IN USE
-    Neither candidate domain could be confirmed as the live canonical production
-    site for this exact landing page during this pass:
-      - viziapi.vercel.app currently resolves, but its root document title is
-        "ViziAPI — Developer Dashboard", not this marketing page, so it's unclear
-        this file is what's actually served at "/" there.
-      - viziapi.com resolves but blocks automated fetching, so it cannot be
-        confirmed as ViziAPI's real, configured domain.
-    Using viziapi.vercel.app/ as an explicit placeholder per the documented
-    fallback rule. REPLACE with the verified custom domain (or confirmed
-    Vercel URL) before submitting to Search Console / going live.
-  -->
-  <link rel="canonical" href="https://viziapi.vercel.app/">
+  <!-- Replace the relative canonical with the verified production domain before OAuth review. -->
+  <link rel="canonical" href="/">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ViziAPI">
   <meta property="og:title" content="ViziAPI — Website Analytics for Developers">
   <meta property="og:description" content="Lightweight website analytics for developers. Understand visitors, sessions, page views, events, and realtime activity.">
-  <meta property="og:url" content="https://viziapi.vercel.app/">
-  <meta property="og:image" content="https://viziapi.vercel.app/og-image.png">
+  <meta property="og:url" content="/">
+  <meta property="og:image" content="/og-image.png">
   <meta property="og:image:alt" content="ViziAPI — Website Analytics for Developers">
   <meta property="og:locale" content="en_US">
 
@@ -43,7 +31,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ViziAPI — Website Analytics for Developers">
   <meta name="twitter:description" content="Lightweight website analytics for developers with realtime traffic, visitors, sessions, page views, and events.">
-  <meta name="twitter:image" content="https://viziapi.vercel.app/og-image.png">
+  <meta name="twitter:image" content="/og-image.png">
   <meta name="twitter:image:alt" content="ViziAPI — Website Analytics for Developers">
 
   <!-- Favicons / platform metadata -->
@@ -67,7 +55,7 @@
     JSON-LD: description trimmed to remove unverified feature claims
     (devices/locations/referrals were in the original but could not be
     confirmed against actual product behavior). url uses the same
-    placeholder domain as the canonical tag above — update together.
+    relative URL until the verified production domain is known.
   -->
   <script type="application/ld+json">
   {
@@ -77,7 +65,7 @@
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Web",
     "description": "Lightweight website analytics for developers, with realtime traffic, visitors, sessions, page views, and events.",
-    "url": "https://viziapi.vercel.app/"
+    "url": "/"
   }
   </script>
 
@@ -257,6 +245,7 @@
     <main style="max-width:760px;margin:0 auto;padding:64px 24px;color:#f4f4f5;font-family:Arial,sans-serif;background:#090A0F;">
       <h1>ViziAPI — Website Analytics for Developers</h1>
       <p>ViziAPI is a lightweight developer-first analytics platform for understanding website traffic, visitors, sessions, page views, events, and realtime activity.</p>
+      <p>ViziAPI uses Google Sign-In only to authenticate users and create or access their ViziAPI account. The current flow requests openid, email, and profile scopes; it does not request Gmail, Drive, Calendar, Photos, or YouTube access.</p>
       <p>Please enable JavaScript to use the ViziAPI web application.</p>
       <nav aria-label="Legal">
         <a href="/privacy" style="color:#f4f4f5;margin-right:16px;">Privacy Policy</a>
