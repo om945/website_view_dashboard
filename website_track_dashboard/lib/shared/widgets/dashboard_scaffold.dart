@@ -234,39 +234,48 @@ class RangeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = Responsive.isCompact(context);
     return Container(
-      width: Responsive.isCompact(context) ? double.infinity : null,
+      width: isMobile ? double.infinity : 300,
+      height: 40,
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
         color: AppColors.surfaceElevated,
         borderRadius: AppRadii.radiusSm,
         border: Border.all(color: AppColors.border),
       ),
-      child: Wrap(
-        spacing: 2,
-        runSpacing: 2,
+      child: Row(
         children: StatsRange.values.map((range) {
           final selected = range == value;
-          return InkWell(
-            onTap: () => onChanged(range),
-            borderRadius: AppRadii.radiusSm,
-            child: AnimatedContainer(
-              duration: AppMotion.fast,
-              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-              decoration: BoxDecoration(
-                color: selected ? AppColors.accentSoft : Colors.transparent,
-                borderRadius: AppRadii.radiusSm,
-                border: selected
-                    ? Border.all(color: AppColors.accentBorder)
-                    : null,
-              ),
-              child: Text(
-                range.label,
-                style: TextStyle(
-                  fontFamily: AppTypography.fontSans,
-                  fontSize: 11,
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-                  color: selected ? AppColors.accent : AppColors.textSecondary,
+          return Expanded(
+            child: InkWell(
+              onTap: () => onChanged(range),
+              borderRadius: AppRadii.radiusSm,
+              child: AnimatedContainer(
+                duration: AppMotion.fast,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: selected ? AppColors.accentSoft : Colors.transparent,
+                  borderRadius: AppRadii.radiusSm,
+                  border: selected
+                      ? Border.all(color: AppColors.accentBorder)
+                      : null,
+                ),
+                child: Center(
+                  child: Text(
+                    range.label,
+                    maxLines: 1,
+                    softWrap: false,
+                    overflow: TextOverflow.visible,
+                    style: TextStyle(
+                      fontFamily: AppTypography.fontSans,
+                      fontSize: 11,
+                      fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                      color: selected
+                          ? AppColors.accent
+                          : AppColors.textSecondary,
+                    ),
+                  ),
                 ),
               ),
             ),
