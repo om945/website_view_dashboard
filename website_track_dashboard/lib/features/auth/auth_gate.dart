@@ -16,7 +16,14 @@ enum _AuthState {
 }
 
 class AuthGate extends StatefulWidget {
-  const AuthGate({super.key});
+  const AuthGate({
+    super.key,
+    required this.routePath,
+    required this.onRouteChanged,
+  });
+
+  final String routePath;
+  final ValueChanged<String> onRouteChanged;
 
   @override
   State<AuthGate> createState() => _AuthGateState();
@@ -107,6 +114,8 @@ class _AuthGateState extends State<AuthGate> {
         return DashboardShell(
           api: _api,
           user: _user!,
+          routePath: widget.routePath,
+          onRouteChanged: widget.onRouteChanged,
           onLoggedOut: () => setState(() {
             _user = null;
             _state = _AuthState.unauthenticated;

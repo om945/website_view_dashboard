@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../features/auth/auth_gate.dart';
+import 'router.dart';
 import 'theme/app_theme.dart';
 
 class WebsiteViewDashboardApp extends StatelessWidget {
@@ -7,11 +7,13 @@ class WebsiteViewDashboardApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Website View API — Dashboard',
       theme: AppTheme.darkTheme,
-      home: const AuthGate(),
+      routerDelegate: DashboardRouterDelegate(),
+      routeInformationParser: DashboardRouteInformationParser(),
+      backButtonDispatcher: RootBackButtonDispatcher(),
     );
   }
 }

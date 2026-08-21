@@ -6,15 +6,6 @@ import 'package:http/http.dart' as http;
 http.Client createClient() => BrowserClient()..withCredentials = true;
 void openUrl(String url) => html.window.location.href = url;
 
-String currentPath() => html.window.location.pathname ?? '/dashboard';
-
-Stream<String> pathChanges() => html.window.onPopState.map((_) => currentPath());
-
-void pushPath(String path) {
-  if (currentPath() == path) return;
-  html.window.history.pushState(null, '', path);
-}
-
 String? selectedSiteId() => html.window.localStorage['website_view_selected_site'];
 void setSelectedSiteId(String? id) {
   if (id == null) {

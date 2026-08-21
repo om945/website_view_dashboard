@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
+
 import '../data/models/models.dart';
+import '../features/auth/auth_gate.dart';
 
 abstract final class DashboardRoutes {
   static const overview = '/dashboard';
@@ -47,4 +50,57 @@ abstract final class DashboardRoutes {
         DashboardSection.tracking => tracking,
         DashboardSection.settings => settings,
       };
+}
+
+class DashboardRouteInformationParser extends RouteInformationParser<String> {
+  @override
+  Future<String> parseRouteInformation(
+    RouteInformation routeInformation,
+  ) async {
+    final uri = routeInformation.uri;
+    final hashPath = uri.fragment;
+    final path = hashPath.startsWith('/dashboard')
+        ? hashPath
+        : uri.path.startsWith('/dashboard')
+            ? uri.path
+            : DashboardRoutes.overview;
+    return DashboardRoutes.all.contains(path)
+        ? path
+        : DashboardRoutes.overview;
+  }
+
+  @override
+  RouteInformation restoreRouteInformation(String configuration) {
+    return RouteInformation(uri: Uri.parse(configuration));
+  }
+}
+
+class DashboardRouterDelegate extends RouterDelegate<String>
+    with ChangeNotifier {
+  String _path = DashboardRoutes.overview;
+
+  @override
+  String get currentConfiguration => _path;
+
+  void _setPath(String path) {
+    final next = DashboardRoutes.all.contains(path)
+        ? path
+        : DashboardRoutes.overview;
+    if (_path == next) return;
+    _path = next;
+    notifyListeners();
+  }
+
+  @override
+  Future<void> setNewRoutePath(String configuration) async {
+    _setPath(configuration);
+  }
+
+  @override
+  Future<bool> popRoute() async => false;
+
+  @override
+  Widget build(BuildContext context) {
+    return AuthGate(routePath: _path, onRouteChanged: _setPath);
+  }
 }

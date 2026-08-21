@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import '../../app/router.dart';
@@ -28,11 +26,15 @@ class DashboardShell extends StatefulWidget {
     super.key,
     required this.api,
     required this.user,
+    required this.routePath,
+    required this.onRouteChanged,
     required this.onLoggedOut,
   });
 
   final ApiClient api;
   final User user;
+  final String routePath;
+  final ValueChanged<String> onRouteChanged;
   final VoidCallback onLoggedOut;
 
   @override
@@ -50,7 +52,6 @@ class _DashboardShellState extends State<DashboardShell> {
   Object? _error;
   bool _openCreateForm = false;
   late final GlobalKey<ScaffoldState> _scaffoldKey;
-  StreamSubscription<String>? _pathSubscription;
 
   @override
   void initState() {
@@ -58,15 +59,19 @@ class _DashboardShellState extends State<DashboardShell> {
     _websites = WebsiteRepository(widget.api);
     _analytics = AnalyticsRepository(widget.api);
     _scaffoldKey = GlobalKey<ScaffoldState>();
-    _section = DashboardRoutes.sectionFromPath(currentPath());
-    if (!currentPath().startsWith('/dashboard')) {
-      pushPath(DashboardRoutes.overview);
-    }
-    _pathSubscription = pathChanges().listen((path) {
-      if (!mounted) return;
-      setState(() => _section = DashboardRoutes.sectionFromPath(path));
-    });
+    _section = DashboardRoutes.sectionFromPath(widget.routePath);
     _loadSites();
+  }
+
+  @override
+  void didUpdateWidget(covariant DashboardShell oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.routePath != widget.routePath) {
+      setState(() {
+        _section = DashboardRoutes.sectionFromPath(widget.routePath);
+        _openCreateForm = false;
+      });
+    }
   }
 
   Future<void> _loadSites({String? preferredId}) async {
@@ -115,7 +120,7 @@ class _DashboardShellState extends State<DashboardShell> {
   }
 
   void _navigate(DashboardSection section, {bool openCreateForm = false}) {
-    pushPath(DashboardRoutes.pathFor(section));
+    widget.onRouteChanged(DashboardRoutes.pathFor(section));
     setState(() {
       _section = section;
       _openCreateForm = openCreateForm;
@@ -128,7 +133,6 @@ class _DashboardShellState extends State<DashboardShell> {
 
   @override
   void dispose() {
-    _pathSubscription?.cancel();
     super.dispose();
   }
 
