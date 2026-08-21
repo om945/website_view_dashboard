@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../../core/config/dashboard_config.dart';
@@ -5,10 +6,13 @@ import '../../core/platform/platform.dart';
 import '../models/models.dart';
 
 class ApiException implements Exception {
-  ApiException(this.statusCode, this.message);
+  ApiException(this.statusCode, this.message, {this.code});
 
   final int statusCode;
   final String message;
+  final String? code;
+
+  bool get isUnauthorized => statusCode == 401;
 
   @override
   String toString() => message;
@@ -31,9 +35,14 @@ class ApiClient {
       request.body = jsonEncode(body);
     }
 
-    final streamed = await _client
-        .send(request)
-        .timeout(const Duration(seconds: 60));
+    late http.StreamedResponse streamed;
+    try {
+      streamed = await _client.send(request).timeout(const Duration(seconds: 30));
+    } on TimeoutException {
+      throw ApiException(0, 'Unable to reach the API');
+    } on http.ClientException {
+      throw ApiException(0, 'Unable to reach the API');
+    }
     final raw = await streamed.stream.bytesToString();
 
     dynamic decoded;
@@ -44,10 +53,22 @@ class ApiClient {
     }
 
     if (streamed.statusCode < 200 || streamed.statusCode >= 300) {
-      final message = decoded is Map && decoded['error'] is Map
-          ? '${decoded['error']['message']}'
-          : 'Request failed (${streamed.statusCode})';
-      throw ApiException(streamed.statusCode, message);
+      final error = decoded is Map && decoded['error'] is Map
+          ? decoded['error'] as Map
+          : const <String, dynamic>{};
+      final status = streamed.statusCode;
+      final fallback = switch (status) {
+        401 => 'Your session has expired. Please sign in again.',
+        403 => 'You do not have permission to perform this action.',
+        404 => 'The requested resource was not found.',
+        409 => 'This website already exists.',
+        429 => 'Too many requests. Please try again shortly.',
+        500 => 'The API returned an internal error.',
+        503 => 'The API is temporarily unavailable.',
+        _ => 'The request could not be completed.',
+      };
+      throw ApiException(status, error['message'] as String? ?? fallback,
+          code: error['code'] as String?);
     }
 
     return decoded;

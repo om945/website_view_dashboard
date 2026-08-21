@@ -44,7 +44,10 @@ class _AuthGateState extends State<AuthGate> {
     } on ApiException catch (e) {
       if (!mounted) return;
       setState(() {
-        if (e.statusCode == 429) {
+        if (e.statusCode == 0) {
+          _state = _AuthState.networkError;
+          _errorMessage = 'Unable to reach the API.';
+        } else if (e.statusCode == 429) {
           _rateLimited = true;
           _state = _AuthState.unauthenticated;
         } else if (e.statusCode >= 500) {

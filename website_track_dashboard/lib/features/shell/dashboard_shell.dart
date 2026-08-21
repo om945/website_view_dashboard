@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../app/theme/colors.dart';
 import '../../core/responsive/responsive.dart';
 import '../../data/api/api_client.dart';
 import '../../data/models/models.dart';
+import '../../core/platform/platform.dart';
 import '../../shared/widgets/app_button.dart';
 import '../../shared/widgets/dashboard_scaffold.dart';
 import '../overview/overview_page.dart';
@@ -37,20 +39,53 @@ class _DashboardShellState extends State<DashboardShell> {
   DashboardSection _section = DashboardSection.overview;
   bool _loading = true;
   Object? _error;
+  late final GlobalKey<ScaffoldState> _scaffoldKey;
+  StreamSubscription<String>? _pathSubscription;
 
   @override
   void initState() {
     super.initState();
+    _scaffoldKey = GlobalKey<ScaffoldState>();
+    _section = _sectionFromPath(currentPath());
+    if (!currentPath().startsWith('/dashboard')) pushPath('/dashboard');
+    _pathSubscription = pathChanges().listen((path) {
+      if (mounted) setState(() => _section = _sectionFromPath(path));
+    });
     _loadSites();
   }
 
-  Future<void> _loadSites() async {
+  DashboardSection _sectionFromPath(String path) => switch (path) {
+        '/dashboard/websites' => DashboardSection.websites,
+        '/dashboard/realtime' => DashboardSection.realtime,
+        '/dashboard/analytics/pages' => DashboardSection.pages,
+        '/dashboard/analytics/visitors' => DashboardSection.visitors,
+        '/dashboard/analytics/events' => DashboardSection.events,
+        '/dashboard/tracking' => DashboardSection.tracking,
+        '/dashboard/settings' => DashboardSection.settings,
+        _ => DashboardSection.overview,
+      };
+
+  String _pathFor(DashboardSection section) => switch (section) {
+        DashboardSection.overview => '/dashboard',
+        DashboardSection.websites => '/dashboard/websites',
+        DashboardSection.realtime => '/dashboard/realtime',
+        DashboardSection.pages => '/dashboard/analytics/pages',
+        DashboardSection.visitors => '/dashboard/analytics/visitors',
+        DashboardSection.events => '/dashboard/analytics/events',
+        DashboardSection.tracking => '/dashboard/tracking',
+        DashboardSection.settings => '/dashboard/settings',
+      };
+
+  Future<void> _loadSites({String? preferredId}) async {
     try {
       final sites = await widget.api.listSites();
       if (!mounted) return;
       setState(() {
         _sites = sites;
-        _selectedSite = _resolveSelectedSite(sites, _selectedSite);
+        _selectedSite = _resolveSelectedSite(
+          sites,
+          preferredId ?? _selectedSite?.id ?? selectedSiteId(),
+        );
         _loading = false;
         _error = null;
       });
@@ -63,10 +98,10 @@ class _DashboardShellState extends State<DashboardShell> {
     }
   }
 
-  Site? _resolveSelectedSite(List<Site> sites, Site? current) {
+  Site? _resolveSelectedSite(List<Site> sites, String? currentId) {
     if (sites.isEmpty) return null;
-    if (current != null && sites.any((site) => site.id == current.id)) {
-      return sites.firstWhere((site) => site.id == current.id);
+    if (currentId != null && sites.any((site) => site.id == currentId)) {
+      return sites.firstWhere((site) => site.id == currentId);
     }
     return sites.first;
   }
@@ -78,16 +113,21 @@ class _DashboardShellState extends State<DashboardShell> {
   }
 
   void _navigate(DashboardSection section) {
+    pushPath(_pathFor(section));
     setState(() => _section = section);
+  }
+
+  @override
+  void dispose() {
+    _pathSubscription?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final mobile = Responsive.isMobile(context);
-    final scaffoldKey = GlobalKey<ScaffoldState>();
-
     return Scaffold(
-      key: scaffoldKey,
+      key: _scaffoldKey,
       backgroundColor: AppColors.background,
       drawer: mobile
           ? Drawer(
@@ -121,8 +161,11 @@ class _DashboardShellState extends State<DashboardShell> {
                   sites: _sites,
                   selectedSite: _selectedSite,
                   mobile: mobile,
-                  onMenuTap: () => scaffoldKey.currentState?.openDrawer(),
-                  onSiteChanged: (site) => setState(() => _selectedSite = site),
+                  onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
+                  onSiteChanged: (site) {
+                    if (site != null) setSelectedSiteId(site.id);
+                    setState(() => _selectedSite = site);
+                  },
                   onLogout: _logout,
                 ),
                 Expanded(
@@ -130,7 +173,9 @@ class _DashboardShellState extends State<DashboardShell> {
                       ? const LoadingState()
                       : _error != null
                           ? ErrorState(
-                              message: 'Unable to load your websites.',
+                              message: _error is ApiException
+                                  ? (_error as ApiException).message
+                                  : 'Unable to reach the API.',
                               onRetry: () {
                                 setState(() {
                                   _loading = true;
@@ -150,7 +195,7 @@ class _DashboardShellState extends State<DashboardShell> {
   }
 
   Widget _buildContent() {
-    if (_selectedSite == null) {
+    if (_selectedSite == null && _section != DashboardSection.websites) {
       return PageFrame(
         title: 'Welcome',
         subtitle: 'Create your first website to start collecting analytics.',
@@ -168,17 +213,28 @@ class _DashboardShellState extends State<DashboardShell> {
       );
     }
 
+    if (_section == DashboardSection.websites) {
+      return WebsitesPage(
+        api: widget.api,
+        sites: _sites,
+        selectedSite: _selectedSite,
+        onCreated: (site) {
+          setSelectedSiteId(site.id);
+          _loadSites(preferredId: site.id);
+        },
+        onSelected: (site) {
+          setSelectedSiteId(site.id);
+          setState(() => _selectedSite = site);
+        },
+        onRefresh: _loadSites,
+      );
+    }
     final site = _selectedSite!;
     return KeyedSubtree(
       key: ValueKey('${_section.name}-${site.id}'),
       child: switch (_section) {
         DashboardSection.overview => OverviewPage(api: widget.api, site: site),
-        DashboardSection.websites => WebsitesPage(
-            api: widget.api,
-            sites: _sites,
-            selectedSite: site,
-            onRefresh: _loadSites,
-          ),
+        DashboardSection.websites => const SizedBox.shrink(),
         DashboardSection.realtime => RealtimePage(api: widget.api, site: site),
         DashboardSection.pages => PagesPage(api: widget.api, site: site),
         DashboardSection.visitors => const UnsupportedPage(
