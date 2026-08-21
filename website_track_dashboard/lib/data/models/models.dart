@@ -40,6 +40,14 @@ class User {
         email: asString(json['email']),
         avatarUrl: json['avatarUrl'] as String?,
       );
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is User && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 class Site {
@@ -61,6 +69,14 @@ class Site {
         domain: asString(json['domain']),
         siteKey: asString(json['siteKey']),
       );
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Site && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 class SiteStats {

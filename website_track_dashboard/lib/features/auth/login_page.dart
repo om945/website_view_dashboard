@@ -24,12 +24,12 @@ class LoginPage extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(32),
                   decoration: BoxDecoration(
-                    color: AppColors.surface.withValues(alpha: 0.92),
+                    color: AppColors.surface.withOpacity(0.92),
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(color: AppColors.borderStrong),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.45),
+                        color: Colors.black.withOpacity(0.45),
                         blurRadius: 40,
                         offset: const Offset(0, 18),
                       ),

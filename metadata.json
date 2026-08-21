@@ -1,0 +1,6 @@
+{
+  "name": "Website Track Dashboard",
+  "description": "Realtime analytics dashboard for website traffic and live visitor tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

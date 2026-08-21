@@ -16,12 +16,27 @@ void setSelectedSiteId(String? id) {
 }
 
 class PresenceSocket {
-  PresenceSocket(this.socket);
-  final html.WebSocket socket;
-  Stream<void> get onOpen => socket.onOpen.map((_) {});
-  Stream<void> get onClose => socket.onClose.map((_) {});
-  Stream<void> get onError => socket.onError.map((_) {});
-  void close() => socket.close();
+  PresenceSocket(this._socket);
+  final html.WebSocket? _socket;
+
+  Stream<void> get onOpen =>
+      _socket?.onOpen.map((_) {}) ?? const Stream<void>.empty();
+  Stream<void> get onClose =>
+      _socket?.onClose.map((_) {}) ?? const Stream<void>.empty();
+  Stream<void> get onError =>
+      _socket?.onError.map((_) {}) ?? const Stream<void>.empty();
+
+  void close() {
+    try {
+      _socket?.close();
+    } catch (_) {}
+  }
 }
 
-PresenceSocket connectPresence(String url) => PresenceSocket(html.WebSocket(url));
+PresenceSocket connectPresence(String url) {
+  try {
+    return PresenceSocket(html.WebSocket(url));
+  } catch (_) {
+    return PresenceSocket(null);
+  }
+}
