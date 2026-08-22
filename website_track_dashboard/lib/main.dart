@@ -7,4 +7,3 @@ void main() {
   usePathUrlStrategy();
   runApp(const WebsiteViewDashboardApp());
 }
-

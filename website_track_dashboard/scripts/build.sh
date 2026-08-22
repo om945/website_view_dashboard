@@ -30,6 +30,6 @@ flutter build web \
   --release \
   --tree-shake-icons \
   --source-maps \
-  --web-resources-cdn \
+  --no-web-resources-cdn \
   --dart-define=API_BASE_URL="$API_BASE_URL" \
   --dart-define=APP_ENV="$APP_ENV"

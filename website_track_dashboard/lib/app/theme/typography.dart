@@ -5,9 +5,8 @@ abstract final class AppTypography {
   static const fontSans = 'Plus Jakarta Sans';
   static const fontMono = 'JetBrains Mono';
   static const fontFallback = <String>[
-    '-apple-system',
-    'BlinkMacSystemFont',
     'Segoe UI',
+    'Arial',
     'Roboto',
     'sans-serif',
   ];
@@ -91,7 +90,7 @@ abstract final class AppTypography {
 
   static const code = TextStyle(
     fontFamily: fontMono,
-    fontFamilyFallback: <String>['Courier New', 'monospace'],
+    fontFamilyFallback: <String>['Consolas', 'Courier New', 'monospace'],
     fontSize: 12.5,
     height: 1.5,
     letterSpacing: -0.2,

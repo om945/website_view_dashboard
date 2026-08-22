@@ -449,7 +449,7 @@ class _RealtimePageState extends State<RealtimePage> {
                     const Text(
                       'Auto-poll interval: 15s',
                       style: TextStyle(
-                        fontFamily: 'JetBrains Mono',
+                        fontFamily: AppTypography.fontMono,
                         fontSize: 11,
                         color: AppColors.textMuted,
                       ),
