@@ -29,10 +29,6 @@ class FaqSection extends StatelessWidget {
         'A session ends after 2 hours of inactivity. A visitor can have multiple sessions throughout a week; a new session does not mean a new visitor.',
       ),
       _FaqItem(
-        'Can I use custom events?',
-        'Yes. You can trigger custom named events using YourTracker.track("signup", { plan: "pro" }) for signups, conversions, button clicks, video plays, or user interactions.',
-      ),
-      _FaqItem(
         'Does tracking block page rendering?',
         'No. The script is lightweight (<2KB) and loaded with the defer attribute. Requests are dispatched asynchronously via navigator.sendBeacon or non-blocking fetch keepalive.',
       ),
@@ -109,16 +105,19 @@ class _FaqAccordionCardState extends State<_FaqAccordionCard> {
             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
             child: ExpansionTile(
               onExpansionChanged: (exp) => setState(() => _isExpanded = exp),
-              tilePadding:
-                  const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
+              tilePadding: const EdgeInsets.symmetric(
+                horizontal: 18,
+                vertical: 4,
+              ),
               trailing: AnimatedRotation(
                 turns: _isExpanded ? 0.25 : 0.0,
                 duration: const Duration(milliseconds: 200),
                 child: Icon(
                   LandingIcons.arrowForwardIos,
                   size: 14,
-                  color:
-                      _isExpanded ? AppColors.accent : AppColors.textSecondary,
+                  color: _isExpanded
+                      ? AppColors.accent
+                      : AppColors.textSecondary,
                 ),
               ),
               title: Text(

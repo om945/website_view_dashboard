@@ -1,6 +1,7 @@
 class AppConstants {
   static const appName = 'ViziAPI';
-  static const appTagline = 'Lightweight website analytics built for developers.';
+  static const appTagline =
+      'Lightweight website analytics built for developers.';
 
   static const docs = <String, Map<String, String>>{
     'docs': {
@@ -53,15 +54,6 @@ class AppConstants {
           'Realtime active counts use WebSocket presence with heartbeat and expiration.',
       'detail':
           'Heartbeat is around 15 seconds and active presence TTL around 45 seconds as implementation defaults.',
-    },
-    'events': {
-      'title': 'Custom events',
-      'eyebrow': '06 / EVENTS',
-      'body': 'Send meaningful actions alongside page views.',
-      'code': 'YourTracker.track("signup", {\n  plan: "pro"\n});',
-      'language': 'JavaScript',
-      'detail':
-          'Useful names include signup, login, purchase, cta_click, video_play, and newsletter_subscribe.',
     },
     'api': {
       'title': 'API reference',
