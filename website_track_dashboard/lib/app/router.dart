@@ -55,15 +55,15 @@ abstract final class DashboardRoutes {
   }
 
   static String pathFor(DashboardSection section) => switch (section) {
-        DashboardSection.overview => overview,
-        DashboardSection.websites => websites,
-        DashboardSection.realtime => realtime,
-        DashboardSection.pages => pages,
-        DashboardSection.visitors => visitors,
-        DashboardSection.events => events,
-        DashboardSection.tracking => tracking,
-        DashboardSection.settings => settings,
-      };
+    DashboardSection.overview => overview,
+    DashboardSection.websites => websites,
+    DashboardSection.realtime => realtime,
+    DashboardSection.pages => pages,
+    DashboardSection.visitors => visitors,
+    DashboardSection.events => events,
+    DashboardSection.tracking => tracking,
+    DashboardSection.settings => settings,
+  };
 }
 
 class DashboardRouteInformationParser extends RouteInformationParser<String> {
@@ -75,7 +75,9 @@ class DashboardRouteInformationParser extends RouteInformationParser<String> {
     final hashPath = uri.fragment;
     final path = hashPath.startsWith('/') && hashPath != '/'
         ? hashPath
-        : uri.path.isEmpty ? DashboardRoutes.home : uri.path;
+        : uri.path.isEmpty
+        ? DashboardRoutes.home
+        : uri.path;
     if (path == DashboardRoutes.login && uri.hasQuery) {
       return '$path?${uri.query}';
     }
@@ -105,27 +107,32 @@ class DashboardRouterDelegate extends RouterDelegate<String>
   @override
   String get currentConfiguration => _loginRedirect == null
       ? _path
-      : Uri(path: DashboardRoutes.login, queryParameters: {
-          'redirect': _loginRedirect!,
-        }).toString();
+      : Uri(
+          path: DashboardRoutes.login,
+          queryParameters: {'redirect': _loginRedirect!},
+        ).toString();
 
   void _setPath(String path) {
     final uri = Uri.tryParse(path);
     final basePath = uri?.path ?? path;
     final requestedRedirect = uri?.queryParameters['redirect'];
-    final safeRedirect = requestedRedirect != null &&
+    final safeRedirect =
+        requestedRedirect != null &&
             (requestedRedirect == '/dashboard' ||
                 requestedRedirect.startsWith('/dashboard/'))
         ? requestedRedirect
         : null;
-    final next = basePath == DashboardRoutes.home ||
+    final next =
+        basePath == DashboardRoutes.home ||
             basePath == DashboardRoutes.login ||
             DashboardRoutes.isDocsPath(basePath) ||
             DashboardRoutes.all.contains(basePath) ||
             DashboardRoutes.public.contains(basePath)
         ? basePath
         : DashboardRoutes.home;
-    final nextLoginRedirect = next == DashboardRoutes.login ? safeRedirect : null;
+    final nextLoginRedirect = next == DashboardRoutes.login
+        ? safeRedirect
+        : null;
     if (_path == next && _loginRedirect == nextLoginRedirect) return;
     _loginRedirect = nextLoginRedirect;
     _path = next;
@@ -135,10 +142,10 @@ class DashboardRouterDelegate extends RouterDelegate<String>
   void goToHome() => _setPath(DashboardRoutes.home);
 
   void goToDocs(String slug) => _setPath(
-        slug.isEmpty || slug == 'docs' || slug == 'doc'
-            ? DashboardRoutes.docs
-            : '${DashboardRoutes.docs}/$slug',
-      );
+    slug.isEmpty || slug == 'docs' || slug == 'doc'
+        ? DashboardRoutes.docs
+        : '${DashboardRoutes.docs}/$slug',
+  );
 
   void goToLogin() => _setPath(DashboardRoutes.login);
 
@@ -161,24 +168,26 @@ class DashboardRouterDelegate extends RouterDelegate<String>
 
   @override
   Widget build(BuildContext context) {
+    final pageKey = DashboardRoutes.isDocsPath(_path)
+        ? 'docs-shell'
+        : _path.startsWith('/dashboard')
+        ? 'protected-dashboard-shell'
+        : _path;
+
     return Navigator(
       key: _navigatorKey,
       pages: [
         MaterialPage<void>(
-          // One stable page identity keeps AuthGate and DashboardShell mounted
-          // while only the route content changes inside the shell.
-          key: ValueKey(
-            _path.startsWith('/dashboard') ? 'protected-dashboard-shell' : _path,
-          ),
+          key: ValueKey<String>(pageKey),
           child: _path == DashboardRoutes.home
               ? const LandingPage()
               : DashboardRoutes.isDocsPath(_path)
-                  ? DocsShell(
-                      slug: _path == DashboardRoutes.docs
-                          ? 'docs'
-                          : _path.substring('${DashboardRoutes.docs}/'.length),
-                    )
-                  : DashboardRoutes.public.contains(_path)
+              ? DocsShell(
+                  slug: _path == DashboardRoutes.docs
+                      ? 'docs'
+                      : _path.substring('${DashboardRoutes.docs}/'.length),
+                )
+              : DashboardRoutes.public.contains(_path)
               ? LegalPage(
                   type: _path == DashboardRoutes.privacy
                       ? LegalPageType.privacy
