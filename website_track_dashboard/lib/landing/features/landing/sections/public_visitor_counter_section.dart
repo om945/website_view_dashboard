@@ -261,21 +261,19 @@ class _PublicVisitorCounterSectionState
                       const SizedBox(height: 16),
                       _buildPrivacySecurityCard(),
                     ] else ...[
-                      IntrinsicHeight(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Expanded(
-                              flex: 5,
-                              child: _buildMetricDefinitionsCard(),
-                            ),
-                            const SizedBox(width: 20),
-                            Expanded(
-                              flex: 5,
-                              child: _buildPrivacySecurityCard(),
-                            ),
-                          ],
-                        ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 5,
+                            child: _buildMetricDefinitionsCard(),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            flex: 5,
+                            child: _buildPrivacySecurityCard(),
+                          ),
+                        ],
                       ),
                     ],
 
@@ -630,7 +628,7 @@ class _PublicVisitorCounterSectionState
 
         const CodeBlock(
           title: 'Public Endpoint & Response',
-          lang: 'HTTP',
+          lang: 'shell',
           code:
               '# Fetch public counts\ncurl "https://api.yourdomain.com/api/v1/public/sites/YOUR_SITE_KEY/visitor-count"\n\n# Response\n{\n  "totalVisitors": 12840,\n  "activeVisitors": 27\n}',
         ),
@@ -831,55 +829,31 @@ class _PublicVisitorCounterSectionState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final isCompact = constraints.maxWidth < 300;
+              final title = _buildPrivacyTitle();
+              final badge = _buildPrivacyBadge();
+
+              if (isCompact) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    title,
+                    const SizedBox(height: 10),
+                    Align(alignment: Alignment.centerRight, child: badge),
+                  ],
+                );
+              }
+
+              return Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: AppColors.emerald.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: const Icon(
-                      LandingIcons.shield,
-                      color: AppColors.emerald,
-                      size: 16,
-                    ),
-                  ),
+                  Expanded(child: title),
                   const SizedBox(width: 10),
-                  const Text(
-                    'Privacy & Security by Design',
-                    style: TextStyle(
-                      fontFamily: AppTypography.fontSans,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14.5,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
+                  badge,
                 ],
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-                decoration: BoxDecoration(
-                  color: AppColors.emerald.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(
-                    color: AppColors.emerald.withValues(alpha: 0.3),
-                  ),
-                ),
-                child: const Text(
-                  'SAFE',
-                  style: TextStyle(
-                    fontFamily: AppTypography.fontMono,
-                    fontSize: 9.5,
-                    color: AppColors.emerald,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ],
+              );
+            },
           ),
           const SizedBox(height: 14),
           const Text(
@@ -902,6 +876,62 @@ class _PublicVisitorCounterSectionState
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildPrivacyTitle() {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: AppColors.emerald.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: const Icon(
+            LandingIcons.shield,
+            color: AppColors.emerald,
+            size: 16,
+          ),
+        ),
+        const SizedBox(width: 10),
+        const Expanded(
+          child: Text(
+            'Privacy & Security by Design',
+            softWrap: true,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontFamily: AppTypography.fontSans,
+              fontWeight: FontWeight.w700,
+              fontSize: 14.5,
+              color: AppColors.textPrimary,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPrivacyBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+      decoration: BoxDecoration(
+        color: AppColors.emerald.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(
+          color: AppColors.emerald.withValues(alpha: 0.3),
+        ),
+      ),
+      child: const Text(
+        'SAFE',
+        style: TextStyle(
+          fontFamily: AppTypography.fontMono,
+          fontSize: 9.5,
+          color: AppColors.emerald,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }

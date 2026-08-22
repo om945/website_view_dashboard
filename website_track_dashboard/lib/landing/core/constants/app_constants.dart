@@ -2,6 +2,7 @@ class AppConstants {
   static const appName = 'ViziAPI';
   static const appTagline =
       'Lightweight website analytics built for developers.';
+  static const buyMeACoffeeUrl = 'https://buymeacoffee.com/ombelekar';
 
   static const docs = <String, Map<String, String>>{
     'docs': {

@@ -5,6 +5,14 @@ import 'package:http/http.dart' as http;
 
 http.Client createClient() => BrowserClient()..withCredentials = true;
 void openUrl(String url) => html.window.location.href = url;
+bool openExternalUrl(String url) {
+  try {
+    html.window.open(url, '_blank');
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
 
 String? selectedSiteId() => html.window.localStorage['website_view_selected_site'];
 void setSelectedSiteId(String? id) {

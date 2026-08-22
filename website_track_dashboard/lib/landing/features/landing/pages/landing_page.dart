@@ -11,6 +11,7 @@ import '../sections/visitor_context_section.dart';
 import '../sections/public_visitor_counter_section.dart';
 import '../sections/realtime_presence_section.dart';
 import '../sections/how_it_works_section.dart';
+import '../sections/support_project_section.dart';
 import '../sections/faq_section.dart';
 import '../sections/google_auth_section.dart';
 
@@ -61,15 +62,40 @@ class _LandingPageState extends State<LandingPage> {
               padding: const EdgeInsets.only(top: 68),
               child: Column(
                 children: [
-                  Container(key: ScrollManager.heroKey, child: const HeroSection()),
-                  Container(key: ScrollManager.quickstartKey, child: const QuickstartSection()),
-                  Container(key: ScrollManager.featuresKey, child: const FeaturesSection()),
-                  Container(key: ScrollManager.metricsKey, child: const MetricsSection()),
+                  Container(
+                    key: ScrollManager.heroKey,
+                    child: const HeroSection(),
+                  ),
+                  Container(
+                    key: ScrollManager.quickstartKey,
+                    child: const QuickstartSection(),
+                  ),
+                  Container(
+                    key: ScrollManager.featuresKey,
+                    child: const FeaturesSection(),
+                  ),
+                  Container(
+                    key: ScrollManager.metricsKey,
+                    child: const MetricsSection(),
+                  ),
                   const VisitorContextSection(),
-                  Container(key: ScrollManager.visitorCounterKey, child: const PublicVisitorCounterSection()),
-                  Container(key: ScrollManager.realtimeKey, child: const RealtimePresenceSection()),
-                  Container(key: ScrollManager.howItWorksKey, child: const HowItWorksSection()),
-                  Container(key: ScrollManager.faqKey, child: const FaqSection()),
+                  Container(
+                    key: ScrollManager.visitorCounterKey,
+                    child: const PublicVisitorCounterSection(),
+                  ),
+                  Container(
+                    key: ScrollManager.realtimeKey,
+                    child: const RealtimePresenceSection(),
+                  ),
+                  const SupportProjectSection(),
+                  Container(
+                    key: ScrollManager.howItWorksKey,
+                    child: const HowItWorksSection(),
+                  ),
+                  Container(
+                    key: ScrollManager.faqKey,
+                    child: const FaqSection(),
+                  ),
                   const GoogleAuthSection(),
                   const SizedBox(height: 64),
                   const SiteFooter(),
@@ -77,15 +103,11 @@ class _LandingPageState extends State<LandingPage> {
               ),
             ),
           ),
-
           Positioned(
             top: 0,
             left: 0,
             right: 0,
-            child: TopNavigationBar(
-              isScrolled: _isScrolled,
-              currentPath: '/',
-            ),
+            child: TopNavigationBar(isScrolled: _isScrolled, currentPath: '/'),
           ),
         ],
       ),

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:website_track_dashboard/landing/shared/icons/landing_icons.dart';
 import '../../../app/theme/colors.dart';
 import '../../../app/theme/typography.dart';
 import '../../../app/theme/radii.dart';
@@ -48,10 +47,7 @@ class _InteractiveDashboardPreviewState
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: AppRadii.radiusXl,
-        border: Border.all(
-          color: AppColors.borderStrong,
-          width: 1,
-        ),
+        border: Border.all(color: AppColors.borderStrong, width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.5),
@@ -98,7 +94,9 @@ class _InteractiveDashboardPreviewState
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3),
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.accentSoft,
                         borderRadius: AppRadii.radiusSm,
@@ -110,32 +108,6 @@ class _InteractiveDashboardPreviewState
                       child: Text(
                         'DEMO DATA',
                         style: AppTypography.chip.copyWith(fontSize: 10),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: AppColors.surfaceElevated,
-                        borderRadius: AppRadii.radiusSm,
-                        border: Border.all(color: AppColors.border),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          Text(
-                            'Last 7 days',
-                            style: TextStyle(
-                              fontFamily: AppTypography.fontSans,
-                              color: AppColors.textSecondary,
-                              fontSize: 11.5,
-                            ),
-                          ),
-                          SizedBox(width: 4),
-                          Icon(LandingIcons.keyboardArrowDown,
-                              size: 14, color: AppColors.textMuted),
-                        ],
                       ),
                     ),
                   ],
@@ -169,7 +141,7 @@ class _InteractiveDashboardPreviewState
                       width: tileWidth,
                       title: 'Active now',
                       value: '$_activeVisitors',
-                      valueColor: AppColors.accent,
+                      valueColor: AppColors.emerald,
                       badge: 'Live',
                       isLive: true,
                     ),
@@ -178,21 +150,21 @@ class _InteractiveDashboardPreviewState
                       title: 'Unique visitors',
                       value: '1,284',
                       valueColor: AppColors.textPrimary,
-                      badge: '+14.2%',
+                      badge: '',
                     ),
                     _StatTile(
                       width: tileWidth,
                       title: 'Page views',
                       value: '4,821',
                       valueColor: AppColors.textPrimary,
-                      badge: '+28.0%',
+                      badge: '',
                     ),
                     _StatTile(
                       width: tileWidth,
                       title: 'Sessions',
                       value: '1,108',
                       valueColor: AppColors.textPrimary,
-                      badge: '2.4 avg/user',
+                      badge: '',
                     ),
                   ],
                 );
@@ -232,10 +204,13 @@ class _InteractiveDashboardPreviewState
                   runSpacing: 6,
                   children: const [
                     _LegendItem(
-                        color: AppColors.accent, label: 'Visitors (Daily)'),
+                      color: AppColors.accent,
+                      label: 'Visitors (Daily)',
+                    ),
                     _LegendItem(
-                        color: AppColors.violet,
-                        label: 'Sessions (2h inactivity)'),
+                      color: AppColors.violet,
+                      label: 'Sessions (2h inactivity)',
+                    ),
                   ],
                 ),
                 Text(
@@ -320,7 +295,7 @@ class _StatTileState extends State<_StatTile> {
                 ),
                 const SizedBox(width: 4),
                 if (widget.isLive)
-                  const LiveDot(size: 5, color: AppColors.accent)
+                  const LiveDot(size: 5, color: AppColors.emerald)
                 else
                   Text(
                     widget.badge,
@@ -379,10 +354,7 @@ class _LegendItem extends StatelessWidget {
         Container(
           width: 8,
           height: 8,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 6),
         Text(
