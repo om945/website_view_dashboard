@@ -4,7 +4,7 @@ set -euo pipefail
 # Vercel runs this script from the Flutter project root. The source checkout is
 # the deployment input; build/web is always regenerated from that checkout.
 FLUTTER_DIR="${FLUTTER_DIR:-.flutter-sdk}"
-API_BASE_URL="${API_BASE_URL:-https://website-view-api-1.onrender.com}"
+API_BASE_URL="${API_BASE_URL:-https://viziapi.onrender.com}"
 APP_ENV="${APP_ENV:-production}"
 
 echo "Preparing Flutter SDK..."

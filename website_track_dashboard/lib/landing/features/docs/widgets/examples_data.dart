@@ -12,7 +12,7 @@ class ExampleDefinition {
 }
 
 const viziApiEndpoint =
-    'https://website-view-api-1.onrender.com/api/v1/public/sites/YOUR_SITE_KEY/visitor-count';
+    'https://viziapi.onrender.com/api/v1/public/sites/YOUR_SITE_KEY/visitor-count';
 
 const viziApiExamples = <ExampleDefinition>[
   ExampleDefinition(

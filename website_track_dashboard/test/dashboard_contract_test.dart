@@ -40,15 +40,15 @@ http.StreamedResponse _json(int status, Object body) {
 void main() {
   group('configuration', () {
     test('uses the production API and derives the production websocket', () {
-      expect(DashboardConfig.apiOrigin, 'https://website-view-api-1.onrender.com');
-      expect(DashboardConfig.wsTrackUrl(), 'wss://website-view-api-1.onrender.com/ws/track');
-      expect(wsTrackUrl(), 'wss://website-view-api-1.onrender.com/ws/track');
+      expect(DashboardConfig.apiOrigin, 'https://viziapi.onrender.com');
+      expect(DashboardConfig.wsTrackUrl(), 'wss://viziapi.onrender.com/ws/track');
+      expect(wsTrackUrl(), 'wss://viziapi.onrender.com/ws/track');
     });
 
     test('builds tracking script from real site key', () {
       final script = DashboardConfig.trackingScript('site_abc');
       expect(script, contains('data-site="site_abc"'));
-      expect(script, contains('https://website-view-api-1.onrender.com/script.js'));
+      expect(script, contains('https://viziapi.onrender.com/script.js'));
     });
   });
 
