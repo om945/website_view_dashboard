@@ -169,63 +169,7 @@ export function VisitorCount() {
   return <span>{data?.totalVisitors ?? '—'} visitors</span>;
 }''',
   ),
-  ExampleDefinition(
-    id: 'vue',
-    group: 'Vue',
-    label: 'Vue',
-    language: 'Vue',
-    code:
-        '''<script setup lang="ts">
-import { onMounted, ref } from 'vue';
 
-const counts = ref<{ totalVisitors: number; activeVisitors: number }>();
-
-onMounted(async () => {
-  const response = await fetch('$viziApiEndpoint');
-  if (!response.ok) {
-    throw new Error('Request failed');
-  }
-  counts.value = await response.json();
-});
-</script>
-<template>
-  <span>{{ counts?.totalVisitors ?? '—' }} visitors</span>
-</template>''',
-  ),
-  ExampleDefinition(
-    id: 'nuxt',
-    group: 'Vue',
-    label: 'Nuxt',
-    language: 'Vue',
-    code:
-        '''<script setup lang="ts">
-const { data, error } = await useFetch('$viziApiEndpoint');
-</script>
-<template>
-  <span v-if="error">Unavailable</span>
-  <span v-else>{{ data?.totalVisitors ?? '—' }} visitors</span>
-</template>''',
-  ),
-  ExampleDefinition(
-    id: 'svelte',
-    group: 'Svelte',
-    label: 'Svelte',
-    language: 'Svelte',
-    code:
-        '''<script lang="ts">
-  let counts: { totalVisitors: number; activeVisitors: number } | null = null;
-
-  fetch('$viziApiEndpoint')
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Request failed');
-      }
-      return response.json();
-    })
-    .then((data) => counts = data);
-</script>
-{counts?.totalVisitors ?? '—'} visitors''',
-  ),
   ExampleDefinition(
     id: 'python',
     group: 'Python',

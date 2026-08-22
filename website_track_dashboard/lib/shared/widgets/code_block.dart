@@ -27,6 +27,15 @@ class _CodeBlockState extends State<CodeBlock> {
       case 'js': case 'javascript': case 'node.js': return 'javascript';
       case 'ts': case 'typescript': return 'typescript';
       case 'jsx': case 'tsx': return 'jsx';
+      case 'c#': case 'csharp': return 'cs';
+      case 'c++': return 'cpp';
+      case 'go': case 'golang': return 'go';
+      case 'php': case 'php / curl': return 'php';
+      case 'java': return 'java';
+      case 'kotlin': return 'kotlin';
+      case 'rust': return 'rust';
+      case 'swift': return 'swift';
+      case 'ruby': return 'ruby';
       case 'html': case 'html / css': return 'xml';
       case 'css': case 'json': case 'dart': case 'sql': return value;
       case 'bash': case 'sh': case 'shell': case 'curl': return 'shell';
