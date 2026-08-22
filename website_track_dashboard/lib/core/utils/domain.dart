@@ -14,7 +14,9 @@ String? normalizeDomain(String value) {
 bool domainOk(String value) {
   final hostname = normalizeDomain(value);
   if (hostname == null) return false;
-  return hostname.contains('.') &&
+  final isLocalhost = hostname == 'localhost';
+  final isIpv4 = RegExp(r'^(?:\d{1,3}\.){3}\d{1,3}$').hasMatch(hostname);
+  return (hostname.contains('.') || isLocalhost || isIpv4) &&
       !hostname.contains(' ') &&
       !hostname.contains('/');
 }
