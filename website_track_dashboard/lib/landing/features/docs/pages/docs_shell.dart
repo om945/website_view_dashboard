@@ -165,10 +165,8 @@ class _DocsShellState extends State<DocsShell> {
     return Scaffold(
       body: Stack(
         children: [
-          // Persistent background grid & radial glow - never unmounts
           const GridBackground(),
 
-          // Main Scrollable Area
           SingleChildScrollView(
             controller: _scrollController,
             physics: const ClampingScrollPhysics(),
@@ -189,7 +187,6 @@ class _DocsShellState extends State<DocsShell> {
                             ? Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  // Mobile Topic Quick Selector Bar
                                   InkWell(
                                     onTap: () =>
                                         _openMobileTopicSelector(context),
@@ -308,7 +305,6 @@ class _DocsShellState extends State<DocsShell> {
             ),
           ),
 
-          // Persistent Top Navigation Bar - never unmounts
           Positioned(
             top: 0,
             left: 0,

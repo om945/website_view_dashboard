@@ -39,7 +39,6 @@ class SiteFooter extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Brand & summary
                     Expanded(
                       flex: 2,
                       child: Column(
@@ -60,7 +59,6 @@ class SiteFooter extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 40),
-                    // Product links
                     _FooterLinkGroup(
                       title: 'Product',
                       links: [
@@ -89,7 +87,6 @@ class SiteFooter extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(width: 40),
-                    // Developer links
                     _FooterLinkGroup(
                       title: 'Developers',
                       links: [
@@ -106,7 +103,6 @@ class SiteFooter extends StatelessWidget {
                   ],
                 ),
               ] else ...[
-                // Mobile layout
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

@@ -12,7 +12,6 @@ abstract final class AppTypography {
     'sans-serif',
   ];
 
-  // Headings
   static const hero = TextStyle(
     fontFamily: fontSans,
     fontFamilyFallback: fontFallback,
@@ -83,7 +82,6 @@ abstract final class AppTypography {
     color: AppColors.textPrimary,
   );
 
-  // Body
   static const bodyLarge = TextStyle(
     fontFamily: fontSans,
     fontFamilyFallback: fontFallback,
@@ -112,7 +110,6 @@ abstract final class AppTypography {
     color: AppColors.textMuted,
   );
 
-  // Micro / Eyebrow / Chips
   static const eyebrow = TextStyle(
     fontFamily: fontSans,
     fontFamilyFallback: fontFallback,
@@ -132,7 +129,6 @@ abstract final class AppTypography {
     color: AppColors.accent,
   );
 
-  // Code
   static const code = TextStyle(
     fontFamily: fontMono,
     fontFamilyFallback: <String>['Courier New', 'monospace'],

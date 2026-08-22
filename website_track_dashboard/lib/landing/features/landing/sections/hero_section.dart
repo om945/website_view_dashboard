@@ -15,12 +15,10 @@ class HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final width = Responsive.width(context);
     final isMobile = Responsive.isMobile(context);
     final isSmall = Responsive.isMobileSmall(context);
     final horizontalPad = Responsive.horizontalPadding(context);
 
-    // Responsive hero font size calculated smoothly
     final heroFontSize = isSmall
         ? 28.0
         : (isMobile
@@ -39,7 +37,6 @@ class HeroSection extends StatelessWidget {
           constraints: const BoxConstraints(maxWidth: AppSpacing.maxWidth),
           child: Column(
             children: [
-              // Eyebrow badge
               SectionReveal(
                 delay: const Duration(milliseconds: 100),
                 child: StatusBadge(
@@ -54,7 +51,6 @@ class HeroSection extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Hero Main Headline
               SectionReveal(
                 delay: const Duration(milliseconds: 200),
                 child: Text(
@@ -72,7 +68,6 @@ class HeroSection extends StatelessWidget {
               ),
               const SizedBox(height: 18),
 
-              // Supporting copy
               SectionReveal(
                 delay: const Duration(milliseconds: 300),
                 child: ConstrainedBox(
@@ -91,7 +86,6 @@ class HeroSection extends StatelessWidget {
               ),
               const SizedBox(height: 28),
 
-              // Action Buttons
               SectionReveal(
                 delay: const Duration(milliseconds: 400),
                 child: Wrap(
@@ -116,7 +110,6 @@ class HeroSection extends StatelessWidget {
               ),
               SizedBox(height: isMobile ? 36 : 56),
 
-              // Live Dashboard Product Preview
               SectionReveal(
                 delay: const Duration(milliseconds: 500),
                 child: const InteractiveDashboardPreview(),

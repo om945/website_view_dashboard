@@ -54,7 +54,6 @@ class _ChartPainter extends CustomPainter {
     final w = size.width;
     final h = size.height;
 
-    // Draw horizontal grid guide lines
     final gridPaint = Paint()
       ..color = const Color(0x0CFFFFFF)
       ..strokeWidth = 1;
@@ -64,11 +63,9 @@ class _ChartPainter extends CustomPainter {
       canvas.drawLine(Offset(0, y), Offset(w, y), gridPaint);
     }
 
-    // Dynamic wave phase
     final angle = phase * 2 * math.pi;
     final waveShift = math.sin(angle) * 6.0;
 
-    // 1. Primary Line (Visitors - Warm Accent)
     final pathPrimary = Path()
       ..moveTo(0, h * 0.72 + waveShift * 0.5)
       ..cubicTo(
@@ -96,7 +93,6 @@ class _ChartPainter extends CustomPainter {
         h * 0.18 + waveShift * 0.2,
       );
 
-    // Primary gradient area fill
     final fillPathPrimary = Path.from(pathPrimary)
       ..lineTo(w, h)
       ..lineTo(0, h)
@@ -116,7 +112,6 @@ class _ChartPainter extends CustomPainter {
 
     canvas.drawPath(fillPathPrimary, fillPaintPrimary);
 
-    // Primary stroke
     final strokePaintPrimary = Paint()
       ..color = AppColors.accent
       ..strokeWidth = 2.8
@@ -125,7 +120,6 @@ class _ChartPainter extends CustomPainter {
 
     canvas.drawPath(pathPrimary, strokePaintPrimary);
 
-    // 2. Secondary Line (Sessions - Violet/Cyan)
     final pathSecondary = Path()
       ..moveTo(0, h * 0.88)
       ..cubicTo(
@@ -153,7 +147,6 @@ class _ChartPainter extends CustomPainter {
 
     canvas.drawPath(pathSecondary, strokePaintSecondary);
 
-    // Active pulse indicator point on the primary curve near end
     final currentEndPos = Offset(w * 0.88, h * 0.06 - waveShift * 0.4);
     canvas.drawCircle(
       currentEndPos,

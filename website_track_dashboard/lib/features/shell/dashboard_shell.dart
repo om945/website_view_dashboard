@@ -111,7 +111,6 @@ class _DashboardShellState extends State<DashboardShell> {
     try {
       await widget.api.logout();
     } catch (_) {
-      // Always clear local session even if network fails.
     }
     setSelectedSiteId(null);
     if (!mounted) return;

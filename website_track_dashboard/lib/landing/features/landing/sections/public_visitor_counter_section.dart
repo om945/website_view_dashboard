@@ -33,7 +33,6 @@ class _PublicVisitorCounterSectionState
   @override
   void initState() {
     super.initState();
-    // Deterministic slow demo cycle every 4 seconds
     _timer = Timer.periodic(const Duration(milliseconds: 4000), (_) {
       if (mounted) {
         setState(() {
@@ -69,7 +68,6 @@ class _PublicVisitorCounterSectionState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Top Split: Description (Left) & Interactive Live Counter (Right)
               if (isMobile) ...[
                 _buildLeftDescription(context, isMobile: true),
                 const SizedBox(height: 36),
@@ -90,7 +88,6 @@ class _PublicVisitorCounterSectionState
 
               const SizedBox(height: 48),
 
-              // Main Features & Architecture Box
               Container(
                 padding: EdgeInsets.all(isNarrow ? 20 : 32),
                 decoration: BoxDecoration(
@@ -123,7 +120,6 @@ class _PublicVisitorCounterSectionState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Section Subtitle & Tag
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -193,7 +189,6 @@ class _PublicVisitorCounterSectionState
                     ),
                     const SizedBox(height: 24),
 
-                    // 3 Step Flow Cards
                     if (isMobile) ...[
                       _StepCard(
                         num: '01',
@@ -261,7 +256,6 @@ class _PublicVisitorCounterSectionState
                     const Divider(color: AppColors.border, height: 1),
                     const SizedBox(height: 28),
 
-                    // Side-by-side Balanced Cards: Metric Definitions & Privacy Guarantee
                     if (isMobile) ...[
                       _buildMetricDefinitionsCard(),
                       const SizedBox(height: 16),
@@ -289,7 +283,6 @@ class _PublicVisitorCounterSectionState
                     const Divider(color: AppColors.border, height: 1),
                     const SizedBox(height: 24),
 
-                    // Supported Use Cases Section
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -316,7 +309,6 @@ class _PublicVisitorCounterSectionState
                     ),
                     const SizedBox(height: 16),
 
-                    // Grid / Wrap of 5 Use Case Badges
                     LayoutBuilder(
                       builder: (context, constraints) {
                         final isWide = constraints.maxWidth > 800;
@@ -447,7 +439,6 @@ class _PublicVisitorCounterSectionState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Live Counter Widget Preview Container
         Container(
           padding: EdgeInsets.all(isNarrow ? 20 : 26),
           decoration: BoxDecoration(
@@ -477,7 +468,6 @@ class _PublicVisitorCounterSectionState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Badge Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -532,7 +522,6 @@ class _PublicVisitorCounterSectionState
               ),
               const SizedBox(height: 20),
 
-              // Total Visitors Number Display
               Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
@@ -576,7 +565,6 @@ class _PublicVisitorCounterSectionState
               ),
               const SizedBox(height: 16),
 
-              // Active Visitors Live Pulse Row
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 14,
@@ -613,7 +601,6 @@ class _PublicVisitorCounterSectionState
               const Divider(color: AppColors.border, height: 1),
               const SizedBox(height: 12),
 
-              // Footer indicator
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
@@ -641,7 +628,6 @@ class _PublicVisitorCounterSectionState
 
         const SizedBox(height: 16),
 
-        // Live Endpoint Request & Response Block
         const CodeBlock(
           title: 'Public Endpoint & Response',
           lang: 'HTTP',
@@ -722,7 +708,6 @@ class _PublicVisitorCounterSectionState
           ),
           const SizedBox(height: 18),
 
-          // Definition 1: Total Visitors
           _buildDefinitionItem(
             badgeColor: AppColors.accent,
             title: 'Total Visitors',
@@ -731,7 +716,6 @@ class _PublicVisitorCounterSectionState
           ),
           const SizedBox(height: 14),
 
-          // Definition 2: Active Visitors
           _buildDefinitionItem(
             badgeColor: AppColors.emerald,
             title: 'Active Visitors',
@@ -740,7 +724,6 @@ class _PublicVisitorCounterSectionState
           ),
           const SizedBox(height: 14),
 
-          // Bottom guarantee
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(

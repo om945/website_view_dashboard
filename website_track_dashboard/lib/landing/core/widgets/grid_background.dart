@@ -16,7 +16,6 @@ class GridBackground extends StatelessWidget {
 class _GridAndGlowPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    // 1. Subtle ambient radial glow at top
     final glowPaint = Paint()
       ..shader = RadialGradient(
         center: const Alignment(0, -0.9),
@@ -31,7 +30,6 @@ class _GridAndGlowPainter extends CustomPainter {
 
     canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), glowPaint);
 
-    // 2. Subtle grid lines
     final linePaint = Paint()
       ..color = const Color(0x0AFFFFFF)
       ..strokeWidth = 1.0;

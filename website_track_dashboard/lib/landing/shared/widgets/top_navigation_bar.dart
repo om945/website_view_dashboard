@@ -164,7 +164,6 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Left: Brand Logo
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
@@ -179,7 +178,6 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
                 ),
               ),
 
-              // Middle: Centered Navigation Links
               if (!isMobile) ...[
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -235,7 +233,6 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
                   ),
                 ),
 
-                // Right: Action Buttons
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,

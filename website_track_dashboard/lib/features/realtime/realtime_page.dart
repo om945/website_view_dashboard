@@ -219,7 +219,6 @@ class _RealtimePageState extends State<RealtimePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Hero Live Banner
           Container(
             width: double.infinity,
             padding: EdgeInsets.all(isMobile ? 16 : 20),
@@ -366,7 +365,6 @@ class _RealtimePageState extends State<RealtimePage> {
           ),
           const SizedBox(height: 14),
 
-          // 3 Metric Cards Grid
           GridView(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -463,7 +461,6 @@ class _RealtimePageState extends State<RealtimePage> {
           ),
           const SizedBox(height: 18),
 
-          // Explanatory Panel
           const DashboardPanel(
             title: 'How active visitors work',
             child: Column(
@@ -485,8 +482,6 @@ class _RealtimePageState extends State<RealtimePage> {
           ),
           const SizedBox(height: 18),
 
-          // Keep implementation details available without making them part of
-          // the normal realtime experience.
           DashboardPanel(
             title: 'Realtime diagnostics',
             child: Column(

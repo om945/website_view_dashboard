@@ -52,10 +52,8 @@ class _LandingPageState extends State<LandingPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background Grid and Radial Glow
           const GridBackground(),
 
-          // Main Scrollable Body
           SingleChildScrollView(
             controller: _scrollController,
             physics: const ClampingScrollPhysics(),
@@ -80,7 +78,6 @@ class _LandingPageState extends State<LandingPage> {
             ),
           ),
 
-          // Sticky Top Navigation
           Positioned(
             top: 0,
             left: 0,

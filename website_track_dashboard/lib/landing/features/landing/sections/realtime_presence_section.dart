@@ -172,7 +172,6 @@ class _RealtimeDisplayBlock extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 18),
-          // Heartbeat TTL progress indicator
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

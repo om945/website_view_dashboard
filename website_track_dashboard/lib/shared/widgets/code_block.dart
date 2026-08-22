@@ -57,9 +57,6 @@ class _CodeBlockState extends State<CodeBlock> {
   Widget build(BuildContext context) {
     final lineCount = widget.code.split('\n').length;
     final textStyle = AppTypography.code.copyWith(fontSize: 13, height: 1.7);
-    // The stock Atom theme paints a block-level background on HighlightView.
-    // Keep the syntax colors, but let the code surface below provide the
-    // background so there is no light rectangle behind the highlighted text.
     final highlightTheme = Map<String, TextStyle>.from(atomOneDarkTheme)
       ..['root'] = const TextStyle(
         color: Color(0xffabb2bf),

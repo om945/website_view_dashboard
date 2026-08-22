@@ -25,7 +25,6 @@ class DocContent extends StatelessWidget {
     final lang = data['language'] ?? 'HTML';
     final detail = data['detail'] ?? '';
 
-    // Find current key and adjacent keys for Next/Prev topic navigation
     final keys = AppConstants.docs.keys.toList();
     final currentIndex =
         keys.indexWhere((k) => AppConstants.docs[k]?['title'] == title);
@@ -40,14 +39,12 @@ class DocContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Category / Eyebrow badge
         StatusBadge(
           label: eyebrow,
           color: AppColors.accent,
         ),
         const SizedBox(height: 16),
 
-        // Main Doc Title
         Text(
           title,
           style: AppTypography.h1.copyWith(
@@ -57,7 +54,6 @@ class DocContent extends StatelessWidget {
         ),
         const SizedBox(height: 16),
 
-        // Body introduction
         if (body.isNotEmpty) ...[
           Text(
             body,
@@ -71,7 +67,6 @@ class DocContent extends StatelessWidget {
           const SizedBox(height: 24),
         ],
 
-        // Code Example block
         if (code != null && title != 'Public visitor counter') ...[
           CodeBlock(
             title: title.toLowerCase().replaceAll(' ', '_'),
@@ -86,7 +81,6 @@ class DocContent extends StatelessWidget {
           const SizedBox(height: 28),
         ],
 
-        // Security / Notice Callout box
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -117,7 +111,6 @@ class DocContent extends StatelessWidget {
         ),
         const SizedBox(height: 24),
 
-        // Detailed Explanation
         if (detail.isNotEmpty) ...[
           Text(
             'Implementation Details',
@@ -134,7 +127,6 @@ class DocContent extends StatelessWidget {
           const SizedBox(height: 32),
         ],
 
-        // Next / Previous Topic Navigator
         const Divider(color: AppColors.border, height: 1),
         const SizedBox(height: 20),
         Wrap(

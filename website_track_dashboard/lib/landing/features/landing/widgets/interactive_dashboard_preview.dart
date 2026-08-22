@@ -26,7 +26,6 @@ class _InteractiveDashboardPreviewState
   @override
   void initState() {
     super.initState();
-    // Deterministic subtle demo update every 3.5 seconds
     _timer = Timer.periodic(const Duration(milliseconds: 3500), (timer) {
       if (mounted) {
         setState(() {
@@ -69,7 +68,6 @@ class _InteractiveDashboardPreviewState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Dashboard Header
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
             child: Wrap(
@@ -147,7 +145,6 @@ class _InteractiveDashboardPreviewState
           ),
           const Divider(color: AppColors.border, height: 1),
 
-          // Stat Cards Grid
           Padding(
             padding: const EdgeInsets.all(16),
             child: LayoutBuilder(
@@ -203,7 +200,6 @@ class _InteractiveDashboardPreviewState
             ),
           ),
 
-          // Wave Pulse Chart
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: LayoutBuilder(
@@ -223,7 +219,6 @@ class _InteractiveDashboardPreviewState
             ),
           ),
 
-          // Chart legend
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
             child: Wrap(
