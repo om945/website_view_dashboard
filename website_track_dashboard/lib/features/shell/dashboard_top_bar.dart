@@ -67,8 +67,15 @@ class DashboardTopBar extends StatelessWidget {
                 ),
               ),
             ),
-            PopupMenuButton<String>(
-              tooltip: 'Switch website',
+            Theme(
+              data: Theme.of(context).copyWith(
+                hoverColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+              ),
+              child: PopupMenuButton<String>(
+                tooltip: 'Switch website',
               offset: const Offset(0, 6),
               position: PopupMenuPosition.under,
               constraints: BoxConstraints(
@@ -114,7 +121,7 @@ class DashboardTopBar extends StatelessWidget {
                     ),
                   )
                   .toList(),
-              child: Container(
+                child: Container(
                 height: 32,
                 constraints: BoxConstraints(
                   maxWidth: mobile ? 150 : 220,
@@ -153,6 +160,7 @@ class DashboardTopBar extends StatelessWidget {
                       size: 15,
                     ),
                   ],
+                ),
                 ),
               ),
             ),
