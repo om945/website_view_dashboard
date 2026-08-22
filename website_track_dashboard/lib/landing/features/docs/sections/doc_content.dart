@@ -8,6 +8,7 @@ import '../../../core/navigation/app_navigation.dart';
 import '../../../core/responsive/responsive_layout.dart';
 import '../../../shared/widgets/code_block.dart';
 import '../../../shared/widgets/status_badge.dart';
+import '../widgets/examples_section.dart';
 
 class DocContent extends StatelessWidget {
   const DocContent({super.key, required this.data});
@@ -71,13 +72,18 @@ class DocContent extends StatelessWidget {
         ],
 
         // Code Example block
-        if (code != null) ...[
+        if (code != null && title != 'Public visitor counter') ...[
           CodeBlock(
             title: title.toLowerCase().replaceAll(' ', '_'),
             lang: lang,
             code: code,
           ),
           const SizedBox(height: 24),
+        ],
+
+        if (title == 'Public visitor counter') ...[
+          const ExamplesSection(),
+          const SizedBox(height: 28),
         ],
 
         // Security / Notice Callout box
