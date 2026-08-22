@@ -122,7 +122,7 @@ class _WebsitesPageState extends State<WebsitesPage> {
     final script = DashboardConfig.trackingScript(site.siteKey);
     await showDialog<void>(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text('Website created'),
         content: SingleChildScrollView(
           child: Column(
@@ -149,7 +149,7 @@ class _WebsitesPageState extends State<WebsitesPage> {
             child: const Text('Copy script'),
           ),
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.of(dialogContext).pop(),
             child: const Text('Done'),
           ),
         ],
