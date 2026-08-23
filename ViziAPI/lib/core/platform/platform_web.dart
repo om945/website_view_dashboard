@@ -7,7 +7,7 @@ http.Client createClient() => BrowserClient()..withCredentials = true;
 void openUrl(String url) => html.window.location.href = url;
 bool openExternalUrl(String url) {
   try {
-    html.window.open(url, '_blank');
+    html.window.open(url, '_blank', 'noopener,noreferrer');
     return true;
   } catch (_) {
     return false;
