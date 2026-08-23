@@ -17,6 +17,10 @@ class FaqSection extends StatelessWidget {
 
     final faqs = [
       _FaqItem(
+        'Is ViziAPI free to use?',
+        'Yes. ViziAPI is completely free to use, with access to its core analytics, visitor tracking, sessions, realtime presence, and event tracking features.',
+      ),
+      _FaqItem(
         'Do I need a frontend framework?',
         'No. ViziAPI is completely framework-agnostic. You can drop the single asynchronous script tag into raw static HTML, WordPress, Webflow, React, Next.js, Vue, Nuxt, SvelteKit, Astro, or any other web stack.',
       ),
