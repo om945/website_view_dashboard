@@ -116,10 +116,9 @@ class _OverviewPageState extends State<OverviewPage> {
     return PageFrame(
       title: 'Overview',
       subtitle: 'Live traffic and aggregates for ${widget.site.domain}.',
-      action: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          RangeSelector(
+      action: Builder(
+        builder: (context) {
+          final rangeSelector = RangeSelector(
             value: _range,
             onChanged: (StatsRange range) {
               setState(() {
@@ -128,17 +127,38 @@ class _OverviewPageState extends State<OverviewPage> {
               });
               _load();
             },
-          ),
-          const SizedBox(width: 8),
-          IconButton(
+          );
+          final refreshButton = IconButton(
             tooltip: 'Refresh',
             onPressed: _load,
             icon: const Icon(
               DashboardIcons.refresh,
               color: AppColors.textSecondary,
             ),
-          ),
-        ],
+          );
+
+          if (Responsive.isCompact(context)) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                rangeSelector,
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: refreshButton,
+                ),
+              ],
+            );
+          }
+
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              rangeSelector,
+              const SizedBox(width: 8),
+              refreshButton,
+            ],
+          );
+        },
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
