@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
@@ -30,12 +31,13 @@ class RealtimePage extends StatefulWidget {
 class _RealtimePageState extends State<RealtimePage> {
   VisitorCount? _count;
   Object? _error;
-  Timer? _pollTimer;
+  Timer? _expiryTimer;
   Timer? _retryTimer;
   PresenceSocket? _socket;
   StreamSubscription<void>? _openSub;
   StreamSubscription<void>? _closeSub;
   StreamSubscription<void>? _errorSub;
+  StreamSubscription<String>? _messageSub;
   String _connectionStatus = 'connecting';
   int _retryAttempts = 0;
   bool _disposed = false;
@@ -46,24 +48,22 @@ class _RealtimePageState extends State<RealtimePage> {
     super.initState();
     _refreshCount();
     _connectPresence();
-    _pollTimer = Timer.periodic(
-      const Duration(seconds: 15),
-      (_) => _refreshCount(),
-    );
   }
 
   @override
   void didUpdateWidget(covariant RealtimePage oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.site.id != widget.site.id) {
+      _expiryTimer?.cancel();
       _refreshCount();
+      _connectPresence();
     }
   }
 
   @override
   void dispose() {
     _disposed = true;
-    _pollTimer?.cancel();
+    _expiryTimer?.cancel();
     _retryTimer?.cancel();
     _detachSocket();
     super.dispose();
@@ -73,9 +73,11 @@ class _RealtimePageState extends State<RealtimePage> {
     _openSub?.cancel();
     _closeSub?.cancel();
     _errorSub?.cancel();
+    _messageSub?.cancel();
     _openSub = null;
     _closeSub = null;
     _errorSub = null;
+    _messageSub = null;
     _socket?.close();
     _socket = null;
   }
@@ -90,6 +92,7 @@ class _RealtimePageState extends State<RealtimePage> {
         _count = count;
         _error = null;
       });
+      _scheduleExpiryCheck(count.activeVisitors);
     } catch (error) {
       if (!mounted) return;
       setState(() => _error = error);
@@ -109,11 +112,14 @@ class _RealtimePageState extends State<RealtimePage> {
 
       _openSub = _socket!.onOpen.listen((_) {
         if (!mounted) return;
+        _socket?.send(jsonEncode({'type': 'subscribe', 'siteKey': widget.site.siteKey}));
         setState(() {
           _connectionStatus = 'connected';
           _retryAttempts = 0;
         });
       });
+
+      _messageSub = _socket!.onMessage.listen(_handlePresenceMessage);
 
       _closeSub = _socket!.onClose.listen((_) {
         if (!mounted || _disposed) return;
@@ -132,6 +138,33 @@ class _RealtimePageState extends State<RealtimePage> {
     } catch (_) {
       if (mounted) setState(() => _connectionStatus = 'disconnected');
     }
+  }
+
+  void _handlePresenceMessage(String raw) {
+    try {
+      final message = jsonDecode(raw);
+      if (message is! Map || message['type'] != 'presence_update') return;
+      final activeVisitors = message['activeVisitors'];
+      if (activeVisitors is! num || !mounted) return;
+      final nextCount = activeVisitors.toInt();
+      setState(() {
+        final current = _count;
+        if (current != null) {
+          _count = VisitorCount(
+            totalVisitors: current.totalVisitors,
+            activeVisitors: nextCount,
+          );
+        }
+        _error = null;
+      });
+      _scheduleExpiryCheck(nextCount);
+    } catch (_) {}
+  }
+
+  void _scheduleExpiryCheck(int activeVisitors) {
+    _expiryTimer?.cancel();
+    if (activeVisitors == 0 || _disposed) return;
+    _expiryTimer = Timer(const Duration(seconds: 90), _refreshCount);
   }
 
   String get _statusLabel => switch (_connectionStatus) {
@@ -447,7 +480,7 @@ class _RealtimePageState extends State<RealtimePage> {
                     ),
                     const SizedBox(height: 2),
                     const Text(
-                      'Auto-poll interval: 15s',
+                      'Live WebSocket updates',
                       style: TextStyle(
                         fontFamily: AppTypography.fontMono,
                         fontSize: 11,
@@ -472,9 +505,9 @@ class _RealtimePageState extends State<RealtimePage> {
                 ),
                 SizedBox(height: 12),
                 Text(
-                  '• Presence expires automatically when the browser tab closes or disconnects (~45 seconds inactivity).\n'
+                  '• Presence expires automatically when the browser tab closes or disconnects (~90 seconds inactivity).\n'
                   '• Realtime visitor counts are anonymous and do not store personally identifiable information (PII).\n'
-                  '• The dashboard maintains a live presence socket and also syncs via REST every 15 seconds.',
+                  '• The dashboard receives live count updates over WebSocket and checks once at the 90-second expiry boundary when visitors are active.',
                   style: AppTypography.bodyMedium,
                 ),
               ],

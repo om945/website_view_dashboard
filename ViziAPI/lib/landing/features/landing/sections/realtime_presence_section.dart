@@ -180,7 +180,7 @@ class _RealtimeDisplayBlock extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      'Presence TTL window (45s)',
+                      'Presence TTL window (90s)',
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontFamily: AppTypography.fontMono,
@@ -191,7 +191,7 @@ class _RealtimeDisplayBlock extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Heartbeat: ~15s',
+                    'Heartbeat: ~30s',
                     style: TextStyle(
                       fontFamily: AppTypography.fontMono,
                       fontSize: 10.5,

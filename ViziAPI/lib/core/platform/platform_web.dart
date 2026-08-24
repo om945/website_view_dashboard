@@ -33,6 +33,13 @@ class PresenceSocket {
       _socket?.onClose.map((_) {}) ?? const Stream<void>.empty();
   Stream<void> get onError =>
       _socket?.onError.map((_) {}) ?? const Stream<void>.empty();
+  Stream<String> get onMessage =>
+      _socket?.onMessage.map((event) => event.data?.toString() ?? '') ??
+      const Stream<String>.empty();
+
+  void send(String message) {
+    _socket?.send(message);
+  }
 
   void close() {
     try {

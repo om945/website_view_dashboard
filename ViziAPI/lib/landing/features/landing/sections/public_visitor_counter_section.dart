@@ -718,7 +718,7 @@ class _PublicVisitorCounterSectionState
             badgeColor: AppColors.emerald,
             title: 'Active Visitors',
             desc:
-                'Visitors active in the real-time presence heartbeat window (last 60s).',
+                'Visitors active in the real-time presence heartbeat window (last 90s).',
           ),
           const SizedBox(height: 14),
 

@@ -10,6 +10,8 @@ class PresenceSocket {
   Stream<void> get onOpen => const Stream<void>.empty();
   Stream<void> get onClose => const Stream<void>.empty();
   Stream<void> get onError => const Stream<void>.empty();
+  Stream<String> get onMessage => const Stream<String>.empty();
+  void send(String message) {}
   void close() {}
 }
 

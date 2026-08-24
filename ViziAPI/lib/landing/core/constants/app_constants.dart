@@ -54,7 +54,7 @@ class AppConstants {
       'body':
           'Realtime active counts use WebSocket presence with heartbeat and expiration.',
       'detail':
-          'Heartbeat is around 15 seconds and active presence TTL around 45 seconds as implementation defaults.',
+          'Heartbeat is around 30 seconds and active presence TTL around 90 seconds as implementation defaults.',
     },
     'api': {
       'title': 'API reference',
