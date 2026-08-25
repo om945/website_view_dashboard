@@ -14,7 +14,6 @@ import '../../shared/icons/dashboard_icons.dart';
 import '../events/events_page.dart';
 import '../overview/overview_page.dart';
 import '../pages/pages_page.dart';
-import '../realtime/realtime_page.dart';
 import '../settings/settings_page.dart';
 import '../tracking/tracking_page.dart';
 import '../visitors/visitors_page.dart';
@@ -293,10 +292,6 @@ class _DashboardShellState extends State<DashboardShell> {
             site: site,
           ),
         DashboardSection.websites => const SizedBox.shrink(),
-        DashboardSection.realtime => RealtimePage(
-            analytics: _analytics,
-            site: site,
-          ),
         DashboardSection.pages => PagesPage(
             analytics: _analytics,
             site: site,

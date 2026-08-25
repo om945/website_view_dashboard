@@ -6,7 +6,6 @@ class ScrollManager {
   static final GlobalKey featuresKey = GlobalKey();
   static final GlobalKey metricsKey = GlobalKey();
   static final GlobalKey visitorCounterKey = GlobalKey();
-  static final GlobalKey realtimeKey = GlobalKey();
   static final GlobalKey howItWorksKey = GlobalKey();
   static final GlobalKey faqKey = GlobalKey();
 

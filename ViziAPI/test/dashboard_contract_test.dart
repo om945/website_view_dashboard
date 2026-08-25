@@ -39,10 +39,8 @@ http.StreamedResponse _json(int status, Object body) {
 
 void main() {
   group('configuration', () {
-    test('uses the production API and derives the production websocket', () {
+    test('uses the production API', () {
       expect(DashboardConfig.apiOrigin, 'https://viziapi.onrender.com');
-      expect(DashboardConfig.wsTrackUrl(), 'wss://viziapi.onrender.com/ws/track');
-      expect(wsTrackUrl(), 'wss://viziapi.onrender.com/ws/track');
     });
 
     test('builds tracking script from real site key', () {
@@ -56,7 +54,6 @@ void main() {
     test('maps every sidebar path to the correct section', () {
       expect(DashboardRoutes.sectionFromPath('/dashboard'), DashboardSection.overview);
       expect(DashboardRoutes.sectionFromPath('/dashboard/websites'), DashboardSection.websites);
-      expect(DashboardRoutes.sectionFromPath('/dashboard/realtime'), DashboardSection.realtime);
       expect(DashboardRoutes.sectionFromPath('/dashboard/analytics/pages'), DashboardSection.pages);
       expect(DashboardRoutes.sectionFromPath('/dashboard/analytics/visitors'), DashboardSection.visitors);
       expect(DashboardRoutes.sectionFromPath('/dashboard/analytics/events'), DashboardSection.events);
@@ -196,13 +193,11 @@ void main() {
                 'newVisitors': 5,
                 'returningVisitors': 2,
                 'sessions': 8,
-                'activeVisitors': 1,
               }),
         }),
       );
       final stats = await api.fetchStats('site_key', StatsRange.h24);
       expect(stats.totalViews, 12);
-      expect(stats.activeVisitors, 1);
       api.dispose();
     });
 

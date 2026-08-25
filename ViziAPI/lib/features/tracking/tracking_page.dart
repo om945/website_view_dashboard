@@ -72,7 +72,7 @@ class TrackingPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Expose total and active visitor counts on your public website without developer authentication.',
+                  'Expose total visitor counts on your public website without developer authentication.',
                   style: AppTypography.bodyMedium,
                 ),
                 const SizedBox(height: 12),

@@ -9,7 +9,6 @@ import '../sections/features_section.dart';
 import '../sections/metrics_section.dart';
 import '../sections/visitor_context_section.dart';
 import '../sections/public_visitor_counter_section.dart';
-import '../sections/realtime_presence_section.dart';
 import '../sections/how_it_works_section.dart';
 import '../sections/support_project_section.dart';
 import '../sections/faq_section.dart';
@@ -82,10 +81,6 @@ class _LandingPageState extends State<LandingPage> {
                   Container(
                     key: ScrollManager.visitorCounterKey,
                     child: const PublicVisitorCounterSection(),
-                  ),
-                  Container(
-                    key: ScrollManager.realtimeKey,
-                    child: const RealtimePresenceSection(),
                   ),
                   const SupportProjectSection(),
                   Container(

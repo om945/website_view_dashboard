@@ -28,7 +28,7 @@ const viziApiExamples = <ExampleDefinition>[
         throw new Error('Failed to fetch visitor count');
     }
     const data = await response.json();
-    console.log(data.totalVisitors, data.activeVisitors);
+    console.log(data.totalVisitors);
     return data;
 }''',
   ),
@@ -43,9 +43,9 @@ if (!response.ok) {
   throw new Error('Unable to fetch visitor count');
 }
 
-const { totalVisitors, activeVisitors } = await response.json();
+const { totalVisitors } = await response.json();
 document.querySelector('#total-visitors').textContent = totalVisitors;
-document.querySelector('#active-visitors').textContent = activeVisitors;''',
+''',
   ),
   ExampleDefinition(
     id: 'styled-card',
@@ -57,7 +57,6 @@ document.querySelector('#active-visitors').textContent = activeVisitors;''',
         '''<div class="visitor-card">
   <strong id="total-visitors">—</strong>
   <span>total visitors</span>
-  <small><span id="active-visitors">—</span> active now</small>
 </div>
 <style>
   .visitor-card {
@@ -73,7 +72,6 @@ document.querySelector('#active-visitors').textContent = activeVisitors;''',
 
   const data = await response.json();
   document.querySelector('#total-visitors').textContent = data.totalVisitors;
-  document.querySelector('#active-visitors').textContent = data.activeVisitors;
 </script>''',
   ),
   ExampleDefinition(
@@ -84,7 +82,6 @@ document.querySelector('#active-visitors').textContent = activeVisitors;''',
     code:
         '''type VisitorCountResponse = {
   totalVisitors: number;
-  activeVisitors: number;
 };
 const response = await fetch('$viziApiEndpoint');
 if (!response.ok) {
@@ -92,7 +89,7 @@ if (!response.ok) {
 }
 
 const data: VisitorCountResponse = await response.json();
-console.log(data.totalVisitors, data.activeVisitors);''',
+console.log(data.totalVisitors);''',
   ),
   ExampleDefinition(
     id: 'react',
@@ -104,7 +101,6 @@ console.log(data.totalVisitors, data.activeVisitors);''',
 
 type Counts = {
   totalVisitors: number;
-  activeVisitors: number;
 };
 
 export default function VisitorCount() {
@@ -139,8 +135,8 @@ export default function VisitorCount() {
     throw new Error('Request failed');
   }
 
-  const { totalVisitors, activeVisitors } = await response.json();
-  return <p>{totalVisitors} total · {activeVisitors} active</p>;
+  const { totalVisitors } = await response.json();
+  return <p>{totalVisitors} total</p>;
 }''',
   ),
   ExampleDefinition(
@@ -182,7 +178,7 @@ response = requests.get('$viziApiEndpoint', timeout=10)
 response.raise_for_status()
 
 data = response.json()
-print(data["totalVisitors"], data["activeVisitors"])''',
+print(data["totalVisitors"])''',
   ),
   ExampleDefinition(
     id: 'httpx',
@@ -197,7 +193,7 @@ with httpx.Client(timeout=10) as client:
     response.raise_for_status()
     data = response.json()
 
-print(data["totalVisitors"], data["activeVisitors"])''',
+print(data["totalVisitors"])''',
   ),
   ExampleDefinition(
     id: 'fastapi',
@@ -266,14 +262,13 @@ func main() {
 
   var data struct {
     TotalVisitors  int `json:"totalVisitors"`
-    ActiveVisitors int `json:"activeVisitors"`
   }
 
   if err := json.NewDecoder(response.Body).Decode(&data); err != nil {
     panic(err)
   }
 
-  fmt.Println(data.TotalVisitors, data.ActiveVisitors)
+  fmt.Println(data.TotalVisitors)
 }''',
   ),
   ExampleDefinition(
@@ -296,7 +291,7 @@ if (response.statusCode() != 200) {
     throw new RuntimeException("Request failed");
 }
 
-System.out.println(response.body()); // JSON: totalVisitors, activeVisitors''',
+System.out.println(response.body()); // JSON: totalVisitors''',
   ),
   ExampleDefinition(
     id: 'csharp',
@@ -309,9 +304,9 @@ using var response = await client.GetAsync("$viziApiEndpoint");
 response.EnsureSuccessStatusCode();
 
 var data = await response.Content.ReadFromJsonAsync<VisitorCount>();
-Console.WriteLine(\$"{data?.TotalVisitors} total, {data?.ActiveVisitors} active");
+Console.WriteLine(\$"{data?.TotalVisitors} total");
 
-record VisitorCount(int TotalVisitors, int ActiveVisitors);''',
+record VisitorCount(int TotalVisitors);''',
   ),
   ExampleDefinition(
     id: 'rust',
@@ -322,7 +317,6 @@ record VisitorCount(int TotalVisitors, int ActiveVisitors);''',
         '''#[derive(serde::Deserialize)]
 struct VisitorCount {
     total_visitors: u64,
-    active_visitors: u64,
 }
 
 #[tokio::main]
@@ -333,7 +327,7 @@ async fn main() -> Result<(), reqwest::Error> {
         .json()
         .await?;
 
-    println!("{} total, {} active", data.total_visitors, data.active_visitors);
+    println!("{} total", data.total_visitors);
     Ok(())
 }''',
   ),
@@ -356,7 +350,7 @@ if (response.statusCode != 200) {
 
 final data = jsonDecode(response.body) as Map<String, dynamic>;
 print(data['totalVisitors']);
-print(data['activeVisitors']);''',
+''',
   ),
   ExampleDefinition(
     id: 'swift',
@@ -374,11 +368,10 @@ guard (response as? HTTPURLResponse)?.statusCode == 200 else {
 }
 
 let data = try JSONDecoder().decode(VisitorCount.self, from: body)
-print(data.totalVisitors, data.activeVisitors)
+print(data.totalVisitors)
 
 struct VisitorCount: Decodable {
   let totalVisitors: Int
-  let activeVisitors: Int
 }''',
   ),
   ExampleDefinition(
@@ -392,7 +385,7 @@ if (!response.ok) {
   throw new Error(`HTTP \${response.status}`);
 }
 
-const { totalVisitors, activeVisitors } = await response.json();
-console.log({ totalVisitors, activeVisitors });''',
+const { totalVisitors } = await response.json();
+console.log({ totalVisitors });''',
   ),
 ];

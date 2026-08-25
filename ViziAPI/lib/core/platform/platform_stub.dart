@@ -5,14 +5,3 @@ void openUrl(String url) {}
 bool openExternalUrl(String url) => false;
 String? selectedSiteId() => null;
 void setSelectedSiteId(String? id) {}
-
-class PresenceSocket {
-  Stream<void> get onOpen => const Stream<void>.empty();
-  Stream<void> get onClose => const Stream<void>.empty();
-  Stream<void> get onError => const Stream<void>.empty();
-  Stream<String> get onMessage => const Stream<String>.empty();
-  void send(String message) {}
-  void close() {}
-}
-
-PresenceSocket connectPresence(String url) => PresenceSocket();

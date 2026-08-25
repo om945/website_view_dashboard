@@ -23,10 +23,8 @@ class PublicVisitorCounterSection extends StatefulWidget {
 
 class _PublicVisitorCounterSectionState
     extends State<PublicVisitorCounterSection> {
-  int _activeVisitors = 27;
   int _totalVisitors = 12840;
   Timer? _timer;
-  final List<int> _activeSequence = [27, 28, 29, 28, 27, 26, 27, 28];
   final List<int> _totalSequence = [12840, 12841, 12842, 12844, 12840];
   int _step = 0;
 
@@ -36,8 +34,7 @@ class _PublicVisitorCounterSectionState
     _timer = Timer.periodic(const Duration(milliseconds: 4000), (_) {
       if (mounted) {
         setState(() {
-          _step = (_step + 1) % _activeSequence.length;
-          _activeVisitors = _activeSequence[_step];
+          _step = (_step + 1) % _totalSequence.length;
           _totalVisitors = _totalSequence[_step % _totalSequence.length];
         });
       }
@@ -211,7 +208,7 @@ class _PublicVisitorCounterSectionState
                         icon: LandingIcons.insights,
                         title: 'Display on your site',
                         body:
-                            'Show total and active visitors anywhere on your site UI, footer, badge, or README.',
+                            'Show total visitors anywhere on your site UI, footer, badge, or README.',
                       ),
                     ] else ...[
                       IntrinsicHeight(
@@ -244,7 +241,7 @@ class _PublicVisitorCounterSectionState
                                 icon: LandingIcons.insights,
                                 title: 'Display on your site',
                                 body:
-                                    'Show total and active visitors anywhere on your site UI, footer, badge, or README.',
+                                    'Show total visitors anywhere on your site UI, footer, badge, or README.',
                               ),
                             ),
                           ],
@@ -382,7 +379,7 @@ class _PublicVisitorCounterSectionState
           eyebrow: '',
           title: 'Track your traffic.\nShow it publicly.',
           body:
-              'ViziAPI powers lightweight public visitor counters on your website, so your community and visitors can see your total reach and real-time active users.',
+              'ViziAPI powers lightweight public visitor counters on your website, so your community and visitors can see your total reach.',
         ),
         const SizedBox(height: 28),
         Wrap(
@@ -563,38 +560,6 @@ class _PublicVisitorCounterSectionState
               ),
               const SizedBox(height: 16),
 
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 9,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: AppRadii.radiusSm,
-                  border: Border.all(color: AppColors.border),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const LiveDot(color: AppColors.emerald, size: 7),
-                    const SizedBox(width: 9),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 250),
-                      child: Text(
-                        '$_activeVisitors active now',
-                        key: ValueKey<int>(_activeVisitors),
-                        style: const TextStyle(
-                          fontFamily: AppTypography.fontSans,
-                          fontSize: 13.5,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
               const SizedBox(height: 18),
               const Divider(color: AppColors.border, height: 1),
               const SizedBox(height: 12),
@@ -603,7 +568,7 @@ class _PublicVisitorCounterSectionState
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
                   Text(
-                    'Auto-updated in real time',
+                    'Example total visitor count',
                     style: TextStyle(
                       fontFamily: AppTypography.fontMono,
                       fontSize: 10.5,
@@ -630,7 +595,7 @@ class _PublicVisitorCounterSectionState
           title: 'Public Endpoint & Response',
           lang: 'shell',
           code:
-              '# Fetch public counts\ncurl "https://api.yourdomain.com/api/v1/public/sites/YOUR_SITE_KEY/visitor-count"\n\n# Response\n{\n  "totalVisitors": 12840,\n  "activeVisitors": 27\n}',
+              '# Fetch public counts\ncurl "https://api.yourdomain.com/api/v1/public/sites/YOUR_SITE_KEY/visitor-count"\n\n# Response\n{\n  "totalVisitors": 12840\n}',
         ),
       ],
     );
@@ -711,14 +676,6 @@ class _PublicVisitorCounterSectionState
             title: 'Total Visitors',
             desc:
                 'Distinct anonymous visitors recorded across the site lifetime.',
-          ),
-          const SizedBox(height: 14),
-
-          _buildDefinitionItem(
-            badgeColor: AppColors.emerald,
-            title: 'Active Visitors',
-            desc:
-                'Visitors active in the real-time presence heartbeat window (last 90s).',
           ),
           const SizedBox(height: 14),
 

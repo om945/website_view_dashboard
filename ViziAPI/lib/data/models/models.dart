@@ -3,7 +3,6 @@ import '../../core/utils/json.dart';
 enum DashboardSection {
   overview,
   websites,
-  realtime,
   pages,
   visitors,
   events,
@@ -86,7 +85,6 @@ class SiteStats {
     required this.newVisitors,
     required this.returningVisitors,
     required this.sessions,
-    required this.activeVisitors,
   });
 
   final int totalViews;
@@ -94,7 +92,6 @@ class SiteStats {
   final int newVisitors;
   final int returningVisitors;
   final int sessions;
-  final int activeVisitors;
 
   factory SiteStats.fromJson(Map<String, dynamic> json) => SiteStats(
         totalViews: asInt(json['totalViews']),
@@ -102,22 +99,18 @@ class SiteStats {
         newVisitors: asInt(json['newVisitors']),
         returningVisitors: asInt(json['returningVisitors']),
         sessions: asInt(json['sessions']),
-        activeVisitors: asInt(json['activeVisitors']),
       );
 }
 
 class VisitorCount {
   const VisitorCount({
     required this.totalVisitors,
-    required this.activeVisitors,
   });
 
   final int totalVisitors;
-  final int activeVisitors;
 
   factory VisitorCount.fromJson(Map<String, dynamic> json) => VisitorCount(
         totalVisitors: asInt(json['totalVisitors']),
-        activeVisitors: asInt(json['activeVisitors']),
       );
 }
 

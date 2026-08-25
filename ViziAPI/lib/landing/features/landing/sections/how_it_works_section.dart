@@ -24,10 +24,8 @@ class HowItWorksSection extends StatelessWidget {
           'Insert one script tag with defer into your HTML layout.'),
       _StepItem('04', 'Visitor opens site',
           'Page view beacon triggers asynchronously on load.'),
-      _StepItem('05', 'Tracker sends view',
-          'Anonymous hash verifies sessions and active state.'),
-      _StepItem('06', 'Analytics are stored',
-          'Inspect realtime numbers and trends on your dashboard.'),
+      _StepItem('05', 'Analytics are stored',
+          'Inspect historical numbers and trends on your dashboard.'),
     ];
 
     return Padding(

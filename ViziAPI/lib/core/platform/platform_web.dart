@@ -22,36 +22,3 @@ void setSelectedSiteId(String? id) {
     html.window.localStorage['website_view_selected_site'] = id;
   }
 }
-
-class PresenceSocket {
-  PresenceSocket(this._socket);
-  final html.WebSocket? _socket;
-
-  Stream<void> get onOpen =>
-      _socket?.onOpen.map((_) {}) ?? const Stream<void>.empty();
-  Stream<void> get onClose =>
-      _socket?.onClose.map((_) {}) ?? const Stream<void>.empty();
-  Stream<void> get onError =>
-      _socket?.onError.map((_) {}) ?? const Stream<void>.empty();
-  Stream<String> get onMessage =>
-      _socket?.onMessage.map((event) => event.data?.toString() ?? '') ??
-      const Stream<String>.empty();
-
-  void send(String message) {
-    _socket?.send(message);
-  }
-
-  void close() {
-    try {
-      _socket?.close();
-    } catch (_) {}
-  }
-}
-
-PresenceSocket connectPresence(String url) {
-  try {
-    return PresenceSocket(html.WebSocket(url));
-  } catch (_) {
-    return PresenceSocket(null);
-  }
-}

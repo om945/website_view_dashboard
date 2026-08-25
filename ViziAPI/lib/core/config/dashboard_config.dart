@@ -25,11 +25,6 @@ abstract final class DashboardConfig {
   static String publicVisitorCountUrl(String siteKey) =>
       '$apiOrigin/api/v1/public/sites/$siteKey/visitor-count';
 
-  static String wsTrackUrl() {
-    final scheme = apiOrigin.startsWith('https') ? 'wss' : 'ws';
-    return '$scheme://${Uri.parse(apiOrigin).authority}/ws/track';
-  }
-
   static String googleSignInUrl({String? redirect}) {
     final uri = Uri.parse('$apiOrigin/api/v1/auth/google');
     return uri

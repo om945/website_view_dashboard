@@ -16,6 +16,7 @@ class MetricCard extends StatefulWidget {
     required this.color,
     this.tooltip,
     this.badge,
+    this.valueLabel,
     this.isLive = false,
   });
 
@@ -25,6 +26,7 @@ class MetricCard extends StatefulWidget {
   final Color color;
   final String? tooltip;
   final String? badge;
+  final String? valueLabel;
   final bool isLive;
 
   @override
@@ -101,14 +103,18 @@ class _MetricCardState extends State<MetricCard> {
                   child: AnimatedSwitcher(
                     duration: AppMotion.normal,
                     child: Text(
-                      formatCount(widget.value),
-                      key: ValueKey<int>(widget.value),
+                      widget.valueLabel ?? formatCount(widget.value),
+                      key: ValueKey<String>(widget.valueLabel ?? '${widget.value}'),
                       style: TextStyle(
                         fontFamily: AppTypography.fontSans,
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.6,
-                        color: widget.isLive ? widget.color : AppColors.textPrimary,
+                        color: widget.valueLabel != null
+                            ? AppColors.textMuted
+                            : widget.isLive
+                                ? widget.color
+                                : AppColors.textPrimary,
                       ),
                     ),
                   ),
@@ -133,4 +139,3 @@ class _MetricCardState extends State<MetricCard> {
     );
   }
 }
-

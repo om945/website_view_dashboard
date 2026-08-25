@@ -115,7 +115,7 @@ class _OverviewPageState extends State<OverviewPage> {
 
     return PageFrame(
       title: 'Overview',
-      subtitle: 'Live traffic and aggregates for ${widget.site.domain}.',
+      subtitle: 'Analytics and aggregates for ${widget.site.domain}.',
       action: Builder(
         builder: (context) {
           final rangeSelector = RangeSelector(
@@ -175,7 +175,7 @@ class _OverviewPageState extends State<OverviewPage> {
                 const LiveDot(color: AppColors.emerald, size: 6),
                 const SizedBox(width: 8),
                 Text(
-                  'Overview & live traffic',
+                  'Overview & analytics',
                   style: AppTypography.bodyMedium.copyWith(
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.w600,
@@ -221,13 +221,12 @@ class _OverviewPageState extends State<OverviewPage> {
                     'Total distinct anonymous visitors recorded for the selected website.',
               ),
               MetricCard(
-                title: 'Active now',
-                value: count.activeVisitors,
+                title: 'Active Users',
+                value: 0,
                 icon: DashboardIcons.active,
-                color: AppColors.emerald,
-                isLive: true,
-                tooltip:
-                    'Visitors currently active according to realtime presence.',
+                color: AppColors.textMuted,
+                valueLabel: 'Coming Soon',
+                tooltip: 'Realtime Active Users are coming in ViziAPI v2.',
               ),
               MetricCard(
                 title: 'New visitors',

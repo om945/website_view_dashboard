@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../app/theme/colors.dart';
 import '../../app/theme/typography.dart';
 import '../../core/errors/api_exception.dart';
-import '../../core/utils/formatters.dart';
 import '../../data/models/models.dart';
 import '../../data/repositories/repositories.dart';
 import '../../shared/widgets/dashboard_scaffold.dart';
@@ -170,7 +169,7 @@ class _VisitorsPageState extends State<VisitorsPage> {
               child: Text(
                 'The API stores hashed visitor identifiers only. '
                 'Raw IP addresses are never shown in this dashboard. '
-                'Active now: ${formatCount(count.activeVisitors)}.',
+                'Visitor identifiers are anonymous and privacy-conscious.',
                 style: AppTypography.bodyMedium,
               ),
             ),

@@ -55,7 +55,7 @@ class _ExamplesSectionState extends State<ExamplesSection> {
         const SizedBox(height: 10),
         Text(
           'ViziAPI returns data. You control how it looks — style total '
-          'visitors, active visitors, badges, cards, or custom dashboards '
+          'visitors, badges, cards, or custom dashboards '
           'with your own design system.',
           style: AppTypography.bodyMedium.copyWith(
             color: AppColors.textSecondary,
@@ -208,7 +208,7 @@ class _ExamplesSectionState extends State<ExamplesSection> {
         ),
       ),
       child: Text(
-        'The response contains totalVisitors and activeVisitors. '
+        'The response contains totalVisitors. '
         'The endpoint is public and requires no authentication; '
         'replace YOUR_SITE_KEY with the site key for your website.',
         style: AppTypography.bodySmall.copyWith(

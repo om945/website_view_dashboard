@@ -67,14 +67,6 @@ class FeaturesSection extends StatelessWidget {
                       FeatureCard(
                         width: cardWidth,
                         number: '03',
-                        title: 'Realtime presence',
-                        description:
-                            'See currently active visitors in realtime via resilient WebSocket connection heartbeats and expiring presence.',
-                        icon: LandingIcons.radar,
-                      ),
-                      FeatureCard(
-                        width: cardWidth,
-                        number: '04',
                         title: 'Developer-first',
                         description:
                             'Simple, predictable REST APIs and client SDKs. Inspect, query, or export raw data on your own terms.',
@@ -82,7 +74,7 @@ class FeaturesSection extends StatelessWidget {
                       ),
                       FeatureCard(
                         width: cardWidth,
-                        number: '05',
+                        number: '04',
                         title: 'SPA ready',
                         description:
                             'Automatic client-side route tracking for Next.js, React Router, Vue, SvelteKit, and Astro without page reloads.',
@@ -90,7 +82,7 @@ class FeaturesSection extends StatelessWidget {
                       ),
                       FeatureCard(
                         width: cardWidth,
-                        number: '06',
+                        number: '05',
                         title: 'Privacy-conscious',
                         description:
                             'No invasive fingerprinting, cookie banners, or cross-site tracking. Anonymous cryptographic hashes keep data safe.',

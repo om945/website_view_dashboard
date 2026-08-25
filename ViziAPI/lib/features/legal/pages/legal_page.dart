@@ -350,7 +350,7 @@ const _privacyDocument = LegalDocument(
     LegalSection('7. How We Use Information', bullets: [
       'Provide, operate, maintain, and improve ViziAPI.',
       'Authenticate users, maintain sessions, and provide account and project access.',
-      'Provide analytics, API, tracking, and realtime features requested by customers.',
+      'Provide analytics, API, and tracking features requested by customers.',
       'Monitor reliability, prevent abuse, investigate security incidents, and enforce agreements.',
       'Communicate about service operation, support, and material policy or product changes.',
       'Comply with legal obligations and respond to lawful requests.',

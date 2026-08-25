@@ -48,14 +48,6 @@ class AppConstants {
       'detail':
           'A visitor can have multiple sessions. A new session does not mean a new visitor.',
     },
-    'realtime': {
-      'title': 'Realtime',
-      'eyebrow': '05 / PRESENCE',
-      'body':
-          'Realtime active counts use WebSocket presence with heartbeat and expiration.',
-      'detail':
-          'Heartbeat is around 30 seconds and active presence TTL around 90 seconds as implementation defaults.',
-    },
     'api': {
       'title': 'API reference',
       'eyebrow': '07 / HTTP API',
@@ -93,12 +85,12 @@ class AppConstants {
       'title': 'Public visitor counter',
       'eyebrow': '11 / PUBLIC METRICS',
       'body':
-          'Display total visitors and active visitors directly on your website via a lightweight public endpoint.',
+          'Display total visitors directly on your website via a lightweight public endpoint.',
       'code':
-          '# Example Request\ncurl "https://api.yourdomain.com/api/v1/public/sites/YOUR_SITE_KEY/visitor-count"\n\n# Example Response\n{\n  "totalVisitors": 12840,\n  "activeVisitors": 27\n}',
+          '# Example Request\ncurl "https://api.yourdomain.com/api/v1/public/sites/YOUR_SITE_KEY/visitor-count"\n\n# Example Response\n{\n  "totalVisitors": 12840\n}',
       'language': 'HTTP',
       'detail':
-          'GET /api/v1/public/sites/:siteKey/visitor-count returns real-time public stats. No authentication is required for this public endpoint. It safely exposes only aggregate visitor counts and active presence without exposing private session records, visitor logs, or IP data.',
+          'GET /api/v1/public/sites/:siteKey/visitor-count returns aggregate total visitor stats. No authentication is required for this public endpoint. It exposes no private session records, visitor logs, or IP data.',
     },
   };
 }

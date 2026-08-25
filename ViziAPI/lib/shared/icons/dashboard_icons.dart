@@ -4,7 +4,6 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 abstract final class DashboardIcons {
   static const dashboard = LucideIcons.layoutDashboard;
   static const websites = LucideIcons.globe2;
-  static const realtime = LucideIcons.radio;
   static const pages = LucideIcons.chartColumn;
   static const visitors = LucideIcons.users;
   static const events = LucideIcons.zap;

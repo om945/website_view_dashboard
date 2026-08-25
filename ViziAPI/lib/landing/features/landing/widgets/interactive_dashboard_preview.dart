@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../app/theme/colors.dart';
 import '../../../app/theme/typography.dart';
@@ -17,30 +16,6 @@ class InteractiveDashboardPreview extends StatefulWidget {
 
 class _InteractiveDashboardPreviewState
     extends State<InteractiveDashboardPreview> {
-  int _activeVisitors = 27;
-  Timer? _timer;
-  final List<int> _sequence = [27, 28, 29, 28, 26, 27, 29, 31, 28];
-  int _seqIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _timer = Timer.periodic(const Duration(milliseconds: 3500), (timer) {
-      if (mounted) {
-        setState(() {
-          _seqIndex = (_seqIndex + 1) % _sequence.length;
-          _activeVisitors = _sequence[_seqIndex];
-        });
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -78,7 +53,7 @@ class _InteractiveDashboardPreviewState
                     LiveDot(color: AppColors.emerald, size: 7),
                     SizedBox(width: 8),
                     Text(
-                      'Overview & Live Traffic',
+                      'Overview & Analytics',
                       style: TextStyle(
                         fontFamily: AppTypography.fontSans,
                         color: AppColors.textPrimary,
@@ -139,11 +114,10 @@ class _InteractiveDashboardPreviewState
                   children: [
                     _StatTile(
                       width: tileWidth,
-                      title: 'Active now',
-                      value: '$_activeVisitors',
-                      valueColor: AppColors.emerald,
-                      badge: 'Live',
-                      isLive: true,
+                      title: 'Active Users',
+                      value: 'Coming Soon',
+                      valueColor: AppColors.textMuted,
+                      badge: 'V2',
                     ),
                     _StatTile(
                       width: tileWidth,
@@ -237,7 +211,6 @@ class _StatTile extends StatefulWidget {
     required this.value,
     required this.valueColor,
     required this.badge,
-    this.isLive = false,
   });
 
   final double width;
@@ -245,7 +218,6 @@ class _StatTile extends StatefulWidget {
   final String value;
   final Color valueColor;
   final String badge;
-  final bool isLive;
 
   @override
   State<_StatTile> createState() => _StatTileState();
@@ -294,18 +266,15 @@ class _StatTileState extends State<_StatTile> {
                   ),
                 ),
                 const SizedBox(width: 4),
-                if (widget.isLive)
-                  const LiveDot(size: 5, color: AppColors.emerald)
-                else
-                  Text(
-                    widget.badge,
-                    style: TextStyle(
-                      fontFamily: AppTypography.fontMono,
-                      fontSize: 10,
-                      color: AppColors.emerald,
-                      fontWeight: FontWeight.w600,
-                    ),
+                Text(
+                  widget.badge,
+                  style: TextStyle(
+                    fontFamily: AppTypography.fontMono,
+                    fontSize: 10,
+                    color: AppColors.emerald,
+                    fontWeight: FontWeight.w600,
                   ),
+                ),
               ],
             ),
             const SizedBox(height: 8),

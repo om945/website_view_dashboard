@@ -32,7 +32,7 @@ class MetricsSection extends StatelessWidget {
                       eyebrow: 'A better baseline',
                       title: 'Know what happened\nafter the click.',
                       body:
-                          'Core metrics stay close to the surface: views, visitors, sessions, and the people active right now.',
+                          'Core metrics stay close to the surface: views, visitors, sessions, and historical trends.',
                     ),
                     SizedBox(height: 28),
                     _MetricsStack(),
@@ -47,7 +47,7 @@ class MetricsSection extends StatelessWidget {
                         eyebrow: 'A better baseline',
                         title: 'Know what happened\nafter the click.',
                         body:
-                            'Core metrics stay close to the surface: views, visitors, sessions, and the people active right now.',
+                            'Core metrics stay close to the surface: views, visitors, sessions, and historical trends.',
                       ),
                     ),
                     SizedBox(width: 48),

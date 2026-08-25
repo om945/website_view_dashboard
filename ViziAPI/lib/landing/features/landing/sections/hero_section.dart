@@ -73,7 +73,7 @@ class HeroSection extends StatelessWidget {
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 640),
                   child: Text(
-                    'A focused analytics API for developer-built websites. One lightweight script for anonymous visitors, sessions, page views, events, and realtime presence.',
+                    'A focused analytics API for developer-built websites. One lightweight script for anonymous visitors, sessions, page views, events, and historical insights.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: AppTypography.fontSans,

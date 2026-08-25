@@ -40,11 +40,6 @@ class DashboardSidebar extends StatelessWidget {
             icon: DashboardIcons.websites,
             label: 'Websites',
           ),
-          _item(
-            section: DashboardSection.realtime,
-            icon: DashboardIcons.realtime,
-            label: 'Realtime',
-          ),
           const SizedBox(height: 18),
           _sectionLabel('ANALYTICS'),
           _item(
@@ -134,4 +129,3 @@ class DashboardSidebar extends StatelessWidget {
     );
   }
 }
-

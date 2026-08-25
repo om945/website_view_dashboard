@@ -151,5 +151,3 @@ String get apiOrigin => DashboardConfig.apiOrigin;
 
 void startGoogleSignIn({String? redirect}) =>
     openUrl(DashboardConfig.googleSignInUrl(redirect: redirect));
-
-String wsTrackUrl() => DashboardConfig.wsTrackUrl();

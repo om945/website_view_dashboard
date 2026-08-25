@@ -13,7 +13,6 @@ abstract final class DashboardRoutes {
   static const docs = '/docs';
   static const overview = '/dashboard';
   static const websites = '/dashboard/websites';
-  static const realtime = '/dashboard/realtime';
   static const pages = '/dashboard/analytics/pages';
   static const visitors = '/dashboard/analytics/visitors';
   static const events = '/dashboard/analytics/events';
@@ -25,7 +24,6 @@ abstract final class DashboardRoutes {
   static const all = <String>[
     overview,
     websites,
-    realtime,
     pages,
     visitors,
     events,
@@ -44,7 +42,6 @@ abstract final class DashboardRoutes {
         : path;
     return switch (normalized) {
       websites => DashboardSection.websites,
-      realtime => DashboardSection.realtime,
       pages => DashboardSection.pages,
       visitors => DashboardSection.visitors,
       events => DashboardSection.events,
@@ -57,7 +54,6 @@ abstract final class DashboardRoutes {
   static String pathFor(DashboardSection section) => switch (section) {
     DashboardSection.overview => overview,
     DashboardSection.websites => websites,
-    DashboardSection.realtime => realtime,
     DashboardSection.pages => pages,
     DashboardSection.visitors => visitors,
     DashboardSection.events => events,

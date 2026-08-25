@@ -89,7 +89,7 @@ class _FooterBrand extends StatelessWidget {
         ),
         const SizedBox(height: 7),
         Text(
-          'Understand visitors, sessions, and realtime activity without the complexity.',
+          'Understand visitors, sessions, and acquisition without the complexity.',
           style: AppTypography.bodySmall.copyWith(color: AppColors.textMuted),
         ),
       ],
