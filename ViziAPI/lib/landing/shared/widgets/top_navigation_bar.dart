@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:website_track_dashboard/core/platform/platform.dart';
+import 'package:website_track_dashboard/landing/core/constants/app_constants.dart';
 import 'package:website_track_dashboard/landing/shared/icons/landing_icons.dart';
 import '../../app/theme/colors.dart';
 import '../../app/theme/typography.dart';
@@ -26,6 +29,17 @@ class TopNavigationBar extends StatefulWidget {
 }
 
 class _TopNavigationBarState extends State<TopNavigationBar> {
+  void _openSupportPage() {
+    if (!openExternalUrl(AppConstants.buyMeACoffeeUrl) && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not open the support page. Please try again.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
   void _openMobileMenu(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -164,17 +178,22 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {
-                    if (widget.currentPath != '/') {
-                      AppNavigation.toHome(context);
-                    } else {
-                      ScrollManager.scrollTo(ScrollManager.heroKey);
-                    }
-                  },
-                  child: const _BrandLogo(),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: () {
+                        if (widget.currentPath != '/') {
+                          AppNavigation.toHome(context);
+                        } else {
+                          ScrollManager.scrollTo(ScrollManager.heroKey);
+                        }
+                      },
+                      child: const _BrandLogo(),
+                    ),
+                  ),
                 ),
               ),
 
@@ -233,20 +252,36 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
                   ),
                 ),
 
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    AppButton(
-                      label: 'Get started',
-                      variant: AppButtonVariant.primary,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 9,
-                      ),
-                      onPressed: () => AppNavigation.toLogin(context),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        AppButton(
+                          label: 'Buy me a coffee',
+                          icon: const Icon(LucideIcons.coffee400, size: 20),
+                          variant: AppButtonVariant.outline,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 9,
+                          ),
+                          onPressed: _openSupportPage,
+                        ),
+                        const SizedBox(width: 6),
+                        AppButton(
+                          label: 'Get started',
+                          variant: AppButtonVariant.primary,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 9,
+                          ),
+                          onPressed: () => AppNavigation.toLogin(context),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ] else ...[
                 IconButton(
