@@ -92,13 +92,13 @@ class LoginPage extends StatelessWidget {
                         spacing: 4,
                         children: [
                           TextButton(
-                            onPressed: () => openUrl(
+                            onPressed: () => openExternalUrl(
                               DashboardConfig.privacyPolicyUrl,
                             ),
                             child: const Text('Privacy Policy'),
                           ),
                           TextButton(
-                            onPressed: () => openUrl(
+                            onPressed: () => openExternalUrl(
                               DashboardConfig.termsOfServiceUrl,
                             ),
                             child: const Text('Terms of Service'),

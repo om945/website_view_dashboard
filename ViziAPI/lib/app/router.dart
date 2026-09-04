@@ -159,6 +159,10 @@ class DashboardRouterDelegate extends RouterDelegate<String>
       navigator.pop();
       return true;
     }
+    if (_loginRedirect != null) {
+      _setPath(DashboardRoutes.home);
+      return true;
+    }
     return false;
   }
 
