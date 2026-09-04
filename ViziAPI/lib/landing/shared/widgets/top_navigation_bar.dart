@@ -122,7 +122,14 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
                   AppNavigation.toDocs(context, 'api');
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              AppButton(
+                label: 'Buy me a coffee',
+                icon: const Icon(LucideIcons.coffee400, size: 20),
+                variant: AppButtonVariant.outline,
+                onPressed: _openSupportPage,
+              ),
+              const SizedBox(height: 10),
               AppButton(
                 label: 'Get started free',
                 onPressed: () {
@@ -408,6 +415,11 @@ class _MobileNavLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      hoverColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      focusColor: Colors.transparent,
+      selectedColor: Colors.transparent,
+      selectedTileColor: Colors.transparent,
       leading: Icon(icon, color: AppColors.accent, size: 20),
       title: Text(
         label,
