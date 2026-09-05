@@ -61,9 +61,13 @@ class _AuthGateState extends State<AuthGate> {
             : _AuthState.unauthenticated;
       });
       if (user == null && widget.routePath.startsWith('/dashboard')) {
-        widget.onRouteChanged(
-          '/login?redirect=${Uri.encodeComponent(widget.routePath)}',
-        );
+        if (mounted) {
+          Router.neglect(context, () {
+            widget.onRouteChanged(
+              '/login?redirect=${Uri.encodeComponent(widget.routePath)}',
+            );
+          });
+        }
       }
       if (user != null && widget.routePath == '/login') {
         widget.onRouteChanged(widget.loginRedirect ?? '/dashboard');
@@ -111,10 +115,7 @@ class _AuthGateState extends State<AuthGate> {
       case _AuthState.networkError:
       case _AuthState.serverError:
         return Scaffold(
-          body: ErrorState(
-            message: _errorMessage,
-            onRetry: _load,
-          ),
+          body: ErrorState(message: _errorMessage, onRetry: _load),
         );
 
       case _AuthState.unauthenticated:

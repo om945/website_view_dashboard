@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:website_track_dashboard/landing/features/landing/widgets/visitors_count.dart';
 import 'package:website_track_dashboard/landing/shared/icons/landing_icons.dart';
 import '../../../app/theme/colors.dart';
 import '../../../app/theme/typography.dart';
@@ -23,22 +24,32 @@ class PublicVisitorCounterSection extends StatefulWidget {
 
 class _PublicVisitorCounterSectionState
     extends State<PublicVisitorCounterSection> {
-  int _totalVisitors = 12840;
+  final data = fetchVisitorCount();
+  int _totalVisitors = 0;
   Timer? _timer;
-  final List<int> _totalSequence = [12840, 12841, 12842, 12844, 12840];
-  int _step = 0;
+
+  Future<void> _loadVisitorCount() async {
+    try {
+      final data = await fetchVisitorCount();
+
+      if (!mounted) return;
+
+      setState(() {
+        _totalVisitors = data.totalVisitors;
+      });
+    } catch (error) {
+      debugPrint('Failed to load visitor count: $error');
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(milliseconds: 4000), (_) {
-      if (mounted) {
-        setState(() {
-          _step = (_step + 1) % _totalSequence.length;
-          _totalVisitors = _totalSequence[_step % _totalSequence.length];
-        });
-      }
-    });
+    _loadVisitorCount();
+    _timer = Timer.periodic(
+      const Duration(seconds: 30),
+      (_) => _loadVisitorCount(),
+    );
   }
 
   @override
@@ -266,10 +277,7 @@ class _PublicVisitorCounterSectionState
                             child: _buildMetricDefinitionsCard(),
                           ),
                           const SizedBox(width: 20),
-                          Expanded(
-                            flex: 5,
-                            child: _buildPrivacySecurityCard(),
-                          ),
+                          Expanded(flex: 5, child: _buildPrivacySecurityCard()),
                         ],
                       ),
                     ],
@@ -877,9 +885,7 @@ class _PublicVisitorCounterSectionState
       decoration: BoxDecoration(
         color: AppColors.emerald.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(
-          color: AppColors.emerald.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: AppColors.emerald.withValues(alpha: 0.3)),
       ),
       child: const Text(
         'SAFE',

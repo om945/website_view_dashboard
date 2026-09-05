@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_highlight/flutter_highlight.dart';
 import 'package:flutter_highlight/themes/atom-one-dark.dart';
+import 'package:highlight/highlight.dart' show Node, highlight;
 
 import '../../app/theme/colors.dart';
 import '../../app/theme/motion.dart';
@@ -20,6 +20,8 @@ class CodeBlock extends StatefulWidget {
 
 class _CodeBlockState extends State<CodeBlock> {
   bool _copied = false;
+
+  String get _displayCode => widget.code.replaceAll('\t', ' ' * 8);
 
   String get _language {
     final value = widget.lang.trim().toLowerCase();
@@ -45,7 +47,7 @@ class _CodeBlockState extends State<CodeBlock> {
   }
 
   Future<void> _copy() async {
-    await Clipboard.setData(ClipboardData(text: widget.code));
+    await Clipboard.setData(ClipboardData(text: _displayCode));
     if (!mounted) return;
     setState(() => _copied = true);
     Future.delayed(const Duration(milliseconds: 1800), () {
@@ -53,9 +55,41 @@ class _CodeBlockState extends State<CodeBlock> {
     });
   }
 
+  List<TextSpan> _highlightSpans(List<Node> nodes, Map<String, TextStyle> theme) {
+    final spans = <TextSpan>[];
+    var current = spans;
+    final stack = <List<TextSpan>>[];
+
+    void visit(Node node) {
+      if (node.value != null) {
+        current.add(
+          node.className == null
+              ? TextSpan(text: node.value)
+              : TextSpan(text: node.value, style: theme[node.className!]),
+        );
+      } else if (node.children != null) {
+        final nested = <TextSpan>[];
+        current.add(TextSpan(children: nested, style: theme[node.className!]));
+        stack.add(current);
+        current = nested;
+        for (final child in node.children!) {
+          visit(child);
+          if (child == node.children!.last) {
+            current = stack.isEmpty ? spans : stack.removeLast();
+          }
+        }
+      }
+    }
+
+    for (final node in nodes) {
+      visit(node);
+    }
+    return spans;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final lineCount = widget.code.split('\n').length;
+    final lineCount = _displayCode.split('\n').length;
     final textStyle = AppTypography.code.copyWith(fontSize: 13, height: 1.7);
     final highlightTheme = Map<String, TextStyle>.from(atomOneDarkTheme)
       ..['root'] = const TextStyle(
@@ -118,8 +152,16 @@ class _CodeBlockState extends State<CodeBlock> {
                 Container(width: 1, height: lineCount * 22.1, color: AppColors.codeBorder),
                 const SizedBox(width: 14),
                 _language.isEmpty
-                    ? SelectableText(widget.code, style: textStyle)
-                    : HighlightView(widget.code, language: _language, theme: highlightTheme, padding: EdgeInsets.zero, textStyle: textStyle),
+                    ? SelectableText(_displayCode, style: textStyle)
+                    : SelectableText.rich(
+                        TextSpan(
+                          style: textStyle.merge(highlightTheme['root']),
+                          children: _highlightSpans(
+                            highlight.parse(_displayCode, language: _language).nodes!,
+                            highlightTheme,
+                          ),
+                        ),
+                      ),
               ]),
             ),
           ),

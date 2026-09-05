@@ -213,7 +213,7 @@ class _OverviewPageState extends State<OverviewPage> {
             childAspectRatio: columns == 1 ? 2.6 : 2.2,
             children: [
               MetricCard(
-                title: 'Total visitors',
+                title: 'Unique visitors',
                 value: count.totalVisitors,
                 icon: DashboardIcons.totalVisitors,
                 color: AppColors.accent,
